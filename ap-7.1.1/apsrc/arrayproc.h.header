@@ -1,0 +1,9 @@
+#include <dsp/dsp.h>
+
+#import "DSPAPUtilities.h"
+
+/* DSPAPSinCos.h */
+extern float *DSPAPSinTable(int num_points);
+extern float *DSPAPCosTable(int num_points);
+
+

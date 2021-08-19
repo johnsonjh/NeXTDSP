@@ -1,0 +1,67 @@
+.TH SNDRECORD 1 "August 13, 1990" "NeXT Computer, Inc."
+.SH NAME
+sndrecord \- record a soundfile from DSP or microphone
+.SH SYNOPSIS
+\fBsndrecord\fR [ \fIoptions\fR ] \fIfile\fR
+.SH DESCRIPTION
+\fISndrecord\fR
+records sound from either the 8Khz microphone input on the back of the
+monitor, or from the DSP.  By default, data is taken in from the microphone
+jack and placed in the named file.  Alternatively, the data may be taken
+from a program running on the DSP.  The default DSP program reads 16-bit-wide
+data in from the DSP serial input.  The resulting file may be played
+back using
+.IR sndplay (1).
+.SH OPTIONS
+.TP
+.B \-d
+Record 16 bit data from the DSP serial input.
+The format of the data saved is 16 bit linear stereo.
+.TP
+.B \-e
+Record 24 bit data from the DSP serial input.
+The format of the data saved is 16 bit linear stereo.
+.TP
+.B \-m
+Specify that the data recorded from the DSP is emphasized.
+.TP
+.B \-f \fIdsp-program\fR
+Run the specified program on the DSP recording it's output into the specified sound file.
+.TP
+.B \-w
+Print warning messages if an output overflow is detected.
+.TP
+.B \-s \fIsize\fR
+Record at most \fIsize\fR bytes into the output file.
+.TP
+.B \-c \fIcomment\fR
+Place
+.I comment
+into the comment field of the output file.
+.TP
+.B \-C \fIcomment-file\fR
+Place the contents of
+.I comment-file
+into the output file.
+.TP
+.B \-h \fIhigh\-water-mark\fR
+Set the high water mark used by the the operating system in wiring down
+memory to record into.  The operating system will try to wire down enough
+physical pages to reach the high water mark.
+.TP
+.B \-l \fIlow-water-mark\fR
+Set the low water mark used by the operating system.  The operating system
+ensures that at least this many bytes are wired down to record into.
+.TP
+.B \-D \fIdma-size\fR
+Set the size of the buffers used by the operating system for a unit of
+recording.  This size must be a power of two less than or equal to the
+physical page size of the machine.
+.TP
+.B \-v
+Print out state useful for determining the internal behavior of
+.IR sndrecord .
+Of marginal use.
+.SH "SEE ALSO"
+sndplay(1), sndconvert(1), sndinfo(1), sndcompress(1)
+

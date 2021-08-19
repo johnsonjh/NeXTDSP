@@ -1,0 +1,168 @@
+.TH DSPWRAP 1 "6 Jun 1989" "NeXT, Inc."
+.SH NAME
+dspwrap \- wrap a DSP macro in a host C function
+
+.SH SYNOPSIS
+\fBdspwrap\fR 
+[ \fB-{ug,ap}\fR ] 
+[ \fB-no{Doc,Link,C}\fR ] 
+.if n .ti +0.5i
+[ \fB-o\fR <\fIpath\fR> ]
+[ \fB-xonly\fR ]
+[ \fB-local\fR <\fIpath\fR> ]
+.if n .ti +0.5i
+[ \fB-macroDir\fR <\fIpath\fR> ]
+.if n .ti +0.5i
+[ \fB-dsploadwrapDir\fR <\fIpath\fR> ]
+[ \fB-trace\fR <\fIn\fR> ]
+.if n .ti +0.5i
+<\fIfilename(s)\fR>
+
+.SH DESCRIPTION
+The 
+.I dspwrap
+program processes unit-generator (UG) or array processing
+(AP) macro source code, producing C or Objective C
+source files from DSP56000 assembly language.
+
+Example array processing macros may be found in the directory
+\fI/usr/lib/dsp/apsrc\fR, and example unit generator macros are in the
+directory \fI/usr/lib/dsp/ugsrc\fR.
+
+For AP macros, \fIdspwrap\fR creates a host C function which, when
+called by a C program running on the host processor, will load
+the preassembled DSP code, install DSP macro arguments from the
+arguments passed in C, and initiate execution on the
+DSP. \fIdspwrap\fR is so named because it in effect "wraps" DSP
+assembly language inside a C function.  Thus, \fIdspwrap\fR is used to
+take a new AP macro and add it to the library of array-processing
+C functions.
+
+As an example of AP macro processing, the command line
+
+    dspwrap -ap apfunc.asm
+
+will write a C function "DSPapfunc(<args>)" into the file
+"DSPapfunc.c", where the <args> are determined by the DSPWRAP
+ARGUMENT INFO field of the "man page" in the source file
+apfunc.asm.  Also written is the file "apfunc.dsp" which contains
+a binary encoding of "apfunc.lnk", the preassembled, relocatable,
+array processing module.
+
+\fIdspwrap\fR provides no translation of C function arguments.  That
+is, the user must specify DSP addresses as 16-bit integers,
+right-justified within type int, and DSP data values must be
+specified as 24-bit fixed-point values right-justified within
+type int (sign extension not required).
+
+For UG macros, \fIdspwrap\fR creates a set of Objective C classes which
+allow the unit generator to be used in the context of the Music
+Kit.  A separate "leaf class" is generated for each memory-space
+combination.  For example, if a unit generator has two inputs and
+one output, 2^3 = 8 leaf classes are generated, corresponding to
+the DSP memory-space combinations, "xxx", "xxy", "xyx", "xyy",
+"yxx", "yxy", "yyx", and "yyy".  These leaf classes are what you
+allocate from the Music Kit Orchestra object.  If you want only
+the x memory-space configuration, include the -xonly option.
+
+In addition, \fIdspwrap\fR generates a "master" class, from which the
+leaf classes inherit.  The master class may be edited to provide
+methods to set the unit generator memory arguments in more
+convenient units.  For example, in an oscillator unit generator,
+one might provide a method to set the oscillator frequency in
+Hertz to avoid having to specify the frequency indirectly as a
+table increment.  Unit generators typically call for the most
+immediately useable format, and the master class is where you
+translate from high-level to low-level units.
+
+Objective C header files are also written for all of the classes
+generated.
+
+For special UG macros having no memory-space variations, only the master class is generated.
+
+As an example of UG macro processing, the command line
+
+    dspwrap -ug add.asm 
+
+will write the following files, assuming add has 2 patch-point
+arguments:
+
+    AddUG.m  /* this is the master class */    
+    AddUG.h  
+    addUGInclude.m /* this file is included by AddUG.m */
+    AddUGxx.m /* These are the leaf classes */
+    AddUGxx.h
+    AddUGxy.m
+    AddUGxy.h
+    AddUGyx.m
+    AddUGyx.h
+    AddUGyy.m
+    AddUGyy.h
+
+The -noC, -noDoc, and -noLink options inhibit the
+generation of the C source file, generated documentation files,
+and the relocatable object module,
+respectively.  Typically, -noLink is used to obtain documentation
+only, and -noDoc is used to skip document generation.
+-noC inhibits generation and output of the C source file(s).
+-noLink implies -noC.
+
+.SH OPERATION
+\fIdspwrap\fR performs the following steps:
+.IP 1.
+A DSP main assembly-language program is generated which invokes the macro.
+.IP 2.
+Macro arguments are filled in according to the DSPWRAP C SYNTAX spec.
+.IP 3.
+The DSP main program and macro are assembled, producing an object module.
+.IP 4.
+C Code is generated for binding C arguments to macro memory arguments.
+.IP 5.
+C Code is generated for downloading the program and data to the DSP.
+.IP 6.
+The C source file is written to disk.
+
+.SH OPTIONS
+Each option can be abbreviated to the shortest disambiguating extent.
+
+.IP \fB\-ug\fR
+Indicate that macro file is type "unit generator".
+.IP \fB\-ap\fR
+Indicate that macro file is type "array processor".
+.IP \fB\-prefixAP\fR <\fIstring\fR>
+Change default AP filename and function prefix from "DSPAP" to "<string>".
+.IP \fB\-stackableAP\fR <\fIstring\fR>
+Change the AP module's loading-function name from "<prefix>LoadGo" to "<prefix>Load".  The "Load" form is used for "stacking" array processing modules.
+.IP \fB\-no{Doc,Link,C}\fR
+Suppress generation of documentation output, DSP linker output,
+or C source file.
+.IP \fB\-o\fR <\fIpath\fR>
+Set output path for documentation files to <\fIpath\fR>.
+.IP \fB\-xonly\fR
+Generate output for x DSP memory space arguments only.
+This option is the default for "array processor" macro types.
+.IP \fB\-local\fR <\fIpath\fR>
+Use local directory for includes.  Overrides installed DSP
+system include source directory.
+.IP \fB\-macroDir\fR <\fIpath\fR>
+Add specified directory to start of search path for macros.
+Default path includes current directory and installed DSP
+system macro source directory.
+.IP \fB\-dsploadwrapDir\fR <\fIpath\fR>
+Use specified directory as location of program dsploadwrap.
+.IP \fB\-trace\fR
+Sets the trace variable. To get all possible tracing, use -1.
+
+.SH SEE ALSO
+\fBdsploadwrap\fR \- called by \fIdspwrap\fR to process
+assembled .lnk, .dsp and .lod files.
+
+.SH DIAGNOSTICS
+If an assembly error occurs when assembling the main program created
+by \fIdspwrap\fR, the assembler listing file (.lst) will be left in the
+current directory.  After a successful assembly, the listing file is 
+deleted.  The main program created by \fIdspwrap\fR is not deleted, so a
+listing can also be generated by manually assembling that. (It's easiest
+to copy and paste the assembly specification from the dspwrap print-out.)
+
+

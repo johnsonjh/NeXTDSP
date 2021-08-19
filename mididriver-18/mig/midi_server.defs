@@ -1,0 +1,224 @@
+/* 
+ * Copyright (c) 1989 NeXT, Inc.
+ * 24-May-89  Gregg Kellogg (gk) at NeXT
+ *	Created.
+ *
+ */
+
+/*
+ * interface for requests to the MIDI device port.
+ */
+subsystem midi_server 400;
+
+#include <std_types.defs>
+
+type u_int		= int;
+type midi_raw_data_t	= struct[1] of int;
+type midi_cooked_data_t	= struct[2] of int;
+type midi_packed_data_t = char;
+type midi_raw_t		= array[*:1000] of midi_raw_data_t;
+type midi_cooked_t	= array[*:500] of midi_cooked_data_t;
+type midi_packed_t	= array[*:4000] of midi_packed_data_t;
+type midi_rx_t		= port_t
+	intran:		midi_rx_t convert_port_to_midi_rx(port_t)
+	outtran:	port_t convert_midi_rx_to_port(midi_rx_t)
+	;
+type midi_dev_t		= port_t
+	intran:		midi_dev_t convert_port_to_midi_dev(port_t)
+	outtran:	port_t convert_midi_dev_to_port(midi_dev_t)
+	;
+
+simport "midi_var.h";
+import <midi/midi_types.h>;
+
+waittime 10000;
+
+/*
+ * Device port messages.
+ */
+/*
+ * Establish ownership.
+ */
+routine midi_set_owner (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+	inout	negotiation_port: port_t);
+
+/*
+ * Get the xmit port for this device.
+ */
+routine midi_get_xmit (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+	out	xmit_port	: port_t);
+
+/*
+ * Get the xmit port for this device.
+ */
+routine midi_get_recv (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+	out	recv_port	: port_t);
+
+/*
+ * Get the xmit port for this device.
+ */
+routine midi_get_out_timer_port (
+		device_port	: midi_dev_t;
+	out	timer_port	: port_t);
+
+/*
+ * Specify number of quanta per received MIDI clock.
+ */
+routine midi_set_quanta_per_clock (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+		quanta_per_clock: int);
+
+/*
+ * Return number of quanta per received MIDI clock.
+ */
+routine midi_get_quanta_per_clock (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+	out	quanta_per_clock: int);
+
+/*
+ * Output queue manipulation
+ * These messages are sent on the device port, rather than the transmit
+ * port, because the server may stop listening to the transmit port
+ * when it's received enough messages.
+ */
+/*
+ * Returns the number of elements in each of the enqueued
+ * output buffers.
+ */
+routine midi_output_queue_size (
+		device_port	: midi_dev_t;
+	out	queue_size	: u_int;	// number of messages in queue
+	out	queue_max	: u_int);	// max # messages q can hold
+
+/*
+ * Specify port to call when the message count in the output queue
+ * is less than or equal to queue_size.  The port is set to
+ * PORT_NULL after the message is sent.
+ */
+routine midi_output_queue_notify (
+		device_port	: midi_dev_t;
+		owner_port	: port_t;
+		reply_port	: port_t;
+		queue_size	: u_int);
+
+/*
+ * Message on the device transmit port.
+ */
+/*
+ * Send MIDI data.
+ * If dont_block is TRUE the call will return an error when the queue's full.
+ * otherwise, it just stops listening to it's input queue until the number
+ * of enqueued messages is less than the maximum queue size.
+ */
+routine midi_send_raw_data (
+	xmit_port		: midi_rx_t;
+	midi_raw_data		: midi_raw_t;
+	dont_block		: boolean_t);
+
+routine midi_send_cooked_data (
+	xmit_port		: midi_rx_t;
+	midi_cooked_data	: midi_cooked_t;
+	dont_block		: boolean_t);
+
+routine midi_send_packed_data (
+	xmit_port		: midi_rx_t;
+	quanta			: u_int;
+	midi_packed_data	: midi_packed_t;
+	dont_block		: boolean_t);
+
+/*
+ * Message on the device receive port.
+ */
+/*
+ * Request that data be sent back to the reply_port when it is available.
+ */
+simpleroutine midi_get_data (
+		receive_port	: midi_rx_t;
+		reply_port	: port_t);
+
+/*
+ * Specify (or return) the set of MIDI system messages that the device will
+ * ignore (not forward to the user).  Note that ignoring MIDI Clock or MIDI
+ * Time Code still allows the messages to be used by the driver for deriving
+ * a time base.
+ */
+routine midi_set_sys_ignores (
+		receive_port	: midi_rx_t;
+		sys_ignores	: u_int);
+
+routine midi_get_sys_ignores (
+		receive_port	: midi_rx_t;
+	out	sys_ignores	: u_int);
+
+/*
+ * Message on either the device transmit or receive ports.
+ */
+/*
+ * Specify (or return) the timer port to use for timing input (output).
+ * Defaults to devices system MIDI port.
+ */
+routine midi_set_in_timer_port (		// set input timer port
+		rx_port		: midi_rx_t;	// MIDI recv or xmit port
+		timer_port	: port_t);	// timer port to use.
+
+routine midi_get_in_timer_port (		// get input timer port
+		rx_port		: midi_rx_t;	// MIDI recv or xmit port
+	out	timer_port	: port_t);	// timer port being used.
+
+/*
+ * Specify (or return) device protocol information.
+ *	Raw, Cooked, or Packed midi data.
+ *	Timestamps relative or absolute
+ *	Device clock synced to input MIDI Clocks (receive port)
+ *	Generate MIDI Clock (transmit port)
+ *	Device clock synced to input MIDI Time Code (receive port only)
+ *	Generate MIDI Time Code (transmit port)
+ */
+routine midi_set_proto (			// set protocol
+		rx_port		: midi_rx_t;	// MIDI recv or xmit port
+		data_format	: u_int;	// raw, cooked, or packed.
+		time_relative	: boolean_t;	// relative timestamps
+		clock_source	: u_int;	// system, MIDI clock, or MTC
+		inter_msg_quanta: u_int;	// number of quanta to wait
+						// for the next message to
+						// arrive (receive only)
+		msg_frame_quanta: u_int;	// maximum number of quanta
+						// to wait from the first
+						// queued message before
+						// sending (receive only)
+		queue_max	: u_int);	// number of messages
+						// (in all enqueued buffers)
+						// that can be enqueued without
+						// causing send to block
+
+routine midi_get_proto (			// get protocol
+		rx_port		: midi_rx_t;	// MIDI recv or xmit port
+	out	data_format	: u_int;	// raw, cooked, or packed.
+	out	time_relative	: boolean_t;	// relative timestamps
+	out	clock_source	: u_int;	// system, MIDI clock, or MTC
+	out	inter_msg_quanta: u_int;	// number of quanta to wait
+						// for the next message to
+						// arrive (receive only)
+	out	msg_frame_quanta: u_int;	// maximum number of quanta
+						// to wait from the first
+						// queued message before
+						// sending (receive only)
+	out	queue_max	: u_int);	// number of messages
+						// (in all enqueued buffers)
+						// that can be enqueued without
+						// causing send to block
+
+/*
+ * Clear any queued data (input or output)
+ */
+routine midi_clear_queue (
+		rx_port		: midi_rx_t);
+

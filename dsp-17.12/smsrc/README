@@ -1,0 +1,56 @@
+DSP SYSTEM MACROS FOR MUSIC KIT AND ARRAY PROCESSING DSP MONITORS
+
+This directory contains the Music Kit DSP monitor "mkmon8k", the array
+processing DSP monitor "apmon8k", and system macros invoked by
+"unit-generator" (UG) macros and "array processing" (AP) macros.
+
+
+MACROS SUMMARY
+
+music_macros.asm - master DSP assembly include file for music
+ap_macros.asm    - master DSP assembly include file for array processing
+include_dirs.asm - include file specifying macro search directories
+verrev.asm	 - include file specifying system version and revision
+config.asm	 - include file specifying assembly and hardware configuration
+defines.asm	 - define symbolic names for dsp assembler constants
+memmap.asm	 - define symbolic names for interesting dsp memory addresses
+allocsys.asm	 - allocate dsp storage for the system
+allocusr.asm	 - allocate dsp storage for the user 
+beginend.asm	 - opening and closing brackets for macros, orchestras, etc.
+sys_me*.asm	 - system symbol definitions for assembling without a system
+misc.asm	 - miscellaneous macros
+
+
+OTHER FILES
+
+mkmon8k.asm     - Music Kit monitor main program
+mkmon8k.mem     - Music Kit memory offsets
+apmon8k.asm     - Array processing monitor main program
+apmon8k.mem     - Array processing memory offsets
+sys_li.asm	- system variables in internal l memory
+sys_xe.asm	- system variables in external x memory
+sys_ye.asm	- system variables in external y memory
+vectors.asm	- interrupt vector contents
+handlers.asm	- interrupt handler routines
+hmdispatch.asm	- host message (et al.) dispatch table
+hmlib.asm	- host message handlers
+dspmsgs.asm	- DSP message and error message codes
+jsrlib.asm	- MK monitor subroutine library
+reset_boot.asm	- special reset used during bootstrap to load externel memory
+reg_defines.asm - define mnemonics used for index registers by mkmon8k code
+degmon.asm 	- famous "degenerate monitor" used by BUG56, the Ariel debugger
+degnext.asm 	- main program used to generate stand-alone degmon
+
+
+
+MAKING A NEW VERSION OF THE MONITORS
+
+    asm56000 -a -b -l -os,so -I/usr/lib/dsp/smsrc/ mkmon8k
+    dspimg mkmon8k.lod mkmon8k.dsp
+
+    asm56000 -a -b -l -os,so -I/usr/lib/dsp/smsrc/ apmon8k
+    dspimg apmon8k.lod apmon8k.dsp
+
+The -I option above can point to your own copy of the smsrc directory
+(be sure to edit your private copy of include_dirs.asm .)
+

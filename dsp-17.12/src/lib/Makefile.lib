@@ -1,0 +1,253 @@
+# CHANGES: no force_version, etags generation, install => installsrc
+#	   include local version of Makefile.common.
+#	   installsrc totally rewritten for libdsp case only.
+#	   pslib and spec installs commented out
+#	   TAGS added to sources
+#	   dspmessages.h and dspmessagenames.h removed from source list
+#  02/16/90/jos - Added minor_version option to mkshlib
+#  ----------------------------------------------------------------------------------
+#  NeXT include file for Internal Library Makefile
+#  Copyright 1987, NeXT, Inc.
+#
+#  This Makefile is included to gain the rules for making and installing
+#  a library, including header files, class files, and a message
+#  group file.
+#
+
+include ../../Makefile.config
+
+# a little doc for when the "help" target is made
+.DEFAULT help:
+	@if (test "$<");		\
+	then echo 'ERROR: Unrecognized Makefile target "$<"';	\
+	fi
+	@echo '  install-  to install the library and all associated files';\
+	echo '  installsrc-  to install the source of the library';\
+	echo '  debug_install-  to install the debugging library';\
+	echo '  local_install-  same as debug_install';\
+	echo '  $(NAME)-  to make the local copy of the library';\
+	echo '  debug-    to make the debugging copy of the library';\
+	echo '  profile-  to make the profiling copy of the library';\
+	echo '  ofiles-   to make the library's .o files';\
+	echo '  debug-    to make the debugging library's .o files';\
+	echo '  profile-  to make the profiling library's .o files';\
+	echo '  clean-    to remove all files but the source';\
+	echo '  lean-     to remove all files but the source and executables';\
+	echo '  print-    to print out all the source files';\
+	echo '  wc-       to get the line, word, and byte count of source';\
+	echo '  size-     to get the size of all object files';\
+	echo '  diff-     diffs current source against installed source';\
+	echo '  tags-     recreate TAGS file';\
+	echo '  depend-   to update Makefile dependencies on include files';\
+	echo '  spec-     to update spec files for all classes';\
+	echo '  lint-     to lint all the source'
+
+
+# this is the fruit of this project
+PRODUCT = lib$(NAME)_g.a
+
+# these are other versions of the library we want to nuke
+SPECIFIC_GARBAGE = $(SPECFILES) $(SPECFILES:.spec=.aux) \
+	shlib_obj/*.o debug_obj/*.o profile_obj/*.o \
+	.depend_done shlib_ofiles_rep
+
+# this stuff gets nuked with a rm -r
+DIRECTORY_GARBAGE = debug_obj profile_obj shlib_obj
+
+# flags passed to ar
+ARFLAGS = ruv
+
+# place where .o files are kept
+OFILE_DIR=debug_obj
+
+# place to look for dependents
+VPATH = $(OFILE_DIR)
+
+#put these in the make rules?
+.s.o:
+	$(AS) -o $(OFILE_DIR)/$*.o $*.s
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c -o $(OFILE_DIR)/$*.o
+.m.o:
+	$(CC) $(CFLAGS) $(OBJCFLAGS) -c $*.m -o $(OFILE_DIR)/$*.o
+.psw.o:
+	$(PSWRAP) $(PSWFLAGS) -o $*.c $*.psw
+	$(CC) $(CFLAGS) -c $*.c -o $(OFILE_DIR)/$*.o
+.pswm.o:
+	$(PSWRAP) $(PSWFLAGS) -o $.m $*.pswm
+	$(CC) $(CFLAGS) $(OBJCFLAGS) -c $*.m -o $(OFILE_DIR)/$*.o
+.y.o:
+	$(YACC) $(YFLAGS) $*.y
+	$(MV) $(MVFLAGS) y.tab.c $*.c
+	$(CC) $(CFLAGS) -c $*.c -o $(OFILE_DIR)/$*.o
+	$(RM) $(RMFLAGS) $*.c
+.ym.o:
+	$(YACC) $(YFLAGS) $*.ym
+	$(MV) $(MVFLAGS) y.tab.c $*.m
+	$(CC) $(CFLAGS) $(OBJCFLAGS) -c $*.m -o $(OFILE_DIR)/$*.o
+	$(RM) $(RMFLAGS) $*.m
+.l.o:
+	$(LEX) $(LFLAGS) $*.l
+	$(MV) $(MVFLAGS) lex.yy.c $*.c
+	$(CC) $(CFLAGS) -c $*.c -o $(OFILE_DIR)/$*.o
+	$(RM) $(RMFLAGS) $*.c
+.lm.o :
+	$(LEX) $(YFLAGS) $*.lm
+	$(MV) $(MVFLAGS) lex.yy.c $*.m
+	$(CC) $(CFLAGS) $(OBJCFLAGS) -c $*.m -o $(OFILE_DIR)/$*.o
+	$(RM) $(RMFLAGS) $*.m
+
+#include $(MAKE_DIR)/Makefile.common
+include Makefile.common
+
+all: $(PRODUCT)
+
+# making "name" causes the library to be built
+$(NAME): $(PRODUCT)
+
+# a library is made by first making all its components, and then
+# ranlib'ing the whole thing together
+
+$(PRODUCT): ofiles
+	/bin/rm -f $(PRODUCT)
+	$(AR) $(ARFLAGS) $(PRODUCT) $(OFILES) $(LIB_OVERRIDE_OFILES)
+	ranlib $(PRODUCT)
+
+TAGS:
+	etags $(CFILES)
+
+# makes all the ofiles
+ofiles: $(OFILE_DIR) $(OFILES)
+
+# creates products and installs them.  Does NOT install source.
+# install: force_version $(PRODUCT) $(DSTROOT) inst_product
+
+install0: $(DSTROOT) inst_incfiles inst_psfiles inst_specs additional_installs
+
+install1: $(PRODUCT) $(DSTROOT) inst_product
+
+install_headers: $(DSTROOT) inst_incfiles
+
+#common_install: install0 install1
+common_install: install0
+
+# installs the library itself
+inst_product: $(LIBA_DIR) $(PRODUCT)
+	install $(IFLAGS) -r -m 444 $(PRODUCT) $(LIBA_DIR)
+	ranlib -t $(LIBA_DIR)/$(PRODUCT)
+	
+# installs the include files
+inst_incfiles: $(DERIVED_INCFILES)
+#	-/bin/rm -rf $(INC_DIR)
+	if (test "$(PUBLIC_INCFILES)")					\
+	    then mkdirs -m 755 $(INC_DIR)/$(NAME);			\
+	    install $(IFLAGS) -m 444 $(PUBLIC_INCFILES) 		\
+		$(PUBLIC_DERIVED_INCFILES)  $(INC_DIR); \
+	fi
+
+# installs the PostScript package files
+inst_psfiles: 
+#	if (test "$(PSFILES)")						\
+#	    then mkdirs -m 755 $(PSLIB_DIR);				\
+#	    install $(IFLAGS) -m 644 $(PSFILES) $(PSLIB_DIR);		\
+#	fi
+
+# install specsheets
+inst_specs: $(SPECFILES)
+#	if (test "$(SPECFILES)")					\
+#	    then mkdirs -m 755 $(SPEC_DIR);				\
+#	    mkdirs -m 755 $(AUX_DIR);					\
+#	    install $(IFLAGS) -m 644 $(SPECFILES) $(SPEC_DIR);		\
+#	    install $(IFLAGS) -m 644 $(SPECFILES:.spec=.aux) $(AUX_DIR); \
+#	fi
+
+# install the source
+#installsrc: TAGS
+installsrc:
+# !!! Change LIBDSP to LIB below to get generic library Makefile behavior
+#	-/bin/rm -rf $(LIBDSP_SRC_DIR)
+	mkdirs -m 755 $(LIBDSP_SRC_DIR)
+	tar cf - $(INSTALL_FILES) | (cd $(LIBDSP_SRC_DIR); tar xfp -)
+	(cd $(LIBDSP_SRC_DIR); chmod 644 $(INSTALL_FILES))
+
+##	The following is necessary to make -I../.. work in the bin Makefiles
+#	ln -s $(LIBDSP_SRC_DIR) $(LIBDSP_SRC_DIR)/dsp
+#	TEMP_VAR1=`pwd`;				\
+#	TEMP_VAR2=`basename $$TEMP_VAR1`;		\
+#	mkdirs -m 755 $(SRCDIR)/$$TEMP_VAR2;		\
+#	for f in $(INSTALL_FILES);			\
+#		do (cp $$f $(SRCDIR)/$$TEMP_VAR2;	\
+#		chmod 644 $(SRCDIR)/$$TEMP_VAR2/$$f)	\
+#	done
+
+# install debugging library.  This should never be directly made, but
+# only as a result of a full install.
+debug_install:
+	$(MAKE) install1 "PRODUCT = lib$(NAME)_g.a" \
+		"OFILE_DIR = debug_obj" "CFLAGS = $(DEBUGCFLAGS) -DDEBUG"
+
+debug_ofiles:
+	$(MAKE) ofiles "PRODUCT = lib$(NAME)_g.a" \
+		"OFILE_DIR = debug_obj" "CFLAGS = $(DEBUGCFLAGS) -DDEBUG"
+
+debug:
+	$(MAKE) lib$(NAME)_g.a "PRODUCT = lib$(NAME)_g.a" \
+		"OFILE_DIR = debug_obj" "CFLAGS = $(DEBUGCFLAGS) -DDEBUG"
+
+# install profiling library.  This should never be directly made, but
+# only as a result of a full install.
+profile_install:
+	$(MAKE) install1 "PRODUCT = lib$(NAME)_p.a" \
+		"OFILE_DIR = profile_obj" "CFLAGS = $(PROFCFLAGS)"
+
+profile_ofiles:
+	$(MAKE) ofiles "PRODUCT = lib$(NAME)_p.a" \
+		"OFILE_DIR = profile_obj" "CFLAGS = $(PROFCFLAGS)"
+
+profile:
+	$(MAKE) lib$(NAME)_p.a "PRODUCT = lib$(NAME)_p.a" \
+		"OFILE_DIR = profile_obj" "CFLAGS = $(PROFCFLAGS)"
+
+#
+# build and install shared library
+#
+shlib_install:: shlib $(SHLIBDIR) $(LIBA_DIR)
+	install $(IFLAGS) -r -m 444 lib$(NAME)_s.a $(LIBA_DIR)
+	install -s -m 555 lib$(NAME)_s.$(SHLIBVERS).shlib $(SHLIBDIR)
+	ranlib -t  $(LIBA_DIR)/lib$(NAME)_s.a
+	mkdirs $(DSTROOT)/usr/local/shlib
+	-/bin/rm -f $(DSTROOT)/usr/local/shlib/lib$(NAME)_s.$(SHLIBVERS).shlib
+	-ln -s ../src/$(NAME)/src/lib/lib$(NAME)_s.$(SHLIBVERS).shlib \
+		$(DSTROOT)/usr/local/shlib/lib$(NAME)_s.$(SHLIBVERS).shlib
+
+
+shlib_debug_install shlib_install_debug:: lib$(NAME)_s.a $(SHLIBDIR) \
+					  $(LIBA_DIR)
+	/bin/cp -p lib$(NAME)_s.a $(LIBA_DIR)
+	/bin/cp -p lib$(NAME)_s.$(SHLIBVERS).shlib $(SHLIBDIR)
+	ranlib -t  $(LIBA_DIR)/lib$(NAME)_s.a
+
+shlib_ofiles::
+	$(MAKE) ofiles "PRODUCT = lib$(NAME)_s.a" "OFILE_DIR = shlib_obj" \
+		"CFLAGS = $(SHLIBCFLAGS) -DSHLIB"
+	touch shlib_ofiles_rep
+
+lib$(NAME)_s.a: shlib_ofiles_rep
+	$(MAKE) shlib "PRODUCT = lib$(NAME)_s.a" "OFILE_DIR = shlib_obj" \
+		"CFLAGS = $(SHLIBCFLAGS) -DSHLIB"
+
+shlib:: shlib_ofiles
+	(cd ./shlib_obj; $(MKSHLIB) -minor_version 17 \
+		$(MKSHLIBFLAGS) -s ../spec_$(NAME) \
+		-t ../lib$(NAME)_s.$(SHLIBVERS).shlib -h ../lib$(NAME)_s.a \
+		-seglinkedit \
+		-segprot __LINKEDIT rwx r \
+		-segaddr __LINKEDIT 40c0000)
+
+$(OFILE_DIR):
+	mkdirs $@
+
+# shows object code size
+size: $(PRODUCT)
+	sizelib $(PRODUCT)
+

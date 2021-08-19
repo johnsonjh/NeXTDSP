@@ -1,0 +1,19 @@
+dsp-17.11/README
+
+Differences relative to dsp-17.10 address bugs 11467, 11394, and 11831.
+
+This is the NeXT internal DSP software development directory.  
+
+Directories below this one include:
+
+     test       - A place to develop DSP software and simulate it.
+     smsrc      - DSP sources: music system
+     ugsrc      - DSP sources: orchestra unit generators macros
+     umsrc      - DSP sources: utility macros
+     doc        - Predocumentation of NeXT DSP software
+     doc56000   - Motorola DSP56000 documentation
+     src	- Sources for DSP C library and DSP programs
+     bin	- Executable programs pertaining to the DSP
+     monitor	- Binary-format DSP music system and associated files
+
+Principal project maintainer is Julius Smith (jos)

@@ -1,0 +1,9 @@
+; DSP56000 memory-map file for typical Music Kit DSP monitor.
+; Use: lnk56000 -B -Rmkmon8k.mem mkmon8k.lnk
+
+; *** THESE ADDRESSES MUST STAY IN SYNCH WITH memmap.asm ***
+
+;*old*SECTION USER PI:64,XI:%100,YI:4,LI:$F6,XLI:$F6,YLI:$F6
+SECTION USER PI:$80,XI:%100,YI:4,LI:$F6,XLI:$F6,YLI:$F6
+SECTION USER PHE:$2000,XHE:$2200,YHE:$2A4A
+SECTION USER LLI:0,LHE:0,PLI:0

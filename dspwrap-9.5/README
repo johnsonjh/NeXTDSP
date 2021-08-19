@@ -1,0 +1,11 @@
+Created on 3/16/90 by Julius Smith.
+
+New features: 	(input) and (output) DSP address qualifier support and the
+		-prefixAP option
+
+The Makefile in this directory builds the dspwrap and dsploadwrap tools and installs
+them to /usr/bin.  Their man pages are also installed - to
+/usr/local/doc/dspwrap_proj/man.
+
+The normal make targets are supported.  Make local_install as well as make debug
+compile debug versions and attempt to link with a debug version of libdsp.

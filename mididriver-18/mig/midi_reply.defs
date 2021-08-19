@@ -1,0 +1,55 @@
+/* 
+ * Copyright (c) 1989 NeXT, Inc.
+ * 21-Sep-90  Doug Mitchell
+ *	Decreased size of data arrays to allow for 4K kernel stacks.
+ * 09-Oct-89  Doug Mitchell at NeXT
+ *	Increased size of midi_raw_t and midi_packed_t arrays.
+ * 24-May-89  Gregg Kellogg (gk) at NeXT
+ *	Created.
+ *
+ */
+
+/*
+ * Asynchronous replies from the midi receive device.
+ */
+subsystem midi_reply 1000;
+
+#include <std_types.defs>
+
+type u_int		= int;
+type midi_raw_data_t	= struct[1] of int;
+type midi_cooked_data_t	= struct[2] of int;
+type midi_packed_data_t = char;
+type midi_raw_t		= array[*:512] of midi_raw_data_t;
+type midi_cooked_t	= array[*:256] of midi_cooked_data_t;
+type midi_packed_t	= array[*:2048] of midi_packed_data_t;
+
+import <midi/midi_types.h>;
+
+waittime 100;
+
+/*
+ * Returned data from the device.
+ */
+simpleroutine midi_ret_raw_data (
+	port			: port_t;
+	midi_raw_data		: midi_raw_t);
+
+simpleroutine midi_ret_cooked_data (
+	port			: port_t;
+	midi_cooked_data	: midi_cooked_t);
+
+simpleroutine midi_ret_packed_data (
+	port			: port_t;
+	quanta			: u_int;
+	midi_packed_data	: midi_packed_t);
+
+/*
+ * Reply containing the current size of the output queue.
+ * This is sent in response to a midi_output_queue_notify() message
+ * when the output queue size is less than or equal to some number of messages.
+ */
+simpleroutine midi_queue_notify (
+	port			: port_t;
+	queue_size		: u_int);
+

@@ -1,0 +1,186 @@
+#!/bin/csh -f
+
+PRODUCT = $(NAME)
+MANPAGE = $(NAME).1
+
+LIBDSPDIR = ../../../src/lib
+LIBDSP = $(LIBDSPDIR)/libdsp_s.a
+DEBUG_LIBDSP = $(LIBDSPDIR)/libdsp_g.a
+PROFILE_LIBDSP = $(LIBDSPDIR)/libdsp_p.a
+
+# Makefile.config is actually obtained from the dir one up from here
+include ../../../Makefile.config
+
+# There was a cc1 bug that prevents using -O and -g together.  Fixed?
+BASE_CFLAGS = -I. -I$(LIBDSPDIR) -L$(LIBDSPDIR) $(OTHER_CFLAGS) -Wimplicit
+CFLAGS = -O -g $(BASE_CFLAGS)
+DEBUG_CFLAGS = -g $(BASE_CFLAGS)
+# *** BUG *** I can't see out how to use the following. (OFILES made from rule)
+PROFILE_CFLAGS = -pg $(BASE_CFLAGS)
+
+LDFLAGS = $(OTHER_LDFLAGS)
+
+PRINT = list
+
+OFILES = $(MFILES:.m=.o) $(CFILES:.c=.o)
+
+# files that will be removed on make clean, along with .o's
+GARBAGE = $(BY_PRODUCTS) TAGS tags core $(OTHER_GARBAGE) $(NAME).io foo foo.snd
+
+# all source code
+SRCS = $(HFILES) $(MFILES) $(CFILES)
+
+# all non-derived, non-garbage files.  This is the source, plus Makefiles,
+# plus anything else that needs to be around for the products to be made.
+INSTALL_FILES = Makefile $(MANPAGE) $(OTHER_MANPAGES) $(SRCS) $(M_AUX_FILES) \
+		$(OTHER_INSTALL_SOURCE)
+
+# an application is made by first making all its components, and then
+# linking the whole thing together.
+
+all: $(PRODUCT)
+
+DEBUG_PRODUCT = d$(PRODUCT)
+
+profile: $(PG_PRODUCT)
+
+$(PRODUCT): $(OFILES) $(OTHER_DEP) $(LIBDSP)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PRODUCT) $(OFILES) \
+		$(OTHER_OFILES) $(LOADLIBES)
+	$(OTHER_MAKE_PRODUCT_ACTIONS)
+#	md -f -d $(OFILES:.o=.d)
+
+$(DEBUG_PRODUCT): $(OFILES) $(OTHER_DEP) $(DEBUG_LIBDSP)
+	$(CC) $(DEBUG_CFLAGS) $(LDFLAGS) -o $(DEBUG_PRODUCT) $(OFILES) \
+		$(OTHER_OFILES) $(DEBUG_LOADLIBES)
+	$(OTHER_MAKE_PRODUCT_ACTIONS)
+#	md -f -d $(OFILES:.o=.d)
+
+$(PG_PRODUCT): $(OFILES) $(OTHER_DEP) $(PROFILE_LIBDSP)
+	$(CC) $(PROFILE_CFLAGS) $(LDFLAGS) -o $(PRODUCT) $(OFILES) \
+		$(OTHER_OFILES) $(PROFILE_LOADLIBES)
+	$(OTHER_MAKE_PRODUCT_ACTIONS)
+#	md -f -d $(OFILES:.o=.d)
+
+help:
+	if (test "$<");		\
+	then echo 'ERROR: Unrecognized Makefile target "$<"';	\
+	fi
+	echo '  profile -  to make the program with profiling code in it';\
+	echo '  debug -  to make the program with gdb symbols';\
+	echo '  c_local_install -  to install the C prog in this clone only';\
+	echo '  m_local_install -  to install the ObjcC prog in this clone';\
+	echo '  install-  to install the program';\
+	echo "  $(NAME)-  to make the program in this directory";\
+	echo '  lean-     to remove all unnecessary files';\
+	echo '  clean-    to remove all files but the source';\
+	echo '  print-    to print out all the source files';\
+	echo '  wc-       to get the line, word, and byte cnt of the source';\
+	echo '  size-     to get the size of all object files';\
+	echo '  diff-     diffs current source against installed source';\
+	echo '  tags-     to run ctags on the source';\
+	echo '  TAGS-     to run etags on the source';\
+	echo '  depend-   to update Makefile dependencies on include files';\
+
+# removes all derived files
+clean:	$(OTHER_CLEANS) lean
+	-/bin/rm -f $(PRODUCT) d$(PRODUCT) $(LCLBINDIR)/$(PRODUCT)
+
+# removes all derived files, leaving product
+lean:	$(OTHER_LEANS)
+	-/bin/rm -f $(OFILES) $(OTHER_OFILES) $(GARBAGE)
+
+TAGS:
+	etags $(CFILES)
+
+#  The tags target creates an index on the source files' functions.
+tags:: $(MFILES) $(CFILES) $(HFILES)
+	ctags $(MFILES) $(CFILES) $(HFILES)
+
+#  prints out all source files
+print:: $(SRCS)
+	$(PRINT) $(SRCS)
+
+# shows object code size
+size: $(OFILES)
+	@/bin/size $(OFILES) | awk '{ print; for( i = 0; ++i <= 4;) \
+	x[i] += $$i } END { print x[1] "\t" x[2] "\t" x[3] "\t" x[4] }'
+
+# shows line count of source
+wc: $(SRCS)
+	wc $(SRCS)
+
+# diffs the current sources with the installed sources
+diff:
+	for f in $(SRCS);				\
+	    do (echo $$f;				\
+	    csh -f -c "diff -c $(BIN_SOURCE_DIR)/$(NAME)/$$f $$f; exit 0")  \
+	done
+
+# creates products and installs them. Installs source also.
+c_install: $(BINDIR) $(PRODUCT) $(MAN_DIR)
+	install $(IFLAGS) $(BINIFLAGS) -m 755 $(PRODUCT) $(OTHER_INSTALLS) \
+                $(BINDIR)
+	install $(IFLAGS) -m 644 $(MANPAGE) $(OTHER_MANPAGES) $(MAN_DIR)
+	$(OTHER_C_INSTALL_ACTIONS)
+	
+# 'make boot' installs an initial boot version
+boot: $(BOOT_BIN_DIR_BIN)
+	install $(IFLAGS) $(BINIFLAGS) -m 755 $(PRODUCT).boot \
+		$(BOOT_BIN_DIR_BIN)
+	/bin/mv -f $(BOOT_BIN_DIR_BIN)/$(PRODUCT).boot \
+		   $(BOOT_BIN_DIR_BIN)/$(PRODUCT)
+
+# creates debuggable product and installs it locally. Source not installed.
+# Since only a link is created, make debug is equivalent after 
+# make local_install has been done once.
+
+c_local_install: $(DEBUG_PRODUCT) debug_link
+
+debug_link:
+#	/bin/rm -f $(LCLBINDIR)/$(DEBUG_PRODUCT)
+#	install $(IFLAGS) -m 755 $(DEBUG_PRODUCT) $(LCLBINDIR)/$(PRODUCT)
+#	ln -s `pwd`/$(PRODUCT) $(LCLBINDIR)/$(PRODUCT)
+
+m_install: $(PRODUCT) $(MAN_DIR)
+	/bin/rm -rf $(M_PRODUCT_DIR)
+	install $(IFLAGS) -m 644 $$(MANPAGE) $(OTHER_MANPAGES) $(MAN_DIR)
+	mkdirs -m 755 $(M_PRODUCT_DIR)
+	install $(IFLAGS) $(BINIFLAGS) -m 755 $(PRODUCT) $(M_PRODUCT_DIR)
+	if (test "$(M_AUX_FILES)")					\
+	    then install -m 664 $(M_AUX_FILES) $(M_PRODUCT_DIR);	\
+	fi
+	$(OTHER_M_INSTALL_ACTIONS)
+
+# *** ASSUMPTION ***
+# LOCAL_M_PRODUCT_DIR contains ONLY the files installed here.
+# That way we can use the date of the directory to trigger installation.
+
+m_local_install: $(LOCAL_M_PRODUCT_DIR)
+	echo 'make m_local_install *** DISABLED ***' > /dev/null
+
+$(LOCAL_M_PRODUCT_DIR): $(DEBUG_PRODUCT)
+#	mkdirs -m 775 $(LOCAL_M_PRODUCT_DIR)
+#	install $(IFLAGS) -m 775 $(DEBUG_PRODUCT) \
+#		$(LOCAL_M_PRODUCT_DIR)/$(PRODUCT)
+#	install $(IFLAGS) -m 664 $(M_AUX_FILES) $(LOCAL_M_PRODUCT_DIR)
+	$(OTHER_LOCAL_M_INSTALL_ACTIONS)
+
+# install the source
+installsrc: $(OTHER_INSTALLSRC_ACTIONS) $(BIN_SOURCE_DIR)/$(NAME)
+	tar cf - $(INSTALL_FILES) | (cd $(BIN_SOURCE_DIR)/$(NAME); tar xfp -)
+#	/bin/cp -p $(INSTALL_FILES) $(BIN_SOURCE_DIR)/$(NAME)
+	(cd $(BIN_SOURCE_DIR)/$(NAME); chmod 644 $(INSTALL_FILES))
+#	install $(IFLAGS) -m 644 $(INSTALL_FILES) $(BIN_SOURCE_DIR)/$(NAME)
+
+$(LIBDSP):
+	(cd ../../../src/lib ; $(MAKE) $(MAKE_FLAGS) shlib)
+
+$(DEBUG_LIBDSP):
+	(cd ../../../src/lib ; $(MAKE) $(MAKE_FLAGS) debug)
+
+.SUFFIXES: .o .c
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+

@@ -1,0 +1,458 @@
+{\rtf0\ansi{\fonttbl\f0\froman Times;\f1\fmodern Courier;\f2\fmodern Ohlfs;}
+\paperw12200
+\paperh11920
+\margl460
+\margr580
+{\colortbl\red0\green0\blue0;}
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\f0\b0\i0\ul0\fs48\li1440 \
+Preliminary 2.0 Release Notes:  \
+The NeXT Music Kit\
+
+\fs28 \
+\
+\
+This file contains information about the following topics:\
+
+\b \
+
+\b0\fi-380\li1800 ·	The Music Kit\
+·	The SynthPatch Library\
+·	The Unit Generator Library\
+·	Programming Examples\
+·	Other Changes
+\b \
+
+\b0 ·	Last Minute Notes
+\b \
+
+\b0\fi0\li1440 \
+\
+\
+
+\b\fs36\li0 Music Kit\
+
+\b0\fs28\li1440 \
+\
+
+\b\li720 New Features\
+
+\b0\li1440 \
+The following are new features that have been added to the Music Kit since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The Music Kit has been optimized to run more efficiently and many bugs have been fixed.\
+\
+·	A sophisticated new application called "Ensemble" allows the user to create music in a variety of ways.  See the Demos directory.\
+\
+·	The documentation is now more complete.  However, some areas may still not be covered  in the Music Chapters.  In such cases, please consult the header file for the appropriate class, where you can find additional (and often extensive) documentation.\
+\
+·	Most Music Kit classes now support archiving to an NXTypedStream.  See each class description for details.\
+\
+·    The Music Kit performance can now optionally be run in a separate Mach thread from that of  the Application, allowing music and graphics to be more independent.  In this case, the Music Kit performance and the Application proceed asynchronously except where explicitly coordinated by the Conductor class methods 
+\b +lockPerformance 
+\b0 and 
+\b +unlockPerformance 
+\b0 (these replace the 1.0 methods 
+\b +adjustTime 
+\b0 and 
+\b +flushTimedMessages 
+\b0 respectively).   See the performance section of the Music chapter for details and restrictions.  \
+\
+·	For users with expandable DSP memory systems, the Music Kit automatically senses the amount of memory you have and uses that memory to its fullest capacity. \
+\
+·	For faster reading and writing of Scorefiles, a new optimized (binary) format  is provided. Files of this format have the .playscore extension.  To write this format, new methods have been added to Score, ScorefileWriter and ScorefilePerformer.  To read this format, the standard reading methods can be used.   ScorefileWriter now has an instance method called 
+\b -fileExtension
+\b0  that returns the extension of the current file.  For backward-compatability, this defaults to invoking the corresponding class method. A subclass that implements -fileExtension need not  implement +
+\b fileExtension
+\b0 . Similarly, ScorefilePerformer now has an optional class method 
+\b +(char **)fileExtensions
+\b0  that returns a null-terminated list of file extensions.  For backward-compatability, the default implementation invokes 
+\b +fileExtension
+\b0 . A subclass that implements +fileExtensions need not implement 
+\b +fileExtension
+\b0 .\
+\
+·	ScoreFile Language now supports simple loop constructs, boolean expressions, and conditional statements. These are legal in both the header and the body of the scorefile. The new constructs are:\
+\
+
+\b 	     	 if (
+\b0 <
+\i boolean expression
+\i0 >
+\b ) \{
+\b0  <
+\i anything
+\i0 > 
+\b \} 
+\b0 \
+
+\b 		else if \{ 
+\b0 <
+\i anything
+\i0 > 
+\b \} 
+\b0 /* optional */\
+
+\b 		else \{
+\b0  <
+\i anything
+\i0 > 
+\b \} 
+\b0    /* optional */\
+\
+
+\b 		repeat 
+\b0 <
+\i integer expression
+\i0 > 
+\b \{ 
+\b0 <
+\i anything
+\i0 > 
+\b \}
+\b0    \
+	\
+	     
+\b 	while (
+\b0 <
+\i boolean expression
+\i0 >
+\b ) \{
+\b0  <
+\i anything
+\i0 > 
+\b \} 
+\b0 \
+	\
+
+\b 		do \{
+\b0  <
+\i anything
+\i0 > 
+\b \} while (
+\b0 <
+\i boolean expression
+\i0 >
+\b )
+\b0 ; \
+	\
+	Note that in all cases, the braces and parens are not optional. Also, if you are using included files, the start and end of the loop or conditional block must be in the same file. \
+\
+	Example:\
+	\
+
+\f1\fs26 		repeat 3 \{ 		t +.1		if (t > 3) \{aPart (2) keyNum:c4k;\} 		else  \{  bPart (1) keyNum:c2k; \}\
+	  \}\
+
+\f0\b\fs28 			\
+
+\b0 ·	The Orchestra now supports writing DSP Commands  format soundfiles. These can  be played back with the sound library and applications.  Yet, they take up a fraction of the disk space of the 16-bit format soundfile.  Also, for debugging, the Orchestra now supports writing log files that can be passed directly to the Motorolla DSP simulator.  See the Orchestra
+\b  
+\b0 Class Description for details on both of these formats.\
+\
+·	Standard MIDI file support has been augmented and improved. Format 2 Standard MIDI files can now be read.  Nearly all MIDI file "meta-events" are now represented as new Music Kit parameters.  System exclusive is now handled. See the MIDI section of the Music Kit documentation for details.\
+\
+·	MIDI channel information is handled in a more sophisticated manner.  When reading a format 1 Standard MIDI file, the Music Kit now stores the MIDI channel in the MK_midiChan parameter of the Notes. Also, for each Part, it assigns to the Part's info the MK_midiChan parameter of the first Note in the Part.  When writing a MIDI file, the Music Kit uses the MK_midiChan parameter in the Note, if any. Otherwise, it uses the MK_midiChan in the Part info, if any.  Otherwise, it uses 1.\
+\
+	The Midi object now has a method 
+\b setMergeInput:
+\b0 . If NO (the default), Notes fashioned from incoming MIDI are sent to the NoteSender corresponding to the MIDI channel, as in 1.0. If YES, all Notes are sent to NoteSender 0 and a MK_midiChan parameter indicates the channel.\
+\
+	Notes sent to the Midi object's NoteReceiver 0 may have an optional MK_midiChan parameter that specifies the channel to send the Note on.\
+\
+·	The Orchestra now supports automatic compaction of DSP program memory, insuring that a maximum of synthesis power is available at all times.\
+\
+·	The SynthData class now supports loading of arrays of shorts. The shorts are loaded right-justified into the DSP.\
+\
+·	You can now specify that your own subclass of Note be used for the Notes that are automatically created when a scorefile or MIDI file is read.  Similarly, your own subclass of Part, Envelope, etc. can be used.  See 
+\b musickit.h
+\b0  for details.  \
+\
+	Also, ScorePerformer now allows you to set your own subclass of PartPerformer to be used;  ScoreRecorder allows you to set your own subclass of PartRecorder.\
+\
+·	The Orchestra now has a way of insuring the Conductor and DSP stay in synch during very long performances. See 
+\b setSynchToConductor:
+\b0  in the Orchestra Class Description. The Orchestra also now supports a third mode besides "timed" and "untimed". This is a special-purpose mode called "softtimed" and is designed specifically for keyboard performance situations.\
+\
+·	Conductor now supports a function 
+\b MKRepositionConductor()
+\b0 .  See the Conductor Class Description for details. \
+\
+·	Performer now supports a delegate that can receive messages such as 
+\b hasDeactivated:
+\b0 .  See 
+\b PerformerDelegate.h
+\b0  for details.  Conductor also provides a simple delegate.  See 
+\b ConductorDelegate.h
+\b0  for details.\
+\
+·	SynthInstrument now supports methods to access and manipulate the internal noteUpdate and controllerValues state.  See the SynthInstrument
+\b  
+\b0 Class Description.\
+\
+·	If anonymous data objects (such as envelopes or wavetables) are written out to a scorefile, they are automatically given names of the form <CLASS>
+\b <int>
+\b0 .  Previously, they were written as immediate (in-line) envelopes.\
+\
+·	Orchestra timed and untimed messages can now be combined within a single performance.  (See the Orchestra method setTimed:.)  Note, however, that untimed messages should only be sent to UnitGenerators that are allocated before the performance begins and remain allocated for the duration of the performance.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-380\li1800 \
+\
+\
+
+\b\fi0\li720 Incompatible Changes\
+
+\b0\li1440 \
+The following incompatible changes have been made to the Music Kit since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The libraries libmusickit.a, libsynthpatches.a and libunitgenerators.a have been combined into a single shared library libmusic_s.a (libmusic_p.a is a profiling version.)  You must change your Makefile to link against libmusic_s.a and libdsp_s.a, in that order.  Note that libdsp_s.a is required even if your application doesn't use the DSP. If your application uses the Midi object, you also need to specify libmidi.a. Example link lines:\
+\
+		-lmusic_s -lmidi -ldsp_s -lNeXT_s -lsys_s     ; program uses Midi object\
+		-lmusic_s -ldsp_s -lNeXT_s -lsys_s                 ; program doesn't use Midi obj\
+\
+	Note that the 1.0 Makefile constructs of the form "-u .objc_class_Pluck" are no longer needed for linking against 2.0 Music Kit classes. \
+\
+	Old binaries that were linked against the Music Kit libraries will continue to work.\
+\
+·	In release 1.0, many functions and methods sometimes returned MAXDOUBLE to signal "no double value".  In 2.0, this value has been replaced with a special NaN (not a number) that is returned by the function 
+\b MKGetNoDVal() 
+\b0 (also available via the macro 
+\b MK_NODVAL
+\b0 )
+\b .  
+\b0 To test this value, use 
+\b MKIsNoDVal(), 
+\b0 which returns 1 if its argument is the special value, 0 otherwise.\
+\
+·	The method 
+\b initialize 
+\b0 has been changed to 
+\b init
+\b0 .  
+\b initialize 
+\b0 has been retained for backward-compatibility, but its use is discouraged.  This change was made to support the new zone allocation API (see the Objective-C documentation).   Note, however, that while  the Music Kit supports zone allocation API, it does not support zones internally in this release.  Thus, you should not create Music Kit objects with 
+\b allocFromZone:
+\b0 .  Use 
+\b new
+\b0 .\
+\
+·	The 
+\b ran
+\b0  ScoreFile languate function did not work as documented in 1.0.  The first call to the  
+\b ran
+\b0  function in a scorefile now produces a different number than it did in 1.0.  
+\b ran
+\b0  has been fixed to be more consistant and flexible\
+\
+·	The avoid conflicts with commonly used variable names, the file 
+\b <musickit/TuningSystem.h>
+\b0  no longer automatically imports 
+\b <musickit/pitches.h>
+\b0 .  To get macros defining pitches, such as c4, it is now necessary to explicitly 
+\b #import <musickit/pitches.h>
+\b0 . For example, the playpart and PlayNote programming examples now need this 
+\b import
+\b0  statement.\
+\
+·	Correction was made to the Orchestra's "headroom" calculation to make it more accurate. In some cases, the headroom of a scorefile or Music Kit application may have to be altered to get it to play properly. Try a value of 0. \
+\
+·
+\b 	MKNameObject()
+\b0  now insures that the name provided is a Scorefile-readable name, (i.e. a name obeying the same restrictions as a C identifier). If you call this function with an illegal name, it is converted to a legal name by replacing all illegal characters with '_'. E.g. the name "2 piano R.H."  becomes "__piano_R_H_".  The 
+\b parName:
+\b0  method of Note does a similar conversion.\
+\
+·	In the 2.0 release, we advise using the Orchestra's timed mode where the untimed mode was used in 1.0. This insures that envelopes and other scheduled events come out reliably and repeatably.  The 2.0 versions of the examples PlayNote and MidiPlay now use timed mode. Please remove the line "[Orchestra setTimed:NO] " from any applications derived from PlayNote or MidiPlay and add MKSetDeltaT(.01);.  See the 2.0 versions of these examples. \
+\
+·	Some obsolete methods have gone away: 	\
+		SynthData's 
+\b +orchestraFactory
+\b0 . 	\
+		FilePerformer 
+\b -str.
+\b0 \
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\li1440 \
+\
+\
+
+\b\li720 Known Problems\
+
+\b0\li1440 \
+The following are known problems in the Music Kit.  They will be corrected in a future release.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The supplied SynthPatches and the SynthInstrument object are not optimally structured for the fastest possible real time repsonse.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\li1440 \
+\
+\
+
+\b\li720 Future Directions\
+
+\b0\li1440 \
+The following are new features planned for future releases of the Music Kit.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	Real-time processing of sound files through the DSP. \
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-380\li1800 \
+\
+\
+\
+
+\b\fs36\fi0\li0 SynthPatch Library\
+
+\b0\fs28\li1440 \
+\
+
+\b\li720 New Features\
+
+\b0\li1440 \
+The following are new features that have been added to the SynthPatch Library since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The SynthPatches in the Music Kit SynthPatch Library now support a new parameter called vibWaveform, that controls the waveform used for the periodic vibrato.\
+\
+·	The Pluck synthpatch now responds to MIDI Volume.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-360\li1800 \
+
+\fi-380 \
+\
+
+\b\fi0\li720 Incompatible Changes\
+
+\b0\fi-380\li1800 \
+
+\fi0\li1440 The following are incompatible changes that have been made to the SynthPatch Library since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The default pitch bend sensitivity of Pluck changed to 3.0 to match that of the other SynthPatches.  Set the pitchBendSensitivity parameter to 1.0 to get the old behavior.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-360\li1800 \
+\
+
+\fi-380 \
+
+\b\fs36\fi0\li0 Unit Generator Library\
+
+\b0\fs28\li1440 \
+\
+
+\b\fs32\li720 Incompatible Changes\
+
+\b0\fs28\fi-380\li1800 \
+
+\fi0\li1440 The following are incompatible changes that have been made to the Unit Generator Library since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The ConstantUG class method 
+\b -setConstant:
+\b0  now takes a double rather than a DSPDatum argument.  There's also a 
+\b -setConstantDSPDatum:
+\b0  method that takes a DSPDatum.  This change was made to correct a conflict with a method defined in AsympUG.\
+\
+·	The AsympUG method 
+\b -setTarget:
+\b0  is now 
+\b -setTargetVal:
+\b0 .  This change was made to correct a conflict with the Application Kit.  The old method has been retained for backwardcompatability, but has been removed from the header file.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-360\li1800 \
+\
+
+\fi-380 \
+
+\b\fs36\fi0\li0 Programming Examples\
+
+\b0\fs28\li1440 \
+\
+
+\b\li720 New Features\
+
+\b0\li1440 \
+The following are new features that have been added to the Music Kit programming examples since Release 1.0.\
+
+\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	All of the examples that use Interface Builder can now be launched from the Workspace. \
+\
+·	There were several fixes to the 
+\b mixsounds
+\b0  programming example. See the file 
+\b MixInstrument.m
+\b0 .  There was a small fix to the file 
+\b RandomPerformer.m
+\b0  in the 
+\b PerformerExample
+\b0  programming example.\
+\
+·	The 
+\b exampsynthpatch
+\b0  example now includes a sophisticated FM SynthPatch with vibrato and a wide variety of parameters. This example also illustrates more efficient SynthPatch design.\
+\
+·	A sophisticated new application called 
+\b Ensemble
+\b0  allows the user to create music in a variety of ways.  
+\b Ensemble
+\b0  is provided as a programming example.  Other new programming examples include 
+\b SineGen
+\b0  and 
+\b exampunitgenerators
+\b0 . The interface to 
+\b PerformerExample
+\b0  has been improved.\
+\
+·	The examples 
+\b PlayNote
+\b0  and 
+\b MidiPlay
+\b0  now use a timed Orchestra. This provides more reliability, as described in the comments in the source files.\
+\
+·	The examples 
+\b PerformerExample
+\b0  and 
+\b PlayNote 
+\b0 have been changed to illustrate the use of a separate-threaded Music Kit performance.  In addition, all programming examples have been changed to use the +
+\b lockPerformance/+unlockPerformance 
+\b0 protocol instead of 
+\b +adjustTime/+flushTimedMessages
+\b0 .  While the latter protocol will still work, the former is preferred for stylistic reasons and is necessary in separate-threaded performances.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\fi-380\li1800 \
+\
+\
+
+\b\fs36\fi0\li0 Other Changes\
+
+\b0\fs28\fi-380\li1800 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	An improved MIDI driver is included in Release 2.0.\
+\
+·	
+\b dspwrap
+\b0  has been improved to generate more realistic compute-time estimates.  Old 
+\b dspwrap
+\b0 -generated classes are both binary- and source-compatible.\
+
+\pard\tx960\tx1920\tx2880\tx3840\tx4800\tx5760\tx6720\tx7680\tx8640\tx9600\li1440 \
+
+\b\fs36\li0 \
+Last Minute Notes
+\b0\fs28\fc0 \
+\
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-360\li1800 ·	The ability to process sound through the DSP with the Music Kit does not work.  This may or may not be fixed in the 2.0 final release.\
+\
+·	The ability to sense expanded DSP memory does not work.  This may or may not be fixed in the 2.0 final release.\
+
+}

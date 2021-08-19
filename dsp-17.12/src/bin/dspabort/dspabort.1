@@ -1,0 +1,60 @@
+.TH DSPABORT 1 "3 Apr 1989" "NeXT, Inc."
+.SH NAME
+dspabort \- Abort DSP
+
+.SH SYNOPSIS
+\fBdspabort\fR
+
+.SH DESCRIPTION 
+The \fBdspabort\fR program aborts the DSP, leaving it ready
+for a "grab" by the Ariel DSP debugger, BUG56.  The abort only works when
+the DSP monitor is either /usr/lib/dsp/monitor/mkmon8k.dsp, the Music Kit
+DSP monitor, or /usr/lib/dsp/monitor/apmon8k.dsp, the array processing
+monitor.
+
+Here is how dspabort is currently used: Bug56 must already be launched.
+When the DSP monitor decides to abort, it hangs the DSP driver by setting
+HF3 and sending a DSP_DE_ABORT message to the user.  When you see this
+message (or when you notice the job seems hung), SUSPEND the task owning
+the DSP and run dspabort.  (If you kill the task, the DSP will be reset,
+and state will be lost.)  You should see output something like the
+following:
+
+    Telling DSP to abort via host command....
+    Awaiting HC clear....ABORT host command issued.
+    Awaiting host flags 2 and 3....DSP is in the aborted state. 
+      (RETURN to continue):
+    Host interface INITed.
+    HF0 asserted.
+    Awaiting backtrace and DEGMON start address,,length...
+    Flushed 0x860008 from DSP RX which could mean "SP(0x8)"
+    Flushed 0x8232CD from DSP RX which could mean "PC(0x32CD)"
+    Flushed 0x8232FB from DSP RX which could mean "PC(0x32FB)"
+    Flushed 0x8232FB from DSP RX which could mean "PC(0x32FB)"
+    Flushed 0x8232CD from DSP RX which could mean "PC(0x32CD)"
+    Flushed 0x823127 from DSP RX which could mean "PC(0x3127)"
+    Flushed 0x823421 from DSP RX which could mean "PC(0x3421)"
+    Flushed 0x823269 from DSP RX which could mean "PC(0x3269)"
+    Flushed 0x82003C from DSP RX which could mean "PC(0x3C)"
+    DEGMON starts at 0x34 and is 76 words long.
+    DSP is aborted and awaiting a grab from (a prelaunched) BUG56.
+
+The "Flushed..." messages give a stack backtrace sent by the DSP.  Now
+activate the prelaunched Bug56 app and press the "Grab" button.  A panel
+should come up saying "DSP Grabbed!"  At this point you should be able to
+take a look around and try to figure out why the DSP aborted.
+
+Note: The Music Kit disables all messages coming back from the DSP by
+default. Say DSPEnableErrorFile("/dev/tty") in your main program before the
+Orchestra is started to see DSP error messages such as DSP_DE_ABORT.
+
+Note: It is helpful to use the "File : Load Symbols Only ..." menu option
+of Bug56 to load /usr/lib/dsp/monitor/mkmon8k.lod or apmon8k.lod.  This
+will give symbolic names to lots of otherwise boring hex.
+
+.SH BUGS
+Single-stepping does work in the grabbed DSP job.
+
+The DSP driver should be modified to not reset the DSP when HF2 and HF3 are
+both set.  This is the "DSP aborting" indication, and what we really want
+is to abort any pending DMA, and "Grab" the DSP in Bug56.

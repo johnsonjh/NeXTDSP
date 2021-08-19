@@ -1,0 +1,46 @@
+/* 
+	This is a sample scorefile illustrating the use of the Wave1i
+	synthpatch.
+
+	If you make your own Music Kit program, Wave1i must be loaded into 
+	your program to play this. See <musickit/synthpatches/Wave1i.h> for 
+	details on the meaning of the Note parameters.
+
+	This example illustrates independent frequency trajectories for each
+	note.
+
+	Feel free to copy and modify this example.
+*/
+info tempo:120;
+part part1;
+part1 synthPatch:"Wave1i" synthPatchCount:10;
+envelope ampFun =  [(0,0)(.2,1)(.3,.5)|(3.5,0.0)(3.6,0,.1)];
+envelope freqFun =  [(0,.95)(.2,1.02)(.3,1)(2.0,.6)];
+waveTable foo = [{1,1},{2,.05},{3,.3},{4,.01},{5,.1}];
+waveTable bar = [{1,.5},{2,1},{3,.3},{4,.1},{5,.02}];
+waveTable baz = [{1,.4},{2,1},{3,.4},{4,.2},{5,.1},{6,.05},{7,.02},{8,.01}];
+waveTable boo = [{1,1},{2,.1},{3,.05},{4,.01}];
+BEGIN;
+part1 (11) amp:0.2  freq1:bf4 freqEnv:freqFun ampEnv:ampFun waveform:foo bearing:-45;
+t 1;
+part1 (10.2) amp:0.2 ampEnv:ampFun freq1:d5 freqEnv:freqFun waveform:bar bearing:-15;
+t 1.5;
+part1 (9.4) amp:0.2 ampEnv:ampFun freq1:f5 freqEnv:freqFun waveform:foo bearing:15;
+t 2.5;
+part1 (8.6) amp:0.2 ampEnv:ampFun freq1:af5 freqEnv:freqFun waveform:bar bearing:45;
+t 3.5;
+part1 (7.8) amp:0.2 ampEnv:ampFun freq1:f4 freqEnv:freqFun waveform:foo bearing:-35;
+t 4;
+part1 (7.0) amp:0.2 ampEnv:ampFun freq1:bf3 freqEnv:freqFun waveform:bar bearing:35;
+t 5;
+part1 (6.2) amp:0.2 ampEnv:ampFun freq1:bf2 freqEnv:freqFun waveform:baz bearing:0;
+t 6;
+part1 (5.4) amp:0.2 ampEnv:ampFun freq1:d6 freqEnv:freqFun waveform:boo bearing:-15;
+t 6.5;
+part1 (4.6) amp:0.2 ampEnv:ampFun freq1:f6 freqEnv:freqFun waveform:boo bearing:15;
+END;
+
+
+
+
+

@@ -1,0 +1,211 @@
+ARRAY PROCESSING LIBRARY
+
+The Makefile in this directory builds the Array Processing Library,
+/usr/lib/libarrayproc.a and its C header file /usr/include/dsp/arrayproc.h.
+The DSP source code macros in apsrc are wrapped into C functions (by dspwrap).
+These functions and some utility routines are placed into libarrayproc.a.
+
+Also installed are the DSP image files (one for each macro),
+the DSP source code itself, and documentation in the style of man pages into /usr/lib/dsp (apbin, apsrc, and apman respectively).
+
+A make all will build everything; a make install will additionally install
+everything to DSTROOT.  Other make targets hopefully work as expected.
+Note that Makefile.macros contains all the current macro names, which are used to
+generate the .asm and .c (interface function) file names.
+
+The shell script aptest runs all the test programs and examples (use -l to
+link against the clone lib instead of the installed lib) and trys to diff
+them against the previous results as a regression test.
+
+ARRAY PROCESSING MACROS (* => finished)
+
+Debugging Aids
+* DSPlveq        - Logical vector equal
+* DSPveqv        - Vector logical equivalence
+* DSPsumv         - Sum of vector elements
+  
+Basic Vector Operations
+* DSPvclear        - Vector clear
+* DSPvmove        - Vector move
+* DSPvswap       - Vector swap
+* DSPvreverse       - Vector reverse ordering
+* DSPvfill       - Vector fill
+* DSPvfilli      - Vector fill immediate 
+* DSPvnegate        - Vector negate
+* DSPvpv        - Vector add
+* DSPvmv        - vector minus vector
+* DSPvtv        - Vector multiply
+* DSPvps       - Vector scalar add
+* DSPvpsi      - Vector scalar add immediate
+* DSPvts       - Vector scalar multiply
+* DSPvsquare         - Vector square
+* DSPvssq        - Vector signed square
+* DSPvabs        - Vector absolute value
+* DSPvtvps        - Vector multiply and scalar add
+* DSPvtspv        - Vector scalar multiply and add
+* DSPvtsmv       - Vector scalar multiply and subtract
+* DSPvtvpv         - Vector multiply and add
+* DSPvtvms        - Vector multiply and subtract
+* DSPvam         - Vector add and multiply 		<<where is it?>>
+* DSPvsbm        - Vector subtract and multiply
+* DSPvsmsa       - Vector scalar multiply and scalar add
+* DSPvtvpvtv        - Vector multiply, multiply, and add
+* DSPvtvmvtv       - Vector multiply, multiply, and subtract
+* DSPvsumtvsum        - Vector add, add, and multiply
+* DSPvsbsbm      - Vector subtract, subtract, and multiply
+* DSPvand        - Vector logical and
+* DSPvor         - Vector or
+* DSPvash        - Vector arithmetic right shift
+* DSPvlsh        - Vector logical right shift
+  
+Vector to Scalar Operations
+* DSPsumvmag       - Sum of vector element magnitudes
+* DSPsumvsq       - Sum of vector element squares
+* DSPsumvsquares         - Sum of vector signed squares
+* DSPmaxv        - Maximum element in vector
+* DSPminv        - Minimum element in vector
+* DSPmaxmagv      - Maximum magnitude element in vector
+* DSPminmagv      - Minimum magnitude element in vector
+  
+Vector Comparison Operations
+* DSPvmax        - Vector maximum
+* DSPvmin        - Vector minimum
+  DSPvmaxmag      - Vector maximum magnitude
+  DSPvminmag      - Vector minimum magnitude
+  DSPvlim        - Vector limit
+  DSPlvgt        - Logical vector greater than
+  DSPlvge        - Logical vector greater than or equal
+  DSPlvne        - Logical vector not equal
+  DSPlvnot       - Logical vector not
+  DSPvlmerg      - Vector logical merge
+  
+Complex Vector Arithmetic
+  DSPcvmove      - Complex vector move
+  DSPcvfill      - Complex vector fill
+  DSPcvcombine   - Complex vector combine
+  DSPcvreal      - Form complex vector of reals
+  DSPcvnegate       - Complex vector negate
+  DSPcvconjugate - Complex vector conjugate
+  DSPcvpcv       - complex vector plus complex vector
+  DSPcvmcv       - complex vector minus complex vector
+  DSPcvtcv       - Complex vector multiply
+  DSPcvts        - Complex vector scalar multiply
+  DSPcrvpv       - Complex and real vector add
+  DSPcrvmv       - Complex and real vector minus vector
+  DSPcrvtv       - Complex and real vector multiply
+  DSPcvma        - Complex vector multiply and add
+  DSPcvmags      - Complex vector magnitude squared
+  DSPscjma       - Self-conjugate multiply and add
+  
+Miscellaneous
+* DSPvramp       - Vector ramp
+  DSPvindex      - Vector index
+  DSPdotpr       - Dot product
+  DSPvrand       - Vector random numbers [JOS has code for this already]
+  DSPmeanv       - Mean value of vector elements
+  DSPmeamagv      - Mean of vector element magnitudes
+  DSPmeasqv      - Mean of vector element squares
+  DSPrmsqv       - Root-mean square of vector elements
+  DSPvreal       - Extract real parts of complex vector 
+  DSPvimag       - Extract imaginary parts of complex vector 
+  DSPpolar       - Rectangular to polar conversion (given vsquarert and atn2 below)
+  DSPrect        - Polar to rectangular conversion (given vsin and vcos below)
+  DSPcdotpr      - Complex dot product
+  DSPmtrans      - Matrix transpose
+  DSPmmac        - Matrix multiply-accumulate (given mtm below)
+  DSPmvml3       - Matrix vector multiply (3x3) (given mtm below)
+  DSPmvml4       - Matrix vector multiply (4x4) (given mtm below)
+  DSPctrn3       - Coordinate transformation on list of 3D coordinates
+* DSPmtm        - Matrix multiply
+  DSPvsquarert       - Vector square root
+  DSPvatn2       - Vector arctangent
+  DSPvsin        - Vector sine
+  DSPvcos        - Vector cosine
+  DSPcvmexp      - Vector multiply complex exponential
+  
+Data Formatting Operations
+  DSPvtvaw2dsp  - Vector MuLaw8 to DSP default format
+  DSPvdsp2mulaw  - Vector DSP default format to MuLaw8
+  DSPvadm2dsp    - Vector ADM1 to DSP default format
+  DSPvdsp2adm    - Vector DSP default format to ADM1
+  DSPvsnd2dsp    - Vector sound to DSP default format
+  DSPvdsp2snd    - Vector DSP default format to sound
+
+Fast Fourier Transform (FFT) Functions
+  DSPcfft        - Complex to complex FFT (in place)
+  DSPcfftb       - Complex to complex FFT (not in place)
+  DSPrfft        - Real to complex FFT (in place)
+  DSPrfftb       - Real to complex FFT (not in place)
+  DSPrfftb2d     - Real to complex 2-dimensional FFT (not in place)
+  DSPcfftsc      - Complex FFT scale
+  DSPrfftsc      - Real FFT scale and format
+
+Digital Filtering
+  DSPdiff        - First-order difference (derivative approximation) (easy)
+  DSPdiff2       - Second-order difference (2nd-derivative approximation) (easy)
+  DSPconv        - Convolution (correlation)
+  DSPdeq2        - Difference equation, 2 poles, 2 zeros
+  DSPdeq         - General difference equation
+  DSPsrc         - Sampling-rate conversion or resampling
+
+Numerical Analysis
+  DSPvpoly       - Vector polynomial evaluation (easy)
+  DSPvsum        - Vector sum-of-elements integration (easy)
+  DSPvtrapz      - Vector trapezoidal-rule integration
+  DSPvsimps      - Vector Simpson's 1/3-rule integration
+  DSPvsimpsas    - Vector Simpson's 1/3-rule integration, avoiding singularities
+
+
+CURRENT LIST IN ALPHABETICAL ORDER
+
+cvtcv      - complex vector multiply
+lveq       - vector logical equivalence 
+maxmagv     - vector magnitude maximum 
+maxv       - vector maximum 
+minmagv     - vector magnitude minimum 
+minv       - vector minimum 
+mtm        - matrix times matrix 
+sumv        - vector element sum - sum vector to a scalar
+sumvmag      - vector magnitude sum 
+sumvnolim   - vector element sum 
+sumvsq      - sum of vector squares
+sumvubar    - vector element sum - sum vector to a scalar
+sumvsquares        - sum of signed vector squares
+vsumtvsum       - vector sum times vector sum
+vabs       - vector absolute value
+vpv       - vector add - add two vectors, creating a third
+vpvnolim  - vector add - add two vectors, creating a third,
+vand       - vector and - and two vectors, creating a third
+vasr       - vector arithmetic shift right
+vclear       - vector clear - clear the elements of a vector
+veqv       - vector logical equivalence 
+vfill      - vector fill - fill vector with a constant value
+vfilli     - vector fill immediate - fill vector with arg constant
+vlsr       - vector logical shift right
+vtvpv        - vector multiply plus add
+vmax       - vector max - max two vectors, creating a third
+vmin       - vector min - min two vectors, creating a third
+vtvpvtv       - vector multiply plus vector multiply
+vtvmvtv      - vector multiply minus vector multiply
+vmove       - vector move - copy vector from one location to another
+vmoveb      - vector move backwards 
+vtvps       - vector multiply plus scalar add
+vtvms       - vector multiply then subtract
+vtv        - vector multiply - pointwise multiplication of two vectors
+vnegate       - vector negate - fill vector with neg of vector
+vor        - vector or - or two vectors, creating a third
+vramp      - vector ramp - fill a vector with a ramp function
+vrampi     - vector ramp immediate - fill a vector with a ramp
+vreverse      - vector reverse elements - reverse the elements of the vector
+vps      - vector scalar add - add scalar to elements of a vector
+vpsi     - vector scalar add immediate
+vsbm       - vector subtract, then multiply 
+vsbsbm     - vector difference times vector difference
+vtspv       - vector scalar multiply-add
+vtsmv      - vector times scalar minus vector
+vts      - vector scalar multiply 
+vtsi     - vector scalar multiply immediate
+vsquare        - vector square - square the elements of a vector
+vssq       - vector signed square 
+vmv       - vector minus vector 
+vswap      - vector swap

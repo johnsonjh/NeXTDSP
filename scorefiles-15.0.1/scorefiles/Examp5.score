@@ -1,0 +1,67 @@
+/* 
+	This is a sample scorefile illustrating the use of the DBWave1v
+	synthpatch.
+
+	If you make your own Music Kit program, DBWave1vi must be loaded into 
+	your program to play this. See <musickit/synthpatches/DBWave1vi.h> for 
+	details on the meaning of the parameters in the Notes in this file. 
+
+	See Examp3.score for more comments. 
+
+	Feel free to copy and modify this example.
+*/
+part part1,part2,part3,part4,part5,part6;
+
+part1 synthPatch:"DBWave1vi" synthPatchCount:1;
+part2 synthPatch:"DBWave1vi" synthPatchCount:1;
+part3 synthPatch:"DBWave1vi" synthPatchCount:1;
+part4 synthPatch:"DBWave1vi" synthPatchCount:1;
+part5 synthPatch:"DBWave1vi" synthPatchCount:1;
+part6 synthPatch:"DBWave1vi" synthPatchCount:1;
+
+envelope ampFun =  [(0,0)(.2,1,1.5)(.3,.8,1.5)(1,.8)(4,.5,2)|(5.1,0.0,.25)];
+
+envelope freqFun =  [(0,.99)(.15,1.005)(.2,.995)(.4,1)|(.5,.99)];
+
+BEGIN;
+part1 (3.9) amp:0.3 ampEnv:ampFun freq:g2 freqEnv:freqFun
+	waveform:"VCS" bearing:-45 svibAmp:.015 svibFreq:4.8 rvibAmp:.008;
+t .01;
+part2 (3.9) amp:0.3 ampEnv:ampFun freq1:g2 freqEnv:freqFun
+	waveform:"VCS" bearing:45 svibAmp:.015 svibFreq:5.1 rvibAmp:.008;
+t 1;
+part3 (3.9) amp:0.3 ampEnv:ampFun freq1:d3 freqEnv:freqFun 
+	waveform:"VCS" bearing:-35 svibAmp:.015 svibFreq:4.7 rvibAmp:.008;
+t 1.01;
+part4 (3.9) amp:0.3 ampEnv:ampFun freq1:d3 freqEnv:freqFun 
+	waveform:"VCS" bearing:35 svibAmp:.015 svibFreq:5.0 rvibAmp:.008;
+t 2;
+part5 (3.9) amp:.3 ampEnv:ampFun freq:a3 freqEnv:freqFun
+	waveform:"VCS" bearing:-20 svibAmp:.015 svibFreq:4.9 rvibAmp:.008;
+t 2.01;
+part6 (3.9) amp:0.3 ampEnv:ampFun freq1:a3 freqEnv:freqFun
+	waveform:"VCS" bearing:20 svibAmp:.015 svibFreq:5.4 rvibAmp:.008;
+t 4;
+part1 (4) amp:0.4 ampEnv:ampFun freq:bf2 freqEnv:freqFun
+	waveform:"VCS" bearing:-45 svibAmp:.015 svibFreq:4.8 rvibAmp:.008;
+t 4.01;
+part2 (4) amp:0.4 ampEnv:ampFun freq1:bf2 freqEnv:freqFun
+	waveform:"VCS" bearing:45 svibAmp:.015 svibFreq:5.1 rvibAmp:.008;
+t 5;
+part3 (3) amp:0.4 ampEnv:ampFun freq1:ef3 freqEnv:freqFun 
+	waveform:"VCS" bearing:-35 svibAmp:.015 svibFreq:4.7 rvibAmp:.008;
+t 5.01;
+part4 (3) amp:0.4 ampEnv:ampFun freq1:ef3 freqEnv:freqFun 
+	waveform:"VCS" bearing:35 svibAmp:.015 svibFreq:5.0 rvibAmp:.008;
+t 6;
+part5 (2) amp:.3 ampEnv:ampFun freq:c4 freqEnv:freqFun
+	waveform:"VNS" bearing:-20 svibAmp:.015 svibFreq:4.9 rvibAmp:.008;
+t 6.01;
+part6 (2) amp:0.4 ampEnv:ampFun freq1:c4 freqEnv:freqFun
+	waveform:"VNS" bearing:20 svibAmp:.015 svibFreq:5.4 rvibAmp:.008;
+END;
+
+
+
+
+

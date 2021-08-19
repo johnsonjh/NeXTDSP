@@ -1,0 +1,60 @@
+.TH SNDCONVERT 1 "August 13, 1990" "NeXT Computer, Inc."
+.SH NAME
+sndconvert \- convert a soundfile to a different format
+.SH SYNOPSIS
+.B sndconvert [ \fIoption\fR ] ... \fIfile\fR
+.SH DESCRIPTION
+\fISndconvert\fR
+modifies the file according to various options. By default,
+a consistency check is performed; the various options allow conversion
+between formats, including non-soundfile formats.
+.SH OPTIONS
+.TP
+.B \-o \fIoutfile\fR
+This option indicates that the output is to be written to the specified file.
+By default, soundfiles are modified in place, with the exception of a 
+conversion that changes the file type (i.e. -d, -m, -r, and -a options).
+.TP
+.B \-i \fIinfostring\fR
+This option specifies that its argument is to be appended to the info string
+in the soundfile header. By default, the info string is null.
+.TP
+.B \-f \fIformatCode\fR
+This specifies the resulting data format of the sound. The value of the number 
+represents the format code; format codes are defined in <sound/soundstruct.h>. 
+The default format code corresponds to 16 bit linear data.  The format conversions currently supported are 
+SND_FORMAT_LINEAR_16 to SND_FORMAT_MULAW_8
+SND_FORMAT_MULAW_8   to SND_FORMAT_LINEAR_16
+SND_FORMAT_FLOAT     to SND_FORMAT_LINEAR_16
+.TP
+.B \-g \fIscaleExponent\fR
+This allows the user to determine the scaling on the float-to-integer or integer-to-float translations.  The scale factor used in translating float-to-integer is (float) * ((1 << scaleExponent)-1).  The scale factor used in translating integer-to-float is (integer) / ((1 << scaleExponent)-1).  The default scaleExponent is 15, which means that a float value of 1.0 is translated to the integer value of 32767.  Using a scaleExponent of 23 translates a float value of 1.0 to a full-scale integer value used by the DSP56001.
+.TP
+.B \-s \fIsampleRate\fR
+This specifies the resulting sampling rate of the sound. It may be a floating
+point number. If the source file sampling rate is not equal to \fIsampleRate\fR, then
+sampling rate conversion is performed.
+.TP
+.B \-c \fIchannelCount\fR
+This specifies the resulting number of channels of the sound. The default
+channel count is 2.  If the input file is mono (1 channel) and the channel count is 2, then a mono-to-stereo conversion is performed, for linear 16 bit files.
+.TP
+.B \-r
+This specifies the input file to be a raw data file, to which a header is 
+added. The resulting soundfile is of the same name as the input file with 
+a .snd extension. 
+.TP
+.B \-a
+This option specifies the input file to be a raw data file, as with the -r
+option, but the data format is ascii, with each number separated by newlines.  The output files that can be generated from ascii input files are SND_FORMAT_LINEAR_16, SND_FORMAT_MULAW_8, SND_FORMAT_FLOAT. 
+.TP
+.B \-d
+This option indicates that the file is a DSP absolute load image. The
+file must have a .lod extension, and the output file will be of the same name
+with a .snd extension.
+.SH FILES
+The <sound/soundstruct.h> file contains the data format codes defined by the
+system.
+.SH "SEE ALSO"
+sndplay(1), sndrecord(1), sndinfo(1), sndcompress(1)
+

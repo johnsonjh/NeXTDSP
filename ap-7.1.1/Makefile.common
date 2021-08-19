@@ -1,0 +1,54 @@
+#
+#	Makefile.common - used to develop and maintain ap
+#	Copyright NeXT, Inc.  1989
+#
+# Modification History:
+#	07/31/89/mtm - initial coding
+
+# Install flags
+IFLAGS = -q -c
+BINIFLAGS = -s -c
+
+# Compiler flags
+BASE_CFLAGS = -Wimplicit
+CFLAGS = $(BASE_CFLAGS) -O
+
+# Files
+COMMON_LEAN_GARBAGE =
+COMMON_CLEAN_GARBAGE = $(PRODUCTS) TAGS core
+
+# Directories
+INSTALLSRC_DIR = $(SRCROOT)/$(SOURCE_DIR)
+
+# Targets
+# Those with double colon may also appear elsewhere.
+# All appears here first so it is the default.
+all::
+
+lean::
+	/bin/rm -rf $(COMMON_LEAN_GARBAGE) $(LEAN_GARBAGE)
+
+# Clean explicitly removes lean garbage rather than
+# invoking lean so nested cleans don't do double lean.
+clean::
+	/bin/rm -rf $(COMMON_LEAN_GARBAGE) $(LEAN_GARBAGE)
+	/bin/rm -rf $(COMMON_CLEAN_GARBAGE) $(CLEAN_GARBAGE)
+	
+installsrc:: SRCROOT
+	/bin/rm -rf $(INSTALLSRC_DIR)
+	mkdirs -m 755  $(INSTALLSRC_DIR)
+	tar cf - $(INSTALLSRC_FILES) | (cd $(INSTALLSRC_DIR); tar xfp -)
+	(cd $(INSTALLSRC_DIR); chmod 644 $(INSTALLSRC_FILES))
+
+nested:
+	@for i in $(NESTED_DIRS); do \
+		(cd ./$$i; echo "$$i:"; \
+		make $(MAKE_FLAGS) $(NESTED_TARGET)) || exit $? ; done
+
+SRCROOT:
+	@if [ -n "${$@}" ]; then exit 0; \
+	else echo Must define $@; exit 1; fi
+	
+TAGS:
+	etags $(CFILES)
+

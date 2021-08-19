@@ -1,0 +1,72 @@
+#
+#	Makefile.macros - used to develop and maintain ap
+#	Copyright NeXT, Inc.  1989
+#
+# Modification History:
+#	07/31/89/mtm - added header, changed prefix name
+
+AP_MACROS = \
+    $(MACRO_PREFIX)cvcombine \
+    $(MACRO_PREFIX)cvconjugate \
+    $(MACRO_PREFIX)cvfill \
+    $(MACRO_PREFIX)cvfilli \
+    $(MACRO_PREFIX)cvmandelbrot \
+    $(MACRO_PREFIX)cvmcv \
+    $(MACRO_PREFIX)cvmove \
+    $(MACRO_PREFIX)cvnegate \
+    $(MACRO_PREFIX)cvpcv \
+    $(MACRO_PREFIX)cvreal \
+    $(MACRO_PREFIX)cvtcv \
+    $(MACRO_PREFIX)fftr2a \
+    $(MACRO_PREFIX)maxmagv \
+    $(MACRO_PREFIX)maxv \
+    $(MACRO_PREFIX)minmagv \
+    $(MACRO_PREFIX)minv \
+    $(MACRO_PREFIX)mtm \
+    $(MACRO_PREFIX)sumv \
+    $(MACRO_PREFIX)sumvmag \
+    $(MACRO_PREFIX)sumvnolim \
+    $(MACRO_PREFIX)sumvsq \
+    $(MACRO_PREFIX)sumvsquares \
+    $(MACRO_PREFIX)vabs \
+    $(MACRO_PREFIX)vand \
+    $(MACRO_PREFIX)vasl \
+    $(MACRO_PREFIX)vasr \
+    $(MACRO_PREFIX)vclear \
+    $(MACRO_PREFIX)veor \
+    $(MACRO_PREFIX)vfill \
+    $(MACRO_PREFIX)vfilli \
+    $(MACRO_PREFIX)vimag \
+    $(MACRO_PREFIX)vlsl \
+    $(MACRO_PREFIX)vlsr \
+    $(MACRO_PREFIX)vmax \
+    $(MACRO_PREFIX)vmin \
+    $(MACRO_PREFIX)vmove \
+    $(MACRO_PREFIX)vmoveb \
+    $(MACRO_PREFIX)vmovebr \
+    $(MACRO_PREFIX)vmv \
+    $(MACRO_PREFIX)vnegate \
+    $(MACRO_PREFIX)vor \
+    $(MACRO_PREFIX)vps \
+    $(MACRO_PREFIX)vpsi \
+    $(MACRO_PREFIX)vpv \
+    $(MACRO_PREFIX)vpvnolim \
+    $(MACRO_PREFIX)vramp \
+    $(MACRO_PREFIX)vrampi \
+    $(MACRO_PREFIX)vrand \
+    $(MACRO_PREFIX)vreal \
+    $(MACRO_PREFIX)vreverse \
+    $(MACRO_PREFIX)vsquare \
+    $(MACRO_PREFIX)vssq \
+    $(MACRO_PREFIX)vswap \
+    $(MACRO_PREFIX)vts \
+    $(MACRO_PREFIX)vtsi \
+    $(MACRO_PREFIX)vtsmv \
+    $(MACRO_PREFIX)vtspv \
+    $(MACRO_PREFIX)vtv \
+    $(MACRO_PREFIX)vtvmv \
+    $(MACRO_PREFIX)vtvmvtv \
+    $(MACRO_PREFIX)vtvps \
+    $(MACRO_PREFIX)vtvpv \
+    $(MACRO_PREFIX)vtvpvtv
+

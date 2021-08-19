@@ -1,0 +1,23 @@
+#!/bin/csh -f
+#
+echo 'Test "make install" from the installed source.'
+
+set droot=/
+set src=$droot/dsp-16-s
+set ins=$droot/dsp-16-i
+set logdir=`pwd`
+
+if ( -e $ins ) then
+	echo ${0}: Target source directory $ins exists.
+	echo ${0}: "Delete it first?"
+	set ok=$<
+	if ( $ok !~ [yY]* ) then
+		echo ${0}: Installing on top of existing installation
+	else
+		echo ${0}: /bin/rm -rf $ins
+			   /bin/rm -rf $ins
+	endif
+endif
+
+echo ${0}: "cd $src; make $1 $2 install DSTROOT=$ins > & $logdir/install.log"
+            cd $src; make $1 $2 install DSTROOT=$ins > & $logdir/install.log

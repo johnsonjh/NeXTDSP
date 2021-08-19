@@ -1,0 +1,59 @@
+/* 
+	This is a sample scorefile illustrating the use of the Fm1vi
+	synthpatch.  
+
+	If you use your own Music Kit program, Fm1vi must be loaded into your 
+	program to play this. See <musickit/synthpatches/Fm1vi.h> for details
+	on the meaning of the parameters in the Notes in this file. 
+
+
+	Feel free to copy and modify this example.
+*/
+part part1,part2;
+
+part1 synthPatch:"Fm1vi" synthPatchCount:5;
+part2 synthPatch:"Fm1vi" synthPatchCount:1; /* One odd-ball. */
+
+/* Envelopes for part1 */
+envelope ampFun =  [(0,0)(.2,1)(.3,.5)(7,.25)(8,1)|(8.2,0.0)];
+envelope indxFun = [(0,0)(.2,1)(.3,.8)(7,.6)(8,1)|(8.2,0.0)];
+envelope freqFun =  [(0,.97)(.2,1.01)(.25,.995)(.3,1)|(.5,.99)];
+
+/* Envelopes for part2 */
+envelope ampFun2 =  [(0,0)(.3,1,2)(.45,.5,2)(7,.25,4)(8,1,4)|(8.2,0.0)];
+envelope indxFun2 = [(0,0)(.3,1,2)(.45,.8,2)(7,.6,4)(8,1,4)|(8.2,0.0)];
+envelope freqFun2 =  [(0,.97)(.3,1.01)(.4,.995)(.45,1)|(.5,.99)];
+
+/* Some assorted wave tables. We use these for both the modulator and 
+	carrier */
+waveTable foo = [{1,1},{2,.05},{3,.3},{4,.01},{5,.1}];
+waveTable bar = [{1,.5},{2,1},{3,.3},{4,.1},{5,.02}];
+waveTable baz = [{1,.4},{2,1},{3,.4},{4,.2},{5,.1},{6,.05},{7,.02},{8,.01}];
+waveTable boo = [{1,1},{2,.1},{3,.05},{4,.01}];
+
+BEGIN;
+part1 (noteUpdate) amp:.2 svibAmp:.01 rvibAmp:.007 ampEnv:ampFun
+	freqEnv:freqFun m1IndEnv:indxFun m1Ind0:0;
+	
+/* We can put information which is reapplied to each new phrase
+   in a noteUpdate with no tag. In this case, each note is a new 'phrase',
+   since there is no note tag. The note itself may override the information. */
+t .001;
+part1 (10)  freq:bf3 bearing:45 svibFreq:4.7 m1Waveform:foo m1Ind:2.3 c1Ratio:1.0 m1Ratio:1;
+t .03;
+part1 (10)  freq:df3 bearing:-45 svibFreq:5.1 m1Waveform:boo m1Ind:2.3 c1ratio:2.0 m1Ratio:3;
+t 1;
+part1 (9)  freq:ef4 bearing:-35 svibFreq:4.5 m1Ind0:3  m1Ind:1.5 c1Ratio:1.0 m1Ratio:2.0;
+t 1.02;
+part1 (9) freq:af4 bearing:-20 svibFreq:5.3 m1Waveform:bar m1Ind:4 c1ratio:3 m1Ratio:2;
+t 1.4;
+part1 (8.6) freq:c5 bearing:35 svibFreq:4.9 waveform:boo m1Ind:2.0 c1ratio:1 m1Ratio:3;
+t 3;
+part2 (7) amp:.35 ampEnv:ampFun2 freq:f2 freqEnv:freqFun2 bearing:10 svibFreq:4.3 waveform:baz m1Waveform:foo m1Ind0:5  m1Ind:2.5 c1ratio:1 m1Ratio:2  m1IndEnv:indxFun2 amp:.2 svibAmp:.01 rvibAmp:.007;
+
+END;
+
+
+
+
+

@@ -1,0 +1,440 @@
+/* 
+	Emma.score 	
+
+	"Emma" by Emma Banjo
+
+	This is a sample scorefile illustrating the use of the Pluck 
+	synthpatch.
+	
+	If you use your own Music Kit program, Pluck must be loaded into your 
+	program to play this.  See <musickit/synthpatches/Pluck.h> for details
+	on the meaning of the parameters in the Notes in this file. 
+
+	Feel free to copy and modify this example.
+*/
+
+part p1,p2,p3,p4,p5; /* Declare five parts. */
+
+info tempo:300;      /* This is an "info" statement. It gives a suggested
+		        tempo for the default Conductor. 
+
+			You might want to experiment by changing this value
+			to play the score faster or slower. Tempo is specified
+			in beats-per-minute, as on a metronome. */
+
+/* The following are part "info" statements. The use of the information 
+   is at the discretion of the application. Here we set the SynthPatch to 
+   Pluck and allocate one for each part. If you omit the allocation statement,
+   dynamic allocation is used (if the application that plays it follows this
+   convention). */
+p1 synthPatch:"Pluck" synthPatchCount:1;
+p2 synthPatch:"Pluck" synthPatchCount:1;
+p3 synthPatch:"Pluck" synthPatchCount:1;
+p4 synthPatch:"Pluck" synthPatchCount:1;
+p5 synthPatch:"Pluck" synthPatchCount:1;
+
+noteTagRange = 1 to 5; /* Helps the parser a bit. Optional. We only need
+			  5 note tags because, in this example, each part
+			  is considered a single long phrase. There are
+			  no noteOffs until the end of the piece. */
+
+BEGIN;        /* This starts the "body" of the scorefile. */
+t .1;         /* Time is in beats and is modified by tempo. */
+p1 (noteUpdate) ampRel:1 decay:100 amp:.5 bright:.5 velocitySensitivity:1.0;
+	/* Note updates with no tag apply to all note tags of the part. 
+	   In this case, we use the same note tag over and
+           over in each part, thus each part consists of one long phrase. */
+p2 (noteUpdate) ampRel:1 decay:10 amp:.5 bright:.5 velocitySensitivity:1.0;
+p3 (noteUpdate) ampRel:1 decay:10 amp:.5 bright:.5 velocitySensitivity:1.0;
+p4 (noteUpdate) ampRel:1 decay:10 amp:.5 bright:.5 velocitySensitivity:1.0;
+p5 (noteUpdate) ampRel:1 decay:10 amp:.5 bright:.5 velocitySensitivity:1.0;
+t 3.005;
+p1 (noteOn 1) , sustain:0.54, velocity:98, freq:233.07;
+t 4.000;
+p2 (noteOn 2) , sustain:.54, velocity:91, freq:146.82;
+t 5.005;
+p3 (noteOn 3) , sustain:.49, velocity:92, freq:174.61;
+t 6.021;
+p1 (noteOn 1) , sustain:.50, velocity:98, freq:233.07;
+t 7.011;
+p1 (noteOn 1) , sustain:.54, velocity:98, freq:293.65;
+t 8.000;
+p2 (noteOn 2) , sustain:.50, velocity:91, freq:174.61;
+t 9.027;
+p3 (noteOn 3) , sustain:.48, velocity:90, freq:233.07;
+t 10.022;
+p1 (noteOn 1) , sustain:.53, velocity:99, freq:293.65;
+t 11.004;
+p1 (noteOn 1) , sustain:.51, velocity:99, freq:261.62;
+t 12.000;
+p2 (noteOn 2) , sustain:.52, velocity:90, freq:155.56;
+t 13.021;
+p3 (noteOn 3) , sustain:.46, velocity:91, freq:219.99;
+t 14.015;
+p1 (noteOn 1) , sustain:.53, velocity:99, freq:261.62;
+t 15.026;
+p1 (noteOn 1) , sustain:.53, velocity:100, freq:233.07;
+t 16.000;
+p2 (noteOn 2) , sustain:.52, velocity:91, freq:116.53;
+t 17.026;
+p3 (noteOn 3) , sustain:.47, velocity:92, freq:174.61;
+t 18.011;
+p1 (noteOn 1) , sustain:.54, velocity:99, freq:233.07;
+t 19.013;
+p1 (noteOn 1) , sustain:.51, velocity:100, freq:311.12;
+t 20.000;
+p2 (noteOn 2) , sustain:.50, velocity:92, freq:195.99;
+t 21.021;
+p3 (noteOn 3) , sustain:.45, velocity:91, freq:233.07;
+t 22.022;
+p1 (noteOn 1) , sustain:.53, velocity:99, freq:311.12;
+t 23.000;
+p1 (noteOn 1) , sustain:.51, velocity:98, freq:293.65;
+t 24.000;
+p2 (noteOn 2) , sustain:.50, velocity:92, freq:174.61;
+t 25.016;
+p3 (noteOn 3) , sustain:.49, velocity:90, freq:233.07;
+t 26.001;
+p1 (noteOn 1) , sustain:.50, velocity:100, freq:293.65;
+t 27.027;
+p1 (noteOn 1) , sustain:.52, velocity:99, freq:261.62;
+t 28.000;
+p2 (noteOn 2) , sustain:.51, velocity:90, freq:174.61;
+t 29.027;
+p3 (noteOn 3) , sustain:.45, velocity:92, freq:219.99;
+t 30.014;
+p1 (noteOn 1) , sustain:.52, velocity:101, freq:261.62;
+t 31.012;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:277.17;
+t 32.000;
+p2 (noteOn 2) , sustain:.50, velocity:98, freq:164.81;
+t 33.018;
+p3 (noteOn 3) , sustain:.45, velocity:98, freq:195.99;
+t 34.015;
+p1 (noteOn 1) , sustain:.52, velocity:107, freq:277.17;
+t 35.007;
+p1 (noteOn 1) , sustain:.51, velocity:109, freq:293.65;
+t 36.000;
+p2 (noteOn 2) , sustain:.50, velocity:103, freq:146.82;
+t 37.026;
+p3 (noteOn 3) , sustain:.46, velocity:103, freq:219.99;
+t 38.026;
+p1 (noteOn 1) , sustain:.51, velocity:104, freq:329.62;
+t 39.021;
+p1 (noteOn 1) , sustain:.54, velocity:106, freq:349.22;
+t 40.000;
+p2 (noteOn 2) , sustain:.51, velocity:103, freq:174.61;
+t 41.001;
+p3 (noteOn 3) , sustain:.45, velocity:102, freq:293.65;
+t 42.023;
+p1 (noteOn 1) , sustain:.54, velocity:106, freq:349.22;
+t 43.008;
+p1 (noteOn 1) , sustain:.53, velocity:105, freq:329.62;
+t 44.000;
+p2 (noteOn 2) , sustain:.50, velocity:104, freq:195.99;
+t 45.024;
+p3 (noteOn 3) , sustain:.48, velocity:104, freq:277.17;
+t 46.004;
+p1 (noteOn 1) , sustain:.51, velocity:105, freq:329.62;
+t 47.021;
+p1 (noteOn 1) , sustain:.51, velocity:105, freq:293.65;
+t 48.000;
+p2 (noteOn 2) , sustain:.50, velocity:103, freq:174.61;
+t 49.023;
+p3 (noteOn 3) , sustain:.49, velocity:104, freq:219.99;
+t 50.022;
+p1 (noteOn 1) , sustain:.54, velocity:107, freq:293.65;
+t 51.012;
+p1 (noteOn 1) , sustain:.51, velocity:109, freq:233.07;
+t 52.000;
+p2 (noteOn 2) , sustain:.54, velocity:103, freq:146.82;
+t 53.024;
+p3 (noteOn 3) , sustain:.46, velocity:102, freq:195.99;
+t 54.019;
+p1 (noteOn 1) , sustain:.52, velocity:110, freq:233.07;
+t 55.002;
+p1 (noteOn 1) , sustain:.51, velocity:110, freq:293.65;
+t 56.000;
+p2 (noteOn 2) , sustain:.52, velocity:101, freq:174.61;
+t 57.006;
+p3 (noteOn 3) , sustain:.49, velocity:100, freq:219.99;
+t 58.018;
+p1 (noteOn 1) , sustain:.53, velocity:107, freq:293.65;
+t 59.011;
+p1 (noteOn 1) , sustain:.50, velocity:102, freq:277.17;
+t 60.000;
+p2 (noteOn 2) , sustain:.53, velocity:100, freq:164.81;
+t 61.018;
+p3 (noteOn 3) , sustain:.49, velocity:99, freq:195.99;
+t 62.010;
+p1 (noteOn 1) , sustain:.53, velocity:100, freq:277.17;
+t 63.021;
+p1 (noteOn 1) , sustain:.52, velocity:98, freq:261.62;
+t 64.000;
+p2 (noteOn 2) , sustain:.52, velocity:97, freq:155.56;
+t 65.009;
+p3 (noteOn 3) , sustain:.46, velocity:98, freq:174.61;
+t 66.017;
+p1 (noteOn 1) , sustain:.50, velocity:102, freq:219.99;
+t 67.008;
+p1 (noteOn 1) , sustain:.52, velocity:102, freq:233.07;
+t 68.000;
+p2 (noteOn 2) , sustain:.53, velocity:96, freq:146.82;
+t 69.027;
+p3 (noteOn 3) , sustain:.45, velocity:98, freq:174.61;
+t 70.009;
+p1 (noteOn 1) , sustain:.52, velocity:99, freq:311.12;
+t 71.012;
+p1 (noteOn 1) , sustain:.50, velocity:98, freq:293.65;
+t 72.000;
+p2 (noteOn 2) , sustain:.51, velocity:96, freq:174.61;
+t 73.021;
+p3 (noteOn 3) , sustain:.49, velocity:97, freq:261.62;
+t 74.003;
+p1 (noteOn 1) , sustain:.51, velocity:102, freq:261.62;
+t 74.510;
+p1 (noteUpdate 1) , sustain:.50, velocity:102, freq:293.65;
+t 75.005;
+p1 (noteOn 1) , sustain:.54, velocity:102, freq:261.62;
+t 76.000;
+p2 (noteOn 2) , sustain:.52, velocity:97, freq:155.56;
+t 77.018;
+p3 (noteOn 3) , sustain:.49, velocity:97, freq:219.99;
+t 78.025;
+p1 (noteOn 1) , sustain:.52, velocity:103, freq:233.07;
+t 78.519;
+p1 (noteUpdate 1) , sustain:.50, velocity:103, freq:261.62;
+t 79.005;
+p1 (noteUpdate 1) , sustain:.54, velocity:102, freq:233.07;
+t 80.000;
+p2 (noteOn 2) , sustain:.54, velocity:97, freq:116.53;
+t 81.019;
+p3 (noteOn 3) , sustain:.46, velocity:96, freq:174.61;
+t 82.007;
+p1 (noteOn 1) , sustain:.51, velocity:101, freq:233.07;
+t 83.015;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:311.12;
+t 84.000;
+p2 (noteOn 2) , sustain:.52, velocity:97, freq:195.99;
+t 85.026;
+p3 (noteOn 3) , sustain:.45, velocity:97, freq:233.07;
+t 86.018;
+p1 (noteOn 1) , sustain:.51, velocity:106, freq:311.12;
+t 87.017;
+p1 (noteOn 1) , sustain:.52, velocity:104, freq:293.65;
+t 88.000;
+p2 (noteOn 2) , sustain:.54, velocity:100, freq:174.61;
+t 89.000;
+p3 (noteOn 3) , sustain:.46, velocity:99, freq:233.07;
+t 90.026;
+p1 (noteOn 1) , sustain:.54, velocity:106, freq:293.65;
+t 91.019;
+p1 (noteOn 1) , sustain:.50, velocity:109, freq:277.17;
+t 92.000;
+p2 (noteOn 2) , sustain:.51, velocity:104, freq:138.58;
+t 93.016;
+p3 (noteOn 3) , sustain:.48, velocity:104, freq:164.81;
+t 94.003;
+p4 (noteOn 4) , sustain:.52, velocity:101, freq:195.99;
+t 95.025;
+p1 (noteOn 1) , sustain:.51, velocity:99, freq:233.07;
+t 96.004;
+p3 (noteOn 3) , sustain:.47, velocity:107, freq:277.17;
+t 97.000;
+p4 (3.00000 4) , sustain:.52, velocity:101, freq:329.62;
+t 98.010;
+p1 (noteOn 1) , sustain:.52, velocity:104, freq:391.98;
+t 99.024;
+p1 (noteOn 1) , sustain:.51, velocity:104, freq:349.22;
+t 100.000;
+p2 (noteOn 2) , sustain:.54, velocity:106, freq:219.99;
+t 101.013;
+p3 (noteOn 3) , sustain:.47, velocity:100, freq:261.62;
+t 102.000;
+p1 (noteOn 1) , sustain:.51, velocity:105, freq:349.22;
+t 103.011;
+p1 (noteOn 1) , sustain:.50, velocity:106, freq:439.99;
+t 104.000;
+p2 (noteOn 2) , sustain:.53, velocity:99, freq:261.62;
+t 105.016;
+p3 (noteOn 3) , sustain:.45, velocity:101, freq:349.22;
+t 106.023;
+p1 (noteOn 1) , sustain:.50, velocity:110, freq:439.99;
+t 107.012;
+p1 (noteOn 1) , sustain:.50, velocity:112, freq:415.29;
+t 108.000;
+p2 (noteOn 2) , sustain:.54, velocity:100, freq:349.22;
+t 109.017;
+p3 (noteOn 3) , sustain:.49, velocity:102, freq:293.65;
+t 110.001;
+p4 (noteOn 4) , sustain:.52, velocity:98, freq:246.93;
+t 111.000;
+p5 (5.00000 5) , sustain:.40, velocity:99, freq:207.64;
+t 112.000;
+p2 (noteOn 2) , sustain:.54, velocity:101, freq:174.61;
+t 113.003;
+p3 (noteOn 3) , sustain:.49, velocity:102, freq:146.82;
+t 114.028;
+p4 (3.00000 4) , sustain:.54, velocity:98, freq:123.46;
+t 115.003;
+p1 (noteOn 1) , sustain:.50, velocity:101, freq:349.22;
+t 116.000;
+p2 (noteOn 2) , sustain:.52, velocity:102, freq:219.99;
+t 117.017;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:329.62;
+t 118.009;
+p1 (noteOn 1) , sustain:.51, velocity:105, freq:349.22;
+t 119.009;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:439.99;
+t 120.000;
+p2 (noteOn 2) , sustain:.53, velocity:101, freq:261.62;
+t 121.007;
+p3 (noteOn 3) , sustain:.46, velocity:101, freq:349.22;
+t 122.028;
+p1 (noteOn 1) , sustain:.53, velocity:102, freq:415.29;
+t 122.510;
+p1 (noteUpdate 1) , sustain:.50, velocity:105, freq:439.99;
+t 123.000;
+p1 (noteOn 1) , sustain:.54, velocity:111, freq:415.29;
+t 124.000;
+p2 (noteOn 2) , sustain:.51, velocity:101, freq:349.22;
+t 125.009;
+p3 (noteOn 3) , sustain:.45, velocity:104, freq:293.65;
+t 126.027;
+p4 (noteOn 4) , sustain:.54, velocity:99, freq:246.93;
+t 127.000;
+p5 (noteOn 5) , sustain:.40, velocity:104, freq:207.64;
+t 128.000;
+p2 (noteOn 2) , sustain:.54, velocity:103, freq:174.61;
+t 129.025;
+p3 (noteOn 3) , sustain:.46, velocity:104, freq:146.82;
+t 130.028;
+p4 (3.00000 4) , sustain:.51, velocity:97, freq:123.46;
+t 131.004;
+p1 (noteOn 1) , sustain:.53, velocity:108, freq:349.22;
+t 132.000;
+p2 (noteOn 2) , sustain:.51, velocity:106, freq:219.99;
+t 133.029;
+p3 (noteOn 3) , sustain:.45, velocity:100, freq:261.62;
+t 134.003;
+p1 (noteOn 1) , sustain:.50, velocity:108, freq:349.22;
+t 135.022;
+p1 (noteOn 1) , sustain:.53, velocity:110, freq:439.99;
+t 136.000;
+p2 (noteOn 2) , sustain:.53, velocity:101, freq:261.62;
+t 137.026;
+p3 (noteOn 3) , sustain:.45, velocity:97, freq:349.22;
+t 138.012;
+p1 (noteOn 1) , sustain:.54, velocity:101, freq:439.99;
+t 139.015;
+p1 (noteOn 1) , sustain:.54, velocity:101, freq:391.98;
+t 140.000;
+p2 (noteOn 2) , sustain:.52, velocity:96, freq:233.07;
+t 141.005;
+p3 (noteOn 3) , sustain:.49, velocity:95, freq:311.12;
+t 142.026;
+p1 (noteOn 1) , sustain:.50, velocity:100, freq:391.98;
+t 143.026;
+p1 (noteOn 1) , sustain:.54, velocity:99, freq:349.22;
+t 144.000;
+p2 (noteOn 2) , sustain:.51, velocity:93, freq:233.07;
+t 145.008;
+p3 (noteOn 3) , sustain:.45, velocity:95, freq:293.65;
+t 146.014;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:349.22;
+t 147.003;
+p1 (noteOn 1) , sustain:.50, velocity:105, freq:391.98;
+t 148.000;
+p2 (noteOn 2) , sustain:.54, velocity:94, freq:233.07;
+t 149.024;
+p3 (noteOn 3) , sustain:.45, velocity:96, freq:311.12;
+t 150.014;
+p1 (noteOn 1) , sustain:.53875, velocity:105, freq:391.98;
+t 151.020;
+p1 (noteOn 1) , sustain:.53, velocity:107, freq:349.22;
+t 152.000;
+p2 (noteOn 2) , sustain:.54, velocity:97, freq:233.07;
+t 153.001;
+p3 (noteOn 3) , sustain:.49, velocity:97, freq:293.65;
+t 154.000;
+p1 (noteOn 1) , sustain:.52, velocity:108, freq:369.98;
+t 154.016;
+p4 (noteOn 4) , sustain:.54, velocity:102, freq:369.98;
+t 155.008;
+p4 (noteUpdate 4) , sustain:.50, velocity:104, freq:391.98;
+t 155.019;
+p1 (noteOn 1) , sustain:.51, velocity:108, freq:391.98;
+t 156.000;
+p2 (noteOn 2) , sustain:.51, velocity:97, freq:233.07;
+t 157.012;
+p3 (noteOn 3) , sustain:.48, velocity:104, freq:311.12;
+t 158.001;
+p1 (noteOn 1) , sustain:.54, velocity:111, freq:415.29;
+t 158.005;
+p4 (noteOn 4) , sustain:.53, velocity:103, freq:415.29;
+t 159.007;
+p1 (noteOn 1) , sustain:.51, velocity:110, freq:439.99;
+t 159.014;
+p4 (noteUpdate 4) , sustain:.52, velocity:102, freq:439.99;
+t 160.000;
+p2 (noteOn 2) , sustain:.51, velocity:103, freq:261.62;
+t 161.003;
+p3 (noteOn 3) , sustain:.48, velocity:102, freq:349.22;
+t 162.006;
+p4 (noteOn 4) , sustain:.51, velocity:103, freq:439.99;
+t 162.010;
+p1 (noteOn 1) , sustain:.54, velocity:111, freq:439.99;
+t 163.015;
+p1 (noteOn 1) , sustain:.51, velocity:109, freq:466.15;
+t 163.020;
+p4 (noteUpdate 4) , sustain:.51, velocity:104, freq:466.15;
+t 164.000;
+p2 (noteOn 2) , sustain:.53, velocity:103, freq:391.98;
+t 165.000;
+p2 (noteOn 2) , sustain:.52, velocity:104, freq:349.22;
+t 166.012;
+p3 (noteOn 3) , sustain:.46, velocity:105, freq:293.65;
+t 167.029;
+p4 (noteOn 4) , sustain:.50, velocity:104, freq:233.07;
+t 168.000;
+p2 (noteOn 2) , sustain:.54, velocity:105, freq:195.99;
+t 169.000;
+p2 (noteOn 2) , sustain:.51, velocity:106, freq:174.61;
+t 170.024;
+p3 (noteOn 3) , sustain:.46, velocity:105, freq:146.82;
+t 171.000;
+p5 (noteOn 5) , sustain:.10, velocity:106, freq:116.53;
+
+t 174.1;
+p5 (noteOn 5) , sustain:.10, velocity:108, freq:(65.405)~-2;
+t 174.500;
+p2 (noteOn 2) , sustain:.53, velocity:104, freq:(130.81)~-2;
+t 174.808;
+p3 (noteOn 3) , sustain:.46, velocity:105, freq:(174.61)~-2;
+t 175.124;
+p4 (noteOn 4) , sustain:.50, velocity:107, freq:(174.61)~-2;
+t 175.515;
+p1 (noteOn 1) , sustain:.51, velocity:109, freq:(219.99)~-2;
+
+t 179.500;
+p5 (noteOn 5) , sustain:.40, velocity:99, freq:(65.405)~-2;
+t 180.006;
+p2 (noteOn 2) , sustain:.53, velocity:107, freq:(130.81)~-2;
+t 180.511;
+p4 (noteOn 4) , sustain:.52, velocity:108, freq:(164.81)~-2;
+t 181.0;
+p3 (noteOn 3) , sustain:.47, velocity:106, freq:(195.99)~-2;
+t 181.657;
+p1 (noteOn 1) , sustain:.52, velocity:99, freq:(261.62)~-2;
+
+t +6;
+p1 (noteOff 1);
+p2 (noteOff 2);
+p3 (noteOff 3);
+p4 (noteOff 4);
+p5 (noteOff 5);
+
+END;
+
+
+

@@ -1,0 +1,420 @@
+README for sound project
+------------------------
+
+#############################################################
+2.0 Sound Library API changes
+
+New Soundfile Formats
+---------------------
+
+SND_FORMAT_EMPHASIZED - 16 bit linear samples recorded with emphasis.
+Indicates that playback should use the deemphasis filter.
+
+SND_FORMAT_COMPRESSED - 16 bit linear samples that have
+been compressed using the Parallel Packing time domain technique.
+The sound library can create a file in this format when recording from
+the DSP serial port, compressing in real-time.  Playback of this format
+uses real-time decompression on the DSP.  The new sndcompress utility
+can also compress and decompress files.  Supports all sample rates, mono
+and stereo.
+
+SND_FORMAT_COMPRESSED_EMPHASIZED - Same as above but indicates that playback
+should use the deemphasis filter.
+
+SND_FORMAT_DSP_COMMANDS - A file of Sound/DSP Driver Mach messages created
+during a MusicKit performance.  Allows the sound library to recreate a
+static MusicKit performance.  Support for creating this format has been
+put in the DSP library and the MusicKit.
+
+SND_FORMAT_DSP_COMMANDS_SAMPLES - Same as above by also streams samples to
+read-data unitgenerators running on the DSP.  For mixing sound with music.
+
+
+Sample Rate Conversion
+----------------------
+
+All sample rates are now automatically converted to 22K or 44K for playback.
+One caveot - a sample rate of 8012 is assumed to be the CODEC rate, 
+8012.8210513.
+
+
+New Commands and Command Features
+---------------------------------
+
+Also see ~/sndcmds_proj/sndcmds/SndCmdsNotes.wn.
+
+sndcompress - Compress a SND_FORMAT_LINEAR_16 file, generating a
+SND_FORMAT_COMPRESSED or SND_FORMAT_COMPRESSED_EMPHASIZED file.
+Can also decompress back to 16 bit linear.
+
+sndconvert - Now supports conversion between all sample rates.
+Can also convert stereo to mono.
+
+sndinfo - Supports the new format codes.
+
+sndrecord - Supports recording compressed and emphasized sound from the DSP.
+
+sndplay - Can playback all new formats.  Can play to the DSP serial port.
+Can convert all sample rates to 22K or 44K for playback.
+
+
+New Sound Library Functions
+---------------------------
+
+int SNDUpdateDSPParameter(int val) - send a DSP host message that causes
+a running MusicKit monitor to write val to a fixed DSP address.  For use
+with SND_FORMAT_DSP_COMMANDS playback to dynamically update parametric
+sounds.
+
+int SNDSetCompressionOptions(SNDSoundStruct *s, int bitFaithful, int dropBits) -
+int SNDSetCompressionOptions(SNDSoundStruct *s, int *bitFaithful, int *dropBits) -
+Set/Get options used when recording s, which must be SND_FORMAT_COMPRESSED or
+SND_FORMAT_COMPRESSED_EMPHASIZED.  Default is bitFaithful=TRUE and dropBits=4.
+
+int SNDCompressSound(SNDSoundStruct *s1, SNDSoundStruct **s2) -
+Compress or decompress s1 into s2.
+
+int SNDStartPlayingDSP(...) - same as SNDStartPlaying() but causes playback
+out the DSP serial port.
+
+int SNDSetFilter(int filterOn) -
+int SNDGetFilter(int *filterOn) -
+Set/Get the state of the low-pass filter used for playing back sounds.
+The filter is automatically used when playing back emphasized sounds.
+
+
+New Sound Library Driver Interface Functions
+--------------------------------------------
+
+snddriver_dsp_reset
+snddriver_new_device_port
+snddriver_dsp_dma_write
+snddriver_dsp_dma_read
+snddriver_dspcmd_abortdma
+snddriver_set_dsp_buffers_per_soundout_buffer
+snddriver_dsp_read_data???
+snddriver_dsp_read_messages???
+
+#############################################################
+BUILDING A LIBSYS SHLIB
+
+[04/10/90/mtm]
+The sound library is part of the libsys shlib, libsys_s (link time) and
+libsys_s.B.shlib (run time).  Doing a "make shlib_ofiles" in the libsys project
+causes each library (including sound) to do a "make shlib_ofiles".
+
+To locally test the sound library, do a "make debug_tests" here and run playtest,
+recordtest, etc.
+
+Creating a libsys with the latest sound library for testing (and for others
+to link against) is a little more complicated...
+
+First create a directory called LIBSYS, and one under that called
+libsys-25 (for example).  Then go to the latest and greatest libsys
+project directory (for example /Net/marvin/p1/BSD/LIBSYS/libsys-25) and do a
+"make installsrc SRCROOT=/Net/marvin/sounds/mminnick/LIBSYS/libsys-25" (for example).
+**NOTE: the destination directory must exist**.
+Go to your new directory and edit the file spec_sys.  Add any new entry points
+after the existing "SND*" entry points, taking up empty slots as needed.  If there
+are any new object files, these need to be added next to the existing ones, too.
+
+In the LIBSYS dirictory you need to create links to each project directory.
+The usual way to do this is to link or mount the current sources to a directory in
+LIBYSYS, then create the links by hand.  The following script might do the
+job:
+
+#!/bin/csh -f
+
+rm -f srcs
+ln -s /usr/local/src srcs
+
+rm -f libc libm sound objc streams libdb cc
+
+ln -s srcs/libc libc
+ln -s srcs/libm libm
+ln -s srcs/sound sound
+ln -s srcs/objc objc
+ln -s srcs/streams streams
+ln -s srcs/libdb libdb
+ln -s srcs/cc cc
+
+Of course you should link sound to what ever source directory you want to test.
+To build the shlib_ofiles in your sound directory (so make shlib, below, works),
+go there and type
+"make shlib_ofiles SHLIBIDIR=/Net/marvin/sounds/mminnick/LIBSYS/libsys-25"
+or wherever you have done the make installsrc to.
+
+Next go to the lower libsys directory, do a "make current_links", then a
+"make shlib".  When that's done, do the following:
+
+su
+mv /lib/libsys_s.a /lib/libsys_s.a.orig
+install -m 444 libsys_s.a /lib/libsys_s.a
+mkdirs /foo/usr/shlib
+install -sS -m 555 libsys_s.B.shlib /foo/usr/shlib/libsys_s.B.shlib
+mv /usr/shlib/libsys_s.B.shlib /usr/shlib/libsys_s.B.shlib.orig
+mv /foo/usr/shlib/libsys_s.B.shlib /usr/shlib/libsys_s.B.shlib
+sync;sync
+reboot
+
+If the sync prints "bad executable (or shared library)", mv the original
+shlib back - your new one is bogus.  If reboot does not work your new one
+is also bogus, but you will have to boot from optical or from the network
+and mount your hard disk in order to move the original shlib back.
+Good Luck! (You'll need it.)
+
+[04/13/90/mtm]
+There is now a LIBSOUND directory on /Net/p1/BSD.  This should be kept up to date
+by dropping in the latest dspdev version of sound.  The idea is that anyone should be
+able to go to /Net/p1/BSD/LIBSYS and build a current libsys.
+
+[05/24/90/mtm]
+NOTE: make shlib_ofiles uses -g, so if you don't strip libsys_s.B.shlib (just cp
+instead of install) you can use gdb to debug the sound library in the shlib.
+
+
+#############################################################
+DEBUGGING WITH XPR TRACES
+
+[04/13/90/mtm]
+To debug with sound/dsp driver xpr traces on, do the following:
+
+<in the monitor>
+ben debug rootdev=sd0
+<nmi>
+b
+<nmi>
+xprflag=0x300000	; 1 is sound, 2 is dsp, 3 is both
+dspdbg=2
+c
+
+Now run gdb and break just before you want to save the trace messages.
+
+<nmi>
+xprc
+c
+
+Now run until you want to look at the traces.
+
+<nmi>
+xpr
+
+You'll likely have to look at the driver source to understand the messages.
+
+ 
+#############################################################
+SOUND LIBRARY TEST SUITE
+
+Debug testing
+-------------
+
+Do a "make debug_tests" and run all the *test files.
+
+Some of these are run by the "testscript" shell script.
+
+recordtest.c
+	Test recording CODEC, short and long.
+	Test recording from the DSP 44K stereo, short and long.
+	Test recording from the DSP 22K mono.
+	Test recording from the DSP compressed, mono and stereo,
+	  bit-faithful and non-bit-faithful, 44K and 22K (mono only).
+	  FIXME: recordtest has no option for 44K mono compressed or
+		 22K mono compressed bit-faithful.
+	Test recording into several files in one invocation, all formats.
+
+playtest.c
+	Test playing all sample rates (44K, 22K, CODEC), mono and stereo.
+	Test playing back on the DSP.
+	Test playing back compressed sounds, all rates, mono and stereo.
+	Test playing back with sample rate conversion.
+	Test playing back several files in one invocation, all formats.
+	Test playing back dsp commands files.
+
+chaintest.c
+	Plays back several files, "optimized" (no breaks).
+	Test optimized and non-optimized formats (see performsound.c - 
+	  modeOptimizable()).
+
+rchaintest.c
+	Tests codec chain recording to multiple files.
+	FIXME: This should record longer sounds to be useful.
+	FIXME: Add my chainrecord to test suite to test dsp chain recording
+	       and chain recording to a single file.
+
+filtertest.c
+	Turn the low-pass filter on and off.
+	Try playing back emphasized and non-emphasized sounds.
+
+converttest.c
+	Convert a codec soundfile to 16-bit linear 22K stereo.
+	FIXME: add other conversion tests.
+
+squelchtest.c
+	Run-length-encode a mulaw codec file.
+	FIXME: currently gets a Bus Error.
+
+decodemutest.c
+	Decode run-length-encoded 8-bit mulaw into 22K.
+
+decodetest.c
+	Decode run-length-encoded 8-bit mulaw into regular codec.
+
+downby2test.c
+	Duplicates converttest.
+	FIXME: remove this.
+
+hosttest.c
+	Play back on specified host.
+	Test with long and short files.
+
+
+Sound Commands Testing
+----------------------
+
+You should link and run these against an installed libsys shilb, build as
+described above.
+
+Some of these are run by the "testscript" shell script.
+
+sndrecord (Note: does not use the sound library)
+	Test recording from CODEC and dsp.
+	Test using custom dsp code (currently broken)
+	Test compressed recording (not currently implemented).
+
+sndplay
+	Test playing back all formats.
+	Test playing back to the DSP SSI port.
+
+sndinfo
+	Test all formats.
+
+sndconvert
+	Test all supported conversions, including ascii, raw, and .lod.
+	See note below on supported conversions.
+	FIXME: arbitrary sample rate conversion not yet implemented.
+
+sndcompress
+	Test compress/decompress at 22K, 44K, mono, stereo,
+	bit-faithful, non-bit-faithful.
+	FIXME: sndcompress is not currently implemented.
+
+
+Apps (SoundKit) Testing
+-----------------------
+
+You need to build a libsys shlib as discribed above.  After it is installed,  all
+Apps will be running against it.
+
+Mail
+	Test Lip Service.
+	Test dragging in soundfiles of various types, including dspcommands.
+	Test playing dragged in sounds by double clicking.
+
+The following are in (/NextDeveloper/Demos):
+
+SoundPlayer
+	Launch with WorkSpace by double-clicking on a soundfile.
+	Try playback of various soundfiles, including dspcommands.
+	Try CODEC recording.
+
+Balancer
+Billiards
+MonsterScope
+ShowAndTell
+SoundCompression?
+
+
+Examples (/NextDeveloper/Examples) Testing
+------------------------------------------
+
+You need to "cp -r" to a temp directory and make them.
+
+SoundEditor
+	Try recording, playback, and display.
+
+Sound
+	Try all examples.
+
+DSP/SoundDSPDriver
+	Try all examples.
+
+
+Other Apps
+----------
+
+SoundWorks?
+
+
+Sounds Testing
+--------------
+
+sndplay /NextLibrary/Sounds/*.snd
+
+
+#############################################################
+Conversions currently supported by sndconvert
+
+FIXME: This should be made clearer in user doc.
+FIXME: The man page impiles -s 22050 and -f 3 are "defaults",
+       but that does not seem to be the case.
+
+Rate	Fmt	Chan	-->	Rate	Fmt	Chan
+
+44	16	--		22	16	--
+8	ulaw	1		22	16	2
+--	--	1		--	--	2
+8	ulaw	--		8	16	--
+--	16	--		8	ulaw	--
+--	16	--		--	float	--
+--	16	--		--	dbl	--
+--	float	--		--	16	--
+--	dbl	--		--	16	--
+
+Also: .lod-->.snd; ascii-->any, raw-->any
+FIXME: arbitrary sample rate conversion not yet implemented.
+
+FIXME: -i "info" not supported for 44->22 and 8->22 formats.
+
+
+#############################################################
+Date: Tue, 21 Aug 90 16:29:20 PDT
+From: Steve_Naroff
+To: software
+Subject: cmpshlib should be part of the shlib development process
+
+
+if (you don't build shlibs) {
+	you can delete this now } else {
+	I wanted to remind everyone that there is a great tool for
+comparing shared libraries for compatibility - it is called
+`cmpshlib'. This tool can be used to verify any changes that you make
+to the shlib - it should be considered part of the shlib development
+process.  cmpshlib will save us all a lot of time. For example, we
+(rich, trey, myself, ...) wasted several hours hunting down a bug that
+cmpshlib was dying to tell us about.  This is what it said:
+
+	cmpshlib: building hash table of external symbols for old
+target: /usr/shlib/lib
+	sys_s.B.shlib
+	cmpshlib: checking external symbols of new target:
+libsys_s.B.shlib
+	Checking the jump table targets
+	Checking the global data addresses
+	cmpshlib: External nobranch_text symbol: _NXPtrPrototype does
+NOT have the 	same address (0x50067b4 and 0x50065b4)
+	cmpshlib: External nobranch_text symbol: _NXStrPrototype does
+NOT have the 	same address (0x50067c4 and 0x50065c4)
+	cmpshlib: External nobranch_text symbol:
+_NXPtrStructKeyPrototype does NOT 	have the same address
+(0x50067d4 and 0x50065d4)
+	cmpshlib: External nobranch_text symbol:
+_NXStrStructKeyPrototype does NOT 	have the same address
+(0x50067e4 and 0x50065e4)
+
+Essentially, several global data symbols moved, making the shlibs
+incompatible. Given this information, it was easy to find the bug.
+
+Thanks to Kevin for providing us with such a useful tool. If you have
+any questions about how to use it, or on interpreting its output, let
+us know.  snaroff.  }
+

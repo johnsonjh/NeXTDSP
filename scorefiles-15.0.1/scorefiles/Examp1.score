@@ -1,0 +1,54 @@
+/* 
+	This is a sample scorefile illustrating the use of the Fm1i
+	SynthPatch. 
+
+	If you use your own Music Kit program, Fm1i must be loaded into your 
+	program to play this. See <musickit/synthpatches/Fm1i.h> for details
+	on the meaning of the parameters in the Notes in this file. 
+
+	Feel free to copy and modify this example.
+	
+*/
+part bell; /* Declare a single part. In this example several simultaneous
+	      notes are assigned to this part. */
+
+
+/* The following is a part "info" statements. The use of the information 
+   is at the discretion of the app. Here we set the SynthPatch to Fm1i and
+   allocate 9 instances. */
+bell synthPatch:"Fm1i" synthPatchCount:9; 
+
+envelope ampFun =  [(0,0)(.005,1)(10,0)|(14,0.0)(15,0)];
+envelope freqFun =  [(0,1)(.005,1.06)(.01,1)(10,1)|(14,.9,2)];
+envelope indxFun =  [(0,2)(.005,1)(10,0,.3)|(14,0.0)];
+
+waveTable wave1  = [{1,1}{3,.1}]; 
+
+
+BEGIN;
+bell (noteUpdate) waveform:wave1 m1Ratio:3.4
+	m1Ind1:.4 amp:0.2 ampEnv:ampFun freqEnv:freqFun m1IndEnv:indxFun;
+/* We can put information which is reapplied to each new phrase
+   in a noteUpdate with no tag. In this case, each note is a new 'phrase',
+   since there is no note tag. The note itself may override the information. */
+
+t .001;
+bell (4.5) freq:c7 bearing:-45;
+bell (4.5) freq:c7+4.5 bearing:0;
+t .1;
+bell (4.4) freq:b6 bearing:-35;
+bell (4.4) freq:b6+4.1 bearing:10;
+t .2;
+bell (4.3) freq:g6 bearing:-25;
+bell (4.3) freq:g6+4.8 bearing:20;
+t .3;
+bell (4.2) freq:f6 bearing:-15;
+bell (4.2) freq:f6+5.5 bearing:30;
+t .4;
+bell (4.1) freq:d6 bearing:45;
+END;
+
+
+
+
+

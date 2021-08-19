@@ -1,0 +1,886 @@
+##
+## The shared library specification file for libdsp
+##
+## Modification history
+##  01/13/90/jos - Incremented minor_version from 1 to 2.
+##		   Added _DSPSendArraySkipModeTimed() to end of dispatch table.
+##		   Added _DSPSendShortArraySkipTimed() also.
+##  02/13/90/jos - Incremented minor_version to 3. DELETED:
+##		   __DSPMKAwaitTMQMapped 	_DSP_dsp_proto
+##		   _DSPMKGetSoundOutStreamPort  _DSPGetSoundOutStreamPort
+##  02/16/90/jos - Removed minor_version setting 
+##		   (See 'minor_version' in Makefile.lib)
+##  02/19/90/jos - Added
+##		   _DSPFreezeOrchestra		552
+##		   _DSPThawOrchestra		553
+##  03/13/90/jos - Added _DSPGetHF2AndHF3(void) 554
+##  03/23/90/mtm - Added DSPOpenCommandsFile and DSPCloseCommandsFile 555,6
+##  03/29/90/jos - Added DSPMKEnableReadData, DSPMKDisableReadData,
+##                 DSPMKReadDataIsEnabled, DSPMKReadDataIsRunning,
+##		   DSPMKGetReadDataStreamPort, DSPMKGetReadDataReplyPort
+##		   DSPMKPauseReadDataTimed, DSPMKResumeReadDataTimed
+##  03/30/90/jos - Added DSPMKSetReadDataFile, DSPMKStartReadData
+##		   DSPMKStartReadDataTimed, DSPMKStartReadDataPaused
+##		   DSPMKStopReadData, DSPMKRewindReadData,
+##		   DSPMKGetReadDataSampleCount
+##  04/16/90/jos - Added 
+##		  __DSPOpenMapped (overrides _DSPOpenMapped)
+##
+##		  _DSPMKFreezeOrchestra	overrides _DSPFreezeOrchestra
+##		  _DSPMKThawOrchestra	overrides _DSPThawOrchestra
+##
+##		  _DSPIsSavingCommands
+##		  _DSPIsSavingCommandsOnly
+##		  _DSPGetCommandsFP
+##		  _DSPSetCommandsFP
+##		  _DSPStartCommandsFP
+##		  _DSPStopCommands
+##
+##		  _DSPMKGetReadDataFD
+##		  _DSPMKStopReadDataTimed
+##		  __DSPMKStartReadDataNoThread
+##		  __DSPExtendHmArrayMode
+##		  _DSPWriteFix24ArrayLJ
+##		  _DSPReadFix24ArrayLJ
+##  04/17/90/jos - Added 
+##		  _DSPMKSetReadDataBytePointer
+##		  _DSPMKIncrementReadDataBytePointer
+##  04/23/90/jos - Flushed unsupported entry points.
+##  04/23/90/jos - Changed _DSPSend* to DSPMKSend* or DSPMK*Timed IN PLACE
+##  04/23/90/jos - Preserved _DSPSendArraySkipTimed, _DSPSendValueTimed, and
+##		   _DSPSendLongTimed for 1.0 binary compatibility.
+##  04/26/90/jos - Since DSPWriteValue and DSPWriteLong were published in
+##	           1.0, they were reverted, renamed to DSPWrite{}1p0(),
+##		   and the new correct-arg-order versions have fresh
+##		   shlib slots. (For 1.0 binary compatibility.)
+##  04/26/90/jos - Deleted _DSPWriteIntArrayXY and __DSPGetUserSection
+##  05/01/90/jos - Added
+##		   _DSPGetValueOfSystemSymbol
+##		   _DSPGetHighestExternalUserPAddress
+##		   _DSPGetLowestExternalUserPAddress
+##		   _DSPGetHighestExternalUserXAddress
+##		   _DSPGetLowestExternalUserXAddress
+##		   _DSPGetHighestInternalUserPAddress
+##		   _DSPGetLowestInternalUserPAddress
+##		   _DSPGetHighestInternalUserXAddress
+##		   _DSPGetLowestInternalUserXAddress
+##		   _DSPGetHighestExternalUserYAddress
+##		   _DSPGetLowestExternalUserYAddress
+##		   _DSPGetHighestInternalUserYAddress
+##		   _DSPGetLowestInternalUserYAddress
+##		   _DSPMKSoundOutDMASize
+##		   _DSPMKClearDSPSoundOutBufferTimed
+##		   _DSPGetLowestXYPartitionUserAddress
+##		   _DSPGetHighestXYPartitionXUserAddress
+##		   _DSPGetHighestXYPartitionYUserAddress
+##		   _DSPGetHighestXYPartitionUserAddress
+##  05/04/90/jos - Added _DSPGetSystemImage
+##  10/21/90/jos - Fixed up branch table slots for 1.0 Music Kit compatibility.
+##  		   All such slots can be found by searching for "## !".
+
+#target /usr/shlib/libdsp_s.A.shlib
+#address __TEXT 0x04090000
+#address __DATA 0x04080000
+## The minor version is now set on the command line
+## via -minor_version `vers_string -n`
+
+## This is the branch table.  Symbols in it MUST remain in the same numbered
+## slot from version to version so that the versions are compatible.  Symbols
+## with ranges get assigned the HIGHEST slot.  So if new symbol is added and
+## a slot is taken from a symbol with a range of slots the orignial symbol must
+## remain using the HIGHEST slot.
+##
+## If you add a new routine, insert it at the end of the list in one of the
+## slots taken by a .empty_slot.  If you remove an old routine you WILL BREAK
+## ALL programs that use it but if you feel you can do this change its slot
+## to .empty_slot and don't reuse it (leave a comment to what it was).
+##
+
+## FIXME - DELETE THE FOLLOWING LINE FOR 2.0!
+##minor_version 16
+
+#branch
+	_DSPAbort			0
+	_DSPAlternateReset		1
+	_DSPAwaitAnyMessage		2
+	_DSPAwaitData			3
+	_DSPAwaitHC			4
+	_DSPAwaitHF3Clear		5
+	_DSPAwaitHostMessage		6
+	_DSPAwaitHF3Clear		7 ## was _DSPAwaitIdleState
+	_DSPAwaitMessage		8
+	_DSPAwaitSignedReply		9
+	_DSPAwaitTRDY			10
+	_DSPAwaitUnsignedReply		11
+	_DSPBoot			12
+	_DSPBootFile			13
+	_DSPBreakPoint			14
+	_DSPCall			15
+	_DSPCallB			16
+	_DSPCallV			17
+	_DSPCat				18
+	_DSPCheckVersion		19
+	_DSPClearHF0			20
+	_DSPClearHF1			21
+	_DSPClose			22
+	_DSPCloseErrorFP		23
+	_DSPCloseSaveState		24
+	_DSPCloseSimulatorFile		25
+	_DSPCloseWhoFile		26
+	_DSPDataIsAvailable		27
+	_DSPDataRecordFree		28
+	_DSPDataRecordInit		29
+	_DSPDataRecordInsert		30
+	_DSPDataRecordLoad		31
+	_DSPDataRecordMerge		32
+	_DSPDataRecordPrint		33
+	_DSPDataRecordRead		34
+	_DSPDataRecordWrite		35
+	_DSPDisableErrorLog		36
+	_DSPDisableErrorLogging		37
+	_DSPDisableHostMsg		38
+	_DSPDisableMappedOnly		39
+	_DSPDoubleToFix24		40
+	_DSPDoubleToFix24Array		41
+	_DSPDoubleToFix48		42
+	_DSPDoubleToFix48UseArg		43
+	_DSPDoubleToInt			44
+	_DSPDoubleToIntArray		45
+	_DSPDoubleToIntCountClips	46
+	_DSPEnableErrorFP		47
+	_DSPEnableErrorFile		48
+	_DSPEnableErrorLog		49
+	_DSPEnableErrorLogging		50
+	_DSPEnableHostMsg		51
+	_DSPEnableMappedOnly		52
+	_DSPErrorLogIsEnabled		53
+	_DSPFix24ToDouble		54
+	_DSPFix24ToDoubleArray		55
+	_DSPFix24ToFloat		56
+	_DSPFix24ToFloatArray		57
+	_DSPFix24ToInt			58
+	_DSPFix24ToIntArray		59
+	_DSPFix24ToStr			60
+	_DSPFix48ToDouble		61
+	_DSPFix48ToInt			62
+	_DSPFix48ToSampleStr		63
+	_DSPFixupFree			64
+	_DSPFixupRead			65
+	_DSPFixupWrite			66
+	_DSPFloatToFix24		67
+	_DSPFloatToFix24Array		68
+	_DSPFloatToInt			69
+	_DSPFloatToIntArray		70
+	_DSPFloatToIntCountClips	71
+	_DSPFlushMessageBuffer		72
+	_DSPFlushMessages		73
+	_DSPGetAPDirectory		74
+	.empty_slot			75 ## was _DSPGetArray
+	.empty_slot			76 ## was _DSPGetArrayPacked
+	.empty_slot			77 ## was _DSPGetArraySkip
+	.empty_slot			78 ## was _DSPGetByteArray
+	_DSPGetCVR			79
+	_DSPGetCurrentDSP		80
+	_DSPGetDSPCount			81
+	_DSPGetDSPDirectory		82
+	_DSPGetDSPMessagePort		83
+	.empty_slot			84 ## was _DSPGetDoubleArray
+	_DSPGetErrorFP			85
+	_DSPGetErrorFile		86
+	_DSPGetErrorPort		87
+	_DSPGetFirstAddress		88
+	.empty_slot			89 ## was _DSPGetFloatArray
+	_DSPGetHF0			90
+	_DSPGetHF1			91
+	_DSPGetHF2			92
+	_DSPGetHF3			93
+	_DSPGetHostMessagePort		94
+	_DSPGetHostTime			95
+	_DSPGetICR			96
+	_DSPGetISR			97
+	_DSPGetImgDirectory		98
+	.empty_slot			99 ## was _DSPGetIntArray
+	_DSPGetLastAddress		100
+	_DSPGetLocalBinDirectory	101
+	_DSPGetMessagePriority		102
+	.empty_slot			103 ## was _DSPGetMusicDirectory
+	_DSPGetOpenPriority		104
+	_DSPGetOwnerPort		105
+	_DSPGetOwnerString		106
+	_DSPGetRX			107
+	.empty_slot			108 ## was _DSPGetRXArray
+	.empty_slot			109 ## was _DSPGetRegs
+	_DSPMKGetSamplingRate		110 ## was _DSPGetSamplingRate
+	.empty_slot			111 ## was _DSPGetShortArray
+	_DSPGetSimulatorFP		112
+	.empty_slot			113 ## was _DSPGetSoundOutStreamPort
+	.empty_slot			114 ## was _DSPGetSoundPort
+	_DSPGetSymbol			115
+	_DSPGetSymbolAddress		116
+	_DSPGetSystemBinaryFile		117
+	_DSPGetSystemDirectory		118
+	_DSPGetSystemLinkFile		119
+	_DSPGetSystemMapFile		120
+	_DSPGetUserSection		121
+	_DSPGetValue			122
+	.empty_slot			123 ## was _DSPGetWriteDataReplyPort
+	.empty_slot			124 ## was _DSPGetWriteDataStreamPort
+	_DSPHostCommand			125
+	_DSPHostMessage			126
+	_DSPHostMsgIsEnabled		127
+	_DSPInit			128
+	_DSPIntToDouble			129
+	_DSPIntToDoubleArray		130
+	_DSPIntToFix24			131
+	_DSPIntToFix24Array		132
+	_DSPIntToFix48			133
+	_DSPIntToFix48UseArg		134
+	_DSPIntToFloat			135
+	_DSPIntToFloatArray		136
+	_DSPIsAlive			137
+	_DSPIsMappedOnly		138
+	_DSPIsOpen			139
+	_DSPIsSimulated			140
+	_DSPIsSimulatedOnly		141
+	.empty_slot			142 ## was _DSPIsWithSoundOut
+	_DSPLoad			143
+	_DSPLoadFile			144
+	_DSPLoadSpecFree		145
+	_DSPLoadSpecInit		146
+	_DSPLoadSpecPrint		147
+	_DSPLoadSpecRead		148
+	_DSPLoadSpecReadFile		149
+	_DSPLoadSpecWrite		150
+	_DSPLoadSpecWriteFile		151
+	_DSPMKBLT			152
+	_DSPMKBLTB			153
+	_DSPMKCallTimed			154
+	_DSPMKCallTimedV		155
+	_DSPMKClearTime			156
+	_DSPMKCloseWriteDataFile	157
+	_DSPMKDisableAtomicTimed	158
+	_DSPMKDisableBlockingOnTMQEmptyTimed 159
+	_DSPMKDisableSmallBuffers	160
+	_DSPMKDisableSoundOut		161
+	_DSPMKDisableWriteData		162
+	_DSPMKDisableWriteDataCleanup	163
+	_DSPMKEnableAtomicTimed		164
+	_DSPMKEnableBlockingOnTMQEmptyTimed 165
+	_DSPMKEnableSmallBuffers	166
+	_DSPMKEnableSoundOut		167
+	_DSPMKEnableWriteData		168
+	_DSPMKEnableWriteDataCleanup	169
+	_DSPMKFlushTimedMessages	170
+	_DSPMKGetSamplingRate		171
+	.empty_slot			172 ## was _DSPMKGetSoundOutStreamPort
+	_DSPMKGetSoundPort		173
+	.empty_slot			174 ## w _DSPMKGetWriteDataBufferCount
+	.empty_slot			175 ## was _DSPMKGetWriteDataBufferSize
+	_DSPMKGetWriteDataFP		176
+	_DSPMKGetWriteDataFile		177
+	_DSPMKGetWriteDataReplyPort	178
+	_DSPMKGetWriteDataSampleCount	179
+	_DSPMKGetWriteDataStreamPort	180
+	_DSPMKGetWriteDataTimeOut	181
+	_DSPMKHostMessageTimed		182
+	_DSPMKHostMessageTimedFromInts	183
+	_DSPMKInit			184
+	_DSPMKInitWithSoundOut		185
+	_DSPMKIsAlive			186
+	_DSPMKIsWithSoundOut		187
+	.empty_slot			188 ## was _DSPMKLoad
+	_DSPMKPauseOrchestra		189
+	_DSPMKPauseOrchestraTimed	190
+	_DSPMKReadTime			191
+	_DSPMKResumeOrchestra		192
+	_DSPMKRetValue			193
+	_DSPMKRetValueTimed		194
+	_DSPMKRewindWriteData		195
+	.empty_slot			196 ## w _DSPMKSendPauseOrchestraTimed
+	.empty_slot			197 ## w _DSPMKSendStartWriteDataTimed
+	.empty_slot			198 ## w _DSPMKSendStopWriteDataTimed
+	_DSPMKSetSamplingRate		199
+	_DSPMKSetTime			200
+	_DSPMKSetTimeFromInts		201
+	.empty_slot			202 ## w _DSPMKSetWriteDataBufferCount
+	_DSPMKSetWriteDataFP		203
+	_DSPMKSetWriteDataFile		204
+	_DSPMKSetWriteDataTimeOut	205
+	_DSPMKSmallBuffersIsEnabled	206
+	_DSPMKSoundOutIsEnabled		207
+	_DSPMKStartSoundOut		208
+	_DSPMKStartWriteData		209
+	_DSPMKStartWriteDataTimed	210
+	_DSPMKStopSoundOut		211
+	_DSPMKStopWriteData		212
+	_DSPMKStopWriteDataTimed	213
+	_DSPMKWriteDataCleanupIsEnabled	214
+	_DSPMKWriteDataIsEnabled	215
+	_DSPMKWriteDataIsRunning	216
+	.empty_slot			217 ## was _DSPMapHostInterface
+	_DSPMappedOnlyIsEnabled		218
+	_DSPMemMapInit			219
+	_DSPMemMapPrint			220
+	_DSPMemoryClear			221
+	_DSPMemoryFill			222
+	_DSPMessageExpand		223
+	_DSPMessageGet			224
+	_DSPMessagesOff			225
+	_DSPMessagesOn			226
+	_DSPMonitorIsAP			227
+	_DSPMonitorIsMK			228
+	__DSPOpenMapped			229 ## was _DSPOpenMapped
+	_DSPOpenNoBoot			230
+	_DSPOpenNoBootHighPriority	231
+	_DSPOpenSimulatorFile		232
+	_DSPOpenWhoFile			233
+	_DSPPing			234
+	_DSPPingTimeOut			235
+	_DSPPingVersion			236
+	_DSPPingVersionTimeOut		237
+	_DSPPoke			238
+	_DSPPokeFloat			239
+	.empty_slot			240 ## was _DSPPutArray
+	.empty_slot			241 ## was _DSPPutArraySkip
+	.empty_slot			242 ## was _DSPPutByteArray
+	.empty_slot			243 ## was _DSPPutCVR
+	.empty_slot			244 ## was _DSPPutDoubleArray
+	.empty_slot			245 ## was _DSPPutFloatArray
+	.empty_slot			246 ## was _DSPPutICR
+	.empty_slot			247 ## was _DSPPutLong
+	.empty_slot			248 ## was _DSPPutPackedArray
+	.empty_slot			249 ## was _DSPPutShortArray
+	.empty_slot			250 ## was _DSPPutTX
+	.empty_slot			251 ## was _DSPPutTXArray
+	.empty_slot			252 ## was _DSPPutTXArrayB
+	.empty_slot			253 ## was _DSPPutValue
+	_DSPRawClose			254
+	_DSPRawCloseSaveState		255
+	_DSPReadArray			256
+	_DSPReadArraySkipMode		257
+	_DSPReadByteArray		258
+	_DSPReadCVR			259
+	_DSPReadDoubleArray		260
+	_DSPReadDoubleArrayXY		261
+	_DSPReadFile			262
+	_DSPReadFix24Array		263
+	_DSPReadFloatArray		264
+	_DSPReadFloatArrayXY		265
+	_DSPReadICR			266
+	_DSPReadISR			267
+	_DSPReadIntArray		268
+	_DSPReadIntArrayXY		269
+	_DSPReadMessages		270
+	_DSPReadPackedArray		271
+	_DSPReadRX			272
+	_DSPReadRXArray			273
+	_DSPReadShortArray		274
+	_DSPReadValue			275
+	_DSPReset			276
+	_DSPRestoreErrorLogging		277
+	.empty_slot			278 ## was _DSPRetValue
+	.empty_slot			279 ## was _DSPRetValueTimed
+	_DSPSectionFree			280
+	_DSPSectionInit			281
+	_DSPSectionPrint		282
+	_DSPSectionRead			283
+	_DSPSectionWrite		284
+	_DSPSetAPSystemFiles		285
+	_DSPSetCurrentDSP		286 ## ! In 1.0 MK as __DSPSetCurrentDSP
+	_DSPSetDMAReadMReg		287
+	_DSPSetDMAWriteMReg		288
+	_DSPSetErrorFP			289
+	_DSPSetErrorFile		290
+	_DSPSetHF0			291
+	_DSPSetHF1			292
+	_DSPSetMKSystemFiles		293
+	_DSPSetMessagePriority		294
+	_DSPSetOpenPriority		295
+	_DSPMKSetSamplingRate		296 ## was _DSPSetSamplingRate
+	_DSPSetSimulatorFP		297
+	_DSPSetStart			298
+	_DSPSetSystem			299
+	_DSPStart			300
+	_DSPStartAtAddress		301
+	_DSPStartSimulator		302
+	_DSPStartSimulatorFP		303
+	_DSPStopSimulator		304
+	_DSPSymbolFree			305
+	_DSPSymbolIsFloat		306
+	_DSPSymbolPrint			307
+	_DSPSymbolRead			308
+	_DSPSymbolWrite			309
+	_DSPTimeStampStr		310
+	_DSPUserError			311
+	_DSPUserError1			312
+	.empty_slot			313 ## was _DSPWriteArray
+	_DSPWriteArraySkipMode		314
+	_DSPWriteByteArray		315
+	.empty_slot			316 ## was _DSPWriteCVR
+	_DSPWriteDoubleArray		317
+	_DSPWriteDoubleArrayXY		318
+	_DSPWriteFix24Array		319
+	_DSPWriteFloatArray		320
+	_DSPWriteFloatArrayXY		321
+	.empty_slot			322 ## was _DSPWriteICR
+	_DSPWriteIntArray		323
+	.empty_slot			324 ## was _DSPWriteIntArrayXY
+	_DSPWriteLong1p0		325 ## was _DSPWriteLong
+	_DSPWritePackedArray		326
+	_DSPWriteShortArray		327
+	_DSPWriteTX			328
+	_DSPWriteTXArray		329
+	_DSPWriteTXArrayB		330
+	_DSPWriteValue1p0		331 ## was _DSPWriteValue
+	__DSPAddRelSymbol		332 ## __DSPAddSymbol
+	__DSPAwaitBit			333
+	__DSPAwaitMsgSendAck		334
+	__DSPAwaitRegs			335
+	__DSPCVAS			336
+	__DSPCVDS			337
+	__DSPCVFS			338
+	__DSPCVHS			339
+	__DSPCVS			340
+	.empty_slot			341 ## was __DSPCallTimed
+	__DSPCallTimedFlush		342
+	__DSPCallTimedFlushB		343
+	__DSPCallTimedFlushV		344
+	__DSPCallTimedMaybeB		345
+	__DSPCallTimedV			346
+	__DSPCat			347
+	__DSPCheckErrorFP		348
+	__DSPCheckMappedMode		349
+	__DSPCheckTMQFlush		350
+	__DSPCheckingFWrite		351
+	__DSPClearBit			352
+	__DSPContiguousFree		353
+	__DSPContiguousMalloc		354
+	__DSPCopyStr			355
+	__DSPDisableMappedArrayReads	356
+	__DSPDisableMappedArrayTransfers 357
+	__DSPDisableMappedArrayWrites	358
+	__DSPDisableMappedOnly		359
+	__DSPDisableUncheckedMappedArrayTransfers 360
+	.empty_slot			361 ## was __DSPDoubleIntToFix48
+	__DSPDoubleIntToFix48UseArg	362
+	__DSPDump			363
+	__DSPEnableMappedArrayReads	364
+	__DSPEnableMappedArrayTransfers	365
+	__DSPEnableMappedArrayWrites	366
+	__DSPEnableMappedOnly		367
+	__DSPEnableUncheckedMappedArrayTransfers 368
+	__DSPEnterMappedMode		369
+	__DSPEnterMappedModeNoCheck	370
+	__DSPEnterMappedModeNoPing	371
+	__DSPErr			372
+	__DSPError			373
+	__DSPError1			374
+	__DSPErrorV			375
+	__DSPExitMappedMode		376
+	__DSPExtendHmArray		377
+	__DSPExtendHmArrayB		378
+	__DSPFGetRecord			379
+	__DSPFatalError			380
+	__DSPFinishHmArray		381
+	__DSPFirstReadableFile		382
+	__DSPFlushTMQ			383
+	.empty_slot			384 ## was __DSPFlushTimedMessages
+	__DSPForceIdle			385
+	__DSPFreeString			386
+	__DSPGetBody			387
+	_DSPGetCurrentDSP		388 ## was __DSPGetCurrentDSP
+	_DSPGetDSPCount			389 ## ! In 1.0 MK as __DSPGetDSPCount
+	__DSPGetDSPIntStr		390
+	__DSPGetField			391
+	__DSPGetFile			392
+	__DSPGetFilter			393
+	.empty_slot			394 ## was __DSPGetFirstAddress
+	__DSPGetFloatStr		395
+	__DSPGetHead			396
+	__DSPGetInputFile		397
+	__DSPGetInputOutputFiles	398
+	__DSPGetIntHexStr		399
+	__DSPGetIntHexStr6		400
+	__DSPGetIntStr			401
+	.empty_slot			402 ## was __DSPGetLastAddress
+	__DSPGetLineStr			403
+	__DSPGetMemStr			404
+	__DSPGetNumber			405
+	__DSPGetOutputFile		406
+	__DSPGetRegs			407
+	__DSPGetRelIntHexStr		408
+	__DSPGetSN			409
+	.empty_slot			410 ## was __DSPGetSystemBinaryFile
+	.empty_slot			411 ## was __DSPGetSystemLinkFile
+	.empty_slot			412 ## was __DSPGetSystemMapFile
+	__DSPGetTail			413
+	__DSPGetTokStr			414
+	_DSPGetUserSection		415 ## was __DSPGetUserSection
+	.empty_slot			416 ## w __DSPHostMessageTimed
+	.empty_slot			417 ## w __DSPHostMessageTimedFromInts
+	.empty_slot			418 ## w __DSPHostMessageTimedRelative
+	__DSPInInt			419
+	__DSPIndexS			420
+	__DSPIntToChar			421
+	.empty_slot			422 ## was __DSPIsWithSoundOut
+	.empty_slot			423 ## was __DSPJoin
+	__DSPLnkRead			424
+	.empty_slot			425 ## was __DSPLnkReadMusic
+	.empty_slot			426 ## was __DSPMKAwaitTMQMapped
+	.empty_slot			427 ## was __DSPMKAwaitTMQNotFullMapped
+	_DSPMKDisableSSISoundOut	428
+	_DSPMKEnableSSISoundOut		429 ## ! In 1.0 MK as __DSPMK...
+	_DSPMKSSISoundOutIsEnabled	430
+	__DSPMKSendUnitGeneratorWithLooperTimed 431 ## ! In 1.0 MK
+	_DSPMKStartSSISoundOut		432
+	__DSPMKStartWriteDataNoThread	433
+	_DSPMKStopSSISoundOut		434
+	.empty_slot			435 ## was __DSPMKWouldAwaitTMQMapped
+	__DSPMachError			436
+	__DSPMakeArray			437
+	__DSPMakeStr			438
+	__DSPMapHostInterface		439
+	__DSPMappedOnlyIsEnabled	440
+	.empty_slot			441 ## was __DSPMemMapInit
+	.empty_slot			442 ## was __DSPMemMapPrint
+	.empty_slot			443 ## was __DSPMemMapRead
+	__DSPMyFopen			444
+	__DSPNewStr			445
+	__DSPNotBlank			446
+	__DSPOpenStatePrint		447
+	__DSPOwnershipIsJoint		448
+	__DSPPadStr			449
+	__DSPParseName			450
+	__DSPPrintDatum			451
+	__DSPPrintRegs			452
+	__DSPPrintValue			453
+	__DSPPutBit			454
+	__DSPPutFilter			455
+	__DSPReCat			456
+	__DSPReadData			457
+	__DSPReadDatum			458
+	__DSPReadRegs			459
+	__DSPReadSSI			460
+	__DSPReadString			461
+	__DSPReloc			462 ## ! In 1.0 MK
+	__DSPRelocate			463
+	__DSPRelocateUser		464
+	__DSPRemoveHead			465
+	__DSPRemoveTail			466
+	__DSPResetTMQ			467
+	__DSPSaveMatD			468
+	_DSPMKSendArray			469 ## was __DSPSendArray
+	__DSPSendArraySkipTimed		470 ## ! In 1.0 MK
+	_DSPMKSendArrayTimed		471 ## was __DSPSendArrayTimed
+	_DSPMKSendBLT			472 ## was __DSPSendBLT
+	_DSPMKSendBLTB			473 ## was __DSPSendBLTB
+	_DSPMKBLTBTimed			474 ## was __DSPSendBLTBTimed
+	_DSPMKBLTSkipTimed		475 ## ! In 1.0 MK as __DSPSendBLTSkipTimed 
+	_DSPMKBLTTimed			476 ## ! In 1.0 MK as __DSPSendBLTTimed
+	.empty_slot			477 ## was __DSPSendBlockTMQLWMTimed
+	_DSPMKDisableBlockingOnTMQEmptyTimed 478 ## w __DSPSendCloseParenTimed
+	__DSPWriteHm			479
+	_DSPMKSendLong			480 ## was __DSPSendLong
+	__DSPSendLongTimed		481 ## ! In 1.0 MK
+	_DSPMKSendMemoryClear		482 ## was __DSPSendMemoryClear
+	_DSPMKMemoryClearTimed		483 ## was __DSPSendMemoryClearTimed
+	_DSPMKSendMemoryFill		484 ## was __DSPSendMemoryFill
+	_DSPMKMemoryFillSkipTimed	485 ## ! In 1.0 MK as __DSPSendMemoryFillSkipTimed
+	_DSPMKMemoryFillTimed		486 ## was __DSPSendMemoryFillTimed
+	_DSPMKEnableBlockingOnTMQEmptyTimed 487 ## w __DSPSendOpenParenTimed
+	__DSPMKSendTwoArraysTimed	488 ## was __DSPSendTwoArraysTimed
+	.empty_slot			489 ## was __DSPSendUnblockTMQLWMTimed
+	_DSPMKSendValue			490 ## was __DSPSendValue
+	__DSPSendValueTimed		491 ## ! In 1.0 MK
+	.empty_slot			492 ## was __DSPSetAPSystemFiles
+	__DSPSetBit			493
+	.empty_slot			494 ## was __DSPSetMKSystemFiles
+	__DSPSetNumber			495
+	__DSPSetSSICRA			496
+	__DSPSetSSICRB			497
+	__DSPSetStartTimed		498
+	.empty_slot			499 ## was __DSPSetSystem
+	__DSPSezYes			500
+	__DSPSineTest			501
+	__DSPSkipToWhite		502
+	__DSPSkipWhite			503
+	__DSPStartHmArray		504
+	.empty_slot			505 ## was __DSPStartSimulator
+	__DSPStartTimed			506
+	.empty_slot			507 ## was __DSPStopSimulator
+	.empty_slot			508 ## was __DSPTMQIsFull
+	__DSPToLowerStr			509
+	__DSPToUpperStr			510
+	__DSPUniqueName			511
+	__DSPWriteData			512
+	__DSPWriteDatum			513
+	__DSPWriteHostMessage		514
+	__DSPWriteRegs			515
+	__DSPWriteString		516
+	__DSP_dsp_condition		517
+	__DSP_dsp_data			518
+	__DSP_dsp_host_command		519
+	__DSP_dsp_host_flag		520
+	.empty_slot			521 ## was __DSP_dsp_proto
+	__DSP_dsp_ret_msg		522
+	.empty_slot			523 ## was __DSP_dspcmd_abortdma
+	.empty_slot			524 ## was __DSP_dspcmd_chandata
+	.empty_slot			525 ## was __DSP_dspcmd_dmain
+	.empty_slot			526 ## was __DSP_dspcmd_dmaout
+	.empty_slot			527 ## was __DSP_dspcmd_event
+	__DSP_dspcmd_msg		528
+	.empty_slot			529 ## was __DSP_dspcmd_msg_data
+	__DSP_dspcmd_msg_reset		530
+	.empty_slot			531 ## was __DSP_dspcmd_req_err
+	.empty_slot			532 ## was __DSP_dspcmd_req_msg
+	__DSP_dsprcv_msg		533
+	__DSP_dsprcv_msg_reset		534
+	.empty_slot			535 ## was __DSP_dspregs
+	__DSP_dspreply_msg		536
+	__DSP_dspreply_msg_reset	537
+	__DSP_dspreset			538
+	.empty_slot			539 ## was __DSP_get_dsp_cmd_port
+	.empty_slot			540 ## was __DSP_get_stream
+	.empty_slot			541 ## was __DSP_set_dsp_owner_port
+	.empty_slot			542 ## was __DSP_set_sndin_owner_port
+	.empty_slot			543 ## was __DSP_set_sndout_owner_port
+	.empty_slot			544 ## was __DSP_stream_control
+	__DSP_stream_msg		545
+	.empty_slot			546 ## was __DSP_stream_nsamples
+	.empty_slot			547 ## was __DSP_stream_options
+	.empty_slot			548 ## was __DSP_stream_play_data
+	.empty_slot			549 ## was __DSP_stream_record_data
+	_DSPMKSendArraySkipModeTimed	550 ## was __DSPSendArraySkipModeTimed
+	_DSPMKSendShortArraySkipTimed	551 ## was __DSPSendShortArraySkipTimed
+	_DSPMKFreezeOrchestra		552 ## was _DSPFreezeOrchestra
+	_DSPMKThawOrchestra		553 ## was _DSPThawOrchestra
+	_DSPGetHF2AndHF3		554
+	_DSPOpenCommandsFile		555
+	_DSPCloseCommandsFile 		556
+	_DSPMKEnableReadData		557
+	_DSPMKDisableReadData		558
+	_DSPMKReadDataIsEnabled		559
+	_DSPMKReadDataIsRunning		560
+	_DSPMKGetReadDataStreamPort	561
+	_DSPMKGetReadDataReplyPort	562
+	_DSPMKPauseReadDataTimed	563
+	_DSPMKResumeReadDataTimed	564
+	_DSPMKSetReadDataFile		565
+	_DSPMKStartReadData		566
+	_DSPMKStartReadDataTimed	567
+	_DSPMKStartReadDataPaused	568
+	_DSPMKStopReadDataTimed		569
+	_DSPMKStopReadData		570
+	_DSPMKRewindReadData		571
+	.empty_slot			572 ## was _DSPMKGetReadDataBufferSize
+	_DSPMKGetReadDataSampleCount	573
+	.empty_slot			574 ## was _DSPMKSetReadDataBufferCount
+	.empty_slot			575 ## was _DSPMKGetReadDataBufferCount
+	__DSPExtendHmArrayMode		576
+	_DSPIsSavingCommands		577
+	_DSPIsSavingCommandsOnly	578
+	_DSPGetCommandsFP		579
+	_DSPSetCommandsFP		580
+	_DSPStartCommandsFP		581
+	_DSPStopCommands		582
+	_DSPMKGetReadDataFD		583
+	_DSPMKStopReadDataTimed		584
+	__DSPMKStartReadDataNoThread	585
+	_DSPWriteFix24ArrayLJ		586
+	_DSPReadFix24ArrayLJ		587
+	_DSPMKSetReadDataBytePointer	588
+	_DSPMKIncrementReadDataBytePointer	589
+	_DSPMKSendArraySkipTimed		590
+	_DSPMKSendValueTimed			591
+	_DSPMKSendLongTimed			592
+	_DSPWriteValue				593
+	_DSPWriteLong				594
+	_DSPGetSymbolInLC			595
+	_DSPMKGetTime				596
+	_DSPGetValueOfSystemSymbol		597
+	_DSPGetHighestExternalUserPAddress	598
+	_DSPGetLowestExternalUserPAddress	599
+	_DSPGetHighestExternalUserXAddress	600
+	_DSPGetLowestExternalUserXAddress	601
+	_DSPGetHighestInternalUserPAddress	602
+	_DSPGetLowestInternalUserPAddress	603
+	_DSPGetHighestInternalUserXAddress	604
+	_DSPGetLowestInternalUserXAddress	605
+	_DSPGetHighestExternalUserYAddress	606
+	_DSPGetLowestExternalUserYAddress	607
+	_DSPGetHighestInternalUserYAddress	608
+	_DSPGetLowestInternalUserYAddress	609
+	_DSPGetHighestExternalUserAddress	610
+	_DSPGetLowestExternalUserAddress	611
+	_DSPGetLowestXYPartitionUserAddress	612
+	_DSPGetHighestXYPartitionXUserAddress	613
+	_DSPGetHighestXYPartitionYUserAddress	614
+	_DSPGetHighestXYPartitionUserAddress	615
+	_DSPGetLowestDegMonAddress		616
+	_DSPGetHighestDegMonAddress		617
+	_DSPMKGetClipCountAddress		618
+	_DSPMKSoundOutDMASize			619
+	_DSPMKClearDSPSoundOutBufferTimed	620
+	_DSPGetSystemImage			621
+	.empty_slot				622-1350
+
+## Branch table slots are a jmp	0x0:l instruction that is 6 bytes long. So to
+## just fill a 8192 byte page it takes 1350 slots plus the 90 byte shlib header
+## that goes before the branch table. The assembler will round the text section
+## of the branch table object file to a multiple of 4 bytes so (1350 * 6) + 90
+## rounded up to a multiple of 4 is 8192.
+
+#nobranch_text
+	_DSPSectionNames
+	_DSPLCNames
+	_DSPMemoryNames
+
+#private_externs
+	__libdsp_data_pad
+	__libdsp_pointers_pad
+
+## These are the assembly language stubs to get around the symbols that can't
+## have a layer of indirection put in by a macro because they are generated
+## directly by the compiler.  These are in alias.o .
+	.libdsp_bcopy
+        .libdsp__fixunsdfsi
+	.libdsp__fixdfsi
+
+#alias
+	_bcopy			.libdsp_bcopy
+        __fixunsdfsi            .libdsp__fixunsdfsi
+        __fixdfsi            	.libdsp__fixdfsi
+
+## This is the order objects get loaded in the shared library.  All global data
+## CANT CHANGE IN SIZE or LOCATION.  Any new global data must added to the last
+## file in this list at the end of the file or added in a new file and put at
+## the end of this list.  There can be no common data, instead it must be
+## initialized data so that it will remain in a fixed place.  All files must
+## have all their static data declared and initialized before all global data
+## in the file.  This is because when the loader builds a shared library it
+## moves all global data to the beginning and all static data to the end.  With
+## this static data can be added changed or deleted to ANY file.
+
+#objects
+## global const data (text) and global data
+	DSPGlobals.o	# global data size 512 global data size 512
+
+## only global data (no const data)
+	pointers.o	# global data size 512
+
+## no global data
+	DSPBoot.o
+	DSPControl.o
+	DSPConversion.o
+	DSPError.o
+	DSPLoad.o
+	DSPObject.o
+	DSPReadFile.o
+	DSPStructMisc.o
+	DSPTransfer.o
+	_DSPCV.o
+	_DSPMachSupport.o
+	_DSPRelocate.o
+	_DSPString.o
+	_DSPUtilities.o
+	alias.o
+
+#init pointers.o
+	__libdsp_SNDAlloc			_SNDAlloc
+	__libdsp_SNDFree			_SNDFree
+	__libdsp__ctype_			__ctype_
+	__libdsp__filbuf			__filbuf
+	__libdsp__flsbuf			__flsbuf
+	__libdsp__iob				__iob
+	__libdsp_access				_access
+	__libdsp_alloca				_alloca
+	__libdsp_atoi				_atoi
+	__libdsp_bcopy				_bcopy
+	__libdsp_cthread_fork			_cthread_fork
+	__libdsp_cthread_init			_cthread_init
+	__libdsp_cthread_join			_cthread_join
+	__libdsp_cthread_yield			_cthread_yield
+	__libdsp_ctime				_ctime
+	__libdsp_errno				_errno
+	__libdsp_exit				_exit
+	__libdsp_fclose				_fclose
+	__libdsp_fflush				_fflush
+	__libdsp_fgets				_fgets
+	__libdsp_fopen				_fopen
+	__libdsp_fprintf			_fprintf
+	__libdsp_fread				_fread
+	__libdsp_free				_free
+	__libdsp_fwrite				_fwrite
+	__libdsp_getenv				_getenv
+	__libdsp_getpagesize			_getpagesize
+	__libdsp_getpid				_getpid
+	__libdsp_gettimeofday			_gettimeofday
+	__libdsp_isatty				_isatty
+	__libdsp_mach_error_string		_mach_error_string
+	__libdsp_malloc				_malloc
+	__libdsp_malloc_size			_malloc_size
+	__libdsp_memmove			_memmove
+	__libdsp_mmap				_mmap
+	__libdsp_msg_receive			_msg_receive
+	__libdsp_msg_rpc			_msg_rpc
+	__libdsp_msg_send			_msg_send
+	__libdsp_name_server_port		_name_server_port
+	__libdsp_netname_look_up		_netname_look_up
+	__libdsp_open				_open
+	__libdsp_pause				_pause
+	__libdsp_perror				_perror
+	__libdsp_port_allocate			_port_allocate
+	__libdsp_port_deallocate		_port_deallocate
+	__libdsp_printf				_printf
+	__libdsp_realloc			_realloc
+	__libdsp_rewind				_rewind
+	__libdsp_select				_select
+	__libdsp_setlinebuf			_setlinebuf
+	__libdsp_snddriver_dspcmd_req_condition _snddriver_dspcmd_req_condition
+	__libdsp_sprintf			_sprintf
+	__libdsp_sscanf				_sscanf
+	__libdsp_strchr				_strchr
+	__libdsp_strcmp				_strcmp
+	__libdsp_strcpy				_strcpy
+	__libdsp_strlen				_strlen
+	__libdsp_strncmp			_strncmp
+	__libdsp_strncpy			_strncpy
+	__libdsp_strtol				_strtol
+	__libdsp_sys_errlist			_sys_errlist
+	__libdsp_sys_nerr			_sys_nerr
+	__libdsp_task_self_			_task_self_
+	__libdsp_thread_reply			_thread_reply
+	__libdsp_time				_time
+	__libdsp_umask				_umask
+	__libdsp_ungetc				_ungetc
+	__libdsp_unlink				_unlink
+	__libdsp_usleep				_usleep
+	__libdsp_valloc				_valloc
+	__libdsp_vm_deallocate			_vm_deallocate
+## 04/10/90/jos for 2.0:
+	__libdsp_vm_page_size			_vm_page_size
+	__libdsp_close				_close
+	__libdsp_read				_read
+	__libdsp_SNDSoundError			_SNDSoundError
+	__libdsp_SNDReadHeader			_SNDReadHeader
+	__libdsp_snddriver_stream_start_reading	_snddriver_stream_start_reading
+	__libdsp_snddriver_stream_control	_snddriver_stream_control
+	__libdsp_snddriver_stream_nsamples	_snddriver_stream_nsamples
+	__libdsp_snddriver_stream_start_writing	_snddriver_stream_start_writing
+	__libdsp_snddriver_get_dsp_cmd_port	_snddriver_get_dsp_cmd_port
+	__libdsp_snddriver_stream_setup		_snddriver_stream_setup
+	__libdsp_snddriver_dsp_protocol		_snddriver_dsp_protocol
+	__libdsp_snddriver_dsp_reset		_snddriver_dsp_reset
+	__libdsp_snddriver_set_dsp_owner_port	_snddriver_set_dsp_owner_port
+	__libdsp_snddriver_set_sndout_owner_port	_snddriver_set_sndout_owner_port
+	__libdsp_snddriver_reply_handler	_snddriver_reply_handler
+	__libdsp_snddriver_dspcmd_req_err	_snddriver_dspcmd_req_err
+	__libdsp_snddriver_dspcmd_req_msg	_snddriver_dspcmd_req_msg
+	__libdsp_lseek				_lseek
+        __libdsp__fixunsdfsi			__fixunsdfsi
+	__libdsp__fixdfsi			__fixdfsi
+	__libdsp_bootstrap_look_up		_bootstrap_look_up
+	__libdsp_SNDAcquire			_SNDAcquire
+	__libdsp_SNDRelease			_SNDRelease
+	__libdsp_snddriver_set_sndout_bufsize	_snddriver_set_sndout_bufsize
+	__libdsp_snddriver_set_sndout_bufcount	_snddriver_set_sndout_bufcount

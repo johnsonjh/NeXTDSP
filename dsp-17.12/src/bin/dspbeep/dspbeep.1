@@ -1,0 +1,24 @@
+.TH DSPBEEP 1 "3 Apr 1989" "NeXT, Inc."
+.SH NAME
+dspbeep \- synthesize a beep using the DSP and sound output
+
+.SH SYNOPSIS
+\fBdspbeep\fR 
+[-l]
+[-n nbuffers]
+
+.SH DESCRIPTION
+The \fBdspbeep\fR program is the simplest test of the DSP's sound-producing
+capability.  It produces a test sinusoid with frequency i*Fs/256, where Fs
+is the sampling frequency (high or low), 256 is the length of the sine ROM
+in the DSP, and i increments by 1 from 1 once each buffer.  (The buffer
+size is 512 stereo audio samples, 256 per channel.)  The output amplitude
+is 2^(-64), i.e., the maximum-amplitude sinusoid read from ROM is
+right-shifted 6 bits before being output.
+
+.SH OPTIONS
+.IP \fB\-l\fR
+Select low sampling rate (22.05 KHz).  The default sampling rate is 44.1 KHz.
+.IP \fB\-n\fR
+Set number of 512-word buffers to output.  The default is equivalent to 
+"-n 100".

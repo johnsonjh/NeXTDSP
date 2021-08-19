@@ -1,0 +1,45 @@
+#!/bin/csh -f
+
+# May be invoked by aptest to tee results to results file.
+
+cd src/bin/dsptestap
+echo === dsptestap ===
+dsptestap
+echo === printmap ===
+printmap
+echo === fftchirptest ===
+fftchirptest
+echo === apex1 ===
+apex1
+echo === apex2 ===
+apex2 
+echo === multitest ===
+multitest 
+    
+cd ../examples/apsound
+/bin/rm -f /tmp/knuF.snd
+echo === apreverse /NextLibrary/Sounds/Funk.snd /tmp/knuF.snd ===
+apreverse /NextLibrary/Sounds/Funk.snd /tmp/knuF.snd
+echo === sndplay /tmp/knuF.snd ===
+sndplay /tmp/knuF.snd
+    
+cd ../fdfilter
+/bin/rm -f /tmp/funk.snd
+echo === fdfilter /NextLibrary/Sounds/Funk.snd /tmp/funk.snd ===
+fdfilter /NextLibrary/Sounds/Funk.snd /tmp/funk.snd
+echo === sndplay /tmp/funk.snd ===
+sndplay /tmp/funk.snd
+
+cd ../fuse
+echo === ctest === 
+ctest
+    
+cd ../libap
+echo === mytest === 
+mytest
+    
+cd ../matrix
+echo === matrix === 
+matrix
+    
+cd ../../../..

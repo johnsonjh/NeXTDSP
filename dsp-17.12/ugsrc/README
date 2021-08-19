@@ -1,0 +1,6 @@
+UNIT GENERATOR MACROS
+
+This directory contains source for "unit-generator" (UG) macros.  UG macros
+are used in building musical instruments for the Music Kit.  They are
+processed by the program dspwrap to produce Objective C classes which are
+linked into libunitgenerators.a.

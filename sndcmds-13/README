@@ -1,0 +1,105 @@
+README for sound commands project.
+
+Also see README in sound project.
+
+NOTE: THIS IS A PHASE 1 PROJECT!!!
+
+[04/10/90/mtm]
+These commands line utilities end up in /usr/bin.  They link against libsys which
+contains the sound library.  The debug version links against
+../../sound_proj/sound/libsound_g.a.  WARNING: the debug sound library gets dsp code
+from the CURRENT WORKING DIRECTORY so the debug version of sndplay here will not find
+any dsp code.
+
+These utilites mostly call sound library functions to do the real work.  EXCEPT FOR
+sndrecord which is completely self contained, including dsp code and sound/dsp driver
+interface functions!  **It should be converted to at least use the sound library driver
+interface someday**.  Also, sndrecord uses simple dma mode, so your -f file must do
+so also.  See dsprecsim16.asm for an example.  FIXME!!! dsprecsim*.snd cannot be
+reproduced from source currently because the original versions of ioequ.asm and
+dspsound.asm have been lost!
+
+[05/21/90/mtm] - The problem with using the sound library for long dsp recordings
+is that it drops buffers, probably because of the memmove() in
+performsound.c/performance_read_data().  Sndrecord will likely have to remain
+self-contained.
+
+2.0 Sound Commands API changes
+------------------------------
+
+*** FIXME:  UPDATE THE MAN PAGES !!! ***
+
+Also see SndCmdsNotes.wn and ~/sound_proj/sound/SoundNotes.wn.
+
+
+New Utilities
+-------------
+
+sndcompress - Compress a 16 bit linear file, generating a
+SND_FORMAT_COMPRESSED or SND_FORMAT_COMPRESSED_EMPHASIZED file.
+Can also decompress back to 16 bit linear.
+Usage: sndcompress [-<n>] <infile> <outfile>
+	If <infile> is in a compressed format,
+	it will be decompressed.  If it is in a 16-bit linear
+	format it will be compressed.
+	-<n>	Shift each sample <n> bits to the right before
+		compressing.  When decompressed, the resulting sound
+		will not be identical to the original, but better
+		compression can be obtained.  The shift value <n> may be
+		between 4 and 8, inclusive.  Higher values give
+		better compression but less fidelity.
+	Example:
+	sndcompress -8 linearsound.snd compressedsound.snd
+
+New Features
+------------
+
+sndconvert - Now supports conversion between all sample rates.
+
+sndinfo - Supports the new format codes.
+
+sndrecord - can create SND_FORMAT_EMPHASIZED
+	-m	read emphasized data from DSP.  May be used with
+		-d (16-bit), or -e (24-bit) switches.
+
+sndplay - Can playback all new formats.  Can play to the DSP serial port.
+	-d	Play data to DSP serial port
+	-c	Don't generate bit clock (implies -d)
+	-s	Don't generate frame sync (implies -d)
+
+
+#############################################################
+Conversions currently supported by sndconvert
+
+FIXME: This should be made clearer in user doc.
+FIXME: The man page impiles -s 22050 and -f 3 are "defaults",
+       but that does not seem to be the case.
+
+Rate	Fmt	Chan	-->	Rate	Fmt	Chan
+
+44	16	--		22	16	--
+8	ulaw	1		22	16	2
+--	--	1		--	--	2
+8	ulaw	--		8	16	--
+--	16	--		8	ulaw	--
+--	16	--		--	float	--
+--	16	--		--	dbl	--
+--	float	--		--	16	--
+--	dbl	--		--	16	--
+
+Also: .lod-->.snd; ascii-->any, raw-->any
+FIXME: arbitrary sample rate conversion not yet implemented.
+
+FIXME: -i "info" not supported for 44->22 and 8->22 formats.
+
+#############################################################
+man pages
+
+Makefile currently puts man pages in /usr/local/doc/sound/man.  This may
+not actually be necessary.  The current strategy is to grab the latest
+version from:
+
+/Net/guaridian/pubs/projects/man_proj/man/usr/man/man1/
+
+modify it, and mail it to Gary Miller.
+

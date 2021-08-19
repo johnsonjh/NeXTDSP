@@ -1,0 +1,72 @@
+.TH DSPLOADWRAP 1 "6 Jun 1989" "NeXT, Inc."
+.SH NAME
+dsploadwrap \- generate code to load a DSP linker file into the DSP
+
+.SH SYNOPSIS
+\fBdsploadwrap\fR 
+[ \fB-{relative,absolute}\fR ] 
+[ \fB-{ug,ap}\fR ] 
+.if n .ti +0.5i
+[ \fB-system\fR ] 
+[ \fB-simulator\fR ] 
+.if n .ti +0.5i
+[ \fB-argtemplate <\fIstring\fR> ] 
+[ \fB-start <\fIaddress\fR> ] 
+.if n .ti +0.5i
+[ \fB-trace\fR <\fIn\fR> ]
+<filename(s)>
+
+.SH DESCRIPTION
+The 
+.I dsploadwrap
+program is called by the 
+.I dspwrap
+program.  It is normally not run by itself.
+
+.SH OPTIONS
+Each option can be abbreviated to the shortest disambiguating extent.
+
+.IP \fB\-relative\fR
+Force treatment of input files as relative assembly.
+This is automatic if the filename extension is '.lnk'
+or '.dsp'.
+.IP \fB\-absolute\fR
+Force treatment of input files as absolute assembly.
+This is automatic if the filename extension is '.lod'.
+.IP \fB\-ug\fR
+Force treatment of input files as unit generators.
+The assembly type must be relative in this case.
+Unit-generators require special structs to be output
+into .m and .h files which are included by the
+unit-generator's Objective-C class file. 
+.IP \fB\-ap\fR
+Force treatment of input files as array processing macros.
+Array processor input files are handled like general purpose 
+DSP programs.
+.IP \fB\-system\fR
+Load system code (and user code, if any). When this option is not 
+present, only symbols and data for section USER are processed.
+When set, the input file is completely loaded, including anything
+from section SYSTEM it may have. Unless the -boot option is also 
+present, the resulting file will be loaded into a running DSP,
+allowing overwriting of system memory. This is a dangerous thing
+to do, and it will only work if you know how to avoid clobbering
+state info used while downloading into the DSP.  For example, 
+overwriting system x variables (which contain various system
+pointers and running status) could clobber the host interface.
+.IP \fB\-simulator\fR
+Generate a simulator host-interface file.
+.IP \fB\-argtemplate\fR <\fIstring\fR>
+Use <\fIstring\fR> as the argument template.
+.IP \fB\-start\fR <\fIaddress\fR>
+Sets the program start address to <\fIaddress\fR>, overriding
+any address specified by the assembler END statement.
+This option is only applicable to main programs, not unit
+generators.
+.IP \fB\-trace\fR
+Sets the trace variable. To get all possible tracing, use -1.
+
+.SH SEE ALSO
+\fBdspwrap\fR \- source processor for unit-generator and
+array-processing macros.
+

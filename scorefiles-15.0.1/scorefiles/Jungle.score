@@ -1,0 +1,2021 @@
+/* JUNGLE - by Michael McNabb.
+
+	Feel free to copy and modify this file.  */
+
+info tempo:80 headroom:.05;
+part flute2,flute3,flute1,ebass,cowbell,bd1,conga,tdrum,kalimba,vdrum;
+
+flute2 synthPatch:"Fm1vi" synthPatchCount:1 rvibAmp:0;
+flute3 synthPatch:"DBFm1vi" rvibAmp:0;
+flute1 synthPatch:"Fm1vi" synthPatchCount:1 rvibAmp:0;
+ebass synthPatch:"Fm2cvi" synthPatchCount:1 svibAmp:0 rvibAmp:0;
+cowbell synthPatch:"DBFm1vi" rvibAmp:0;
+bd1 synthPatch:"Fm2cnvi" synthPatchCount:1 rvibAmp:0 svibAmp:0;
+conga synthPatch:"Fm2cnvi" synthPatchCount:1 rvibAmp:0 svibAmp:0;
+tdrum synthPatch:"Fm2cnvi" synthPatchCount:1 rvibAmp:0 svibAmp:0;
+kalimba synthPatch:"Fm2cvi" synthPatchCount:1 rvibAmp:0 svibAmp:0;
+vdrum synthPatch:"DBFm1vi" rvibAmp:0;
+
+envelope ampFn1  =  [(0,0)(.002,1,.7)(.8,0,1)|(.810,0)(.811,0,.5)];
+envelope indFn1  =  [(0,0)(.002,1,.1)(.2,0,.4)];
+envelope indFn2  =  [(0,0)(.002,1,.1)(.1,0,.1)];
+
+envelope ampFn2  =  [(0,0)(.001,1,.05)(.5,0,1.4)(.501,0)|(.520,0)(.521,0,.5)];
+envelope indFn3  =  [(0,1)(.001,1,.05)(.2,0,.5)];
+envelope indFn4  =  [(0,1)(.001,1,.05)(.02,0,1)];
+
+envelope ampFn4  =  [(0,0)(.001,1,.2)(2,0,.7)(2.001,0)|(2.2,0)(2.21,0,.5)];
+envelope indFn5  =  [(0,0)(.001,1,.2)(1,0,.5)];
+envelope indFn6  =  [(0,0)(.001,1,.1)(.1,0,.1)];
+
+waveTable tdrum1 = [{1,1}{3,.2}];
+
+waveTable kal1 = [{1,1}{2,.1}];
+waveTable kal2 = [{1,1}{4,1}{7,1}{11,.5}{13,.2}{17,.1}];
+waveTable bd = [{1,1}{2,1}];
+waveTable cn = [{1,1}{3,.5}{5,.05}];
+
+envelope ampFn12  =  [(0,0)(.06,1,2)(.12,0)|(.128,0)(.13,0,.5)];
+envelope indFn12  =  [(0,1)(.03,1,.05)(.1,0)];
+envelope frqFn12  =  [(0,.95)(.1,1.05,2)];
+envelope frqFn13  =  [(0,1.05)(.1,0.95,2)];
+
+/* ebass envelopes and tables */
+envelope ampFn5  =  [(0,0)(.004,1,1)(3,0,.8)|(3.01,0)(3.011,0,.5)];
+envelope indFn7  =  [(0,0)(.004,1,1)(3,0,.7)];
+envelope ampFn5b =  [(0,0)(.004,1,1)(3,0,.7)|(3.2,.16,2)(4.8,0,1)(4.81,0,.5)];
+envelope indFn7b =  [(0,0)(.004,1,1)(3,0,.7)|(3.2,.07,2)(4.8,0,1)];
+envelope indFn8  =  [(0,0)(.004,1,1)(.5,0,.13)];
+waveTable bass1 = [{1,1}{6,.1}];
+waveTable bass2 = [{1,.6}{2,.4}{6,.1}];
+waveTable bass3 = [{1,.3}{2,.7}{6,.1}];
+waveTable bass4 = [{1,.1}{2,.9}{6,.1}];
+waveTable bass5 = [{2,1}{7,.5}];
+waveTable bass6 = [{1,.5}{3,.1}];
+
+/* Talking drum envelopes */
+envelope ampFn3  =  [(0,0)(.001,1,.05)(1,0,1)(1.001,0)|(1.2,0)(1.21,0,.5)];
+envelope indFn10  =  [(0,0)(.001,1,.05)(.1,0,.2)];
+envelope indFn11  =  [(0,0)(.001,1,.04)(.07,0,.1)];
+envelope frqFn1  =  [(0,.8)(.1,1.2,.8)(.6,.5)];
+envelope frqFn2  =  [(0,1.1)(.1,.8,.8)(.6,1.5)];
+envelope frqFn3  =  [(0,1.1)(.1,.8,.8)(.3,1.5,1)(.8,.5,1)];
+
+/* Flute envelopes and wavetables */
+envelope ampFn14  =  [(0,0)(.04,1,.7)(.5,.7,.8)(3,.85,3)(4,.6)|(4.05,0)(4.051,0,.5)];
+envelope ampFn14b =  [(0,0)(.04,1,.7)(.5,.7,.8)(3,.85,3)(4,.6)|(4.05,0)(4.5,0,.5)];
+envelope ampFn15  =  [(0,0)(.04,.7,.7)(.5,.1,.8)(4,1,3)|(4.05,0)(4.051,0,.5)];
+envelope ampFn16  =  [(0,1)(.005,1,.7)(.5,1)|(1,1)];
+envelope ampFn17  =  [(0,0)(.04,1,.7)(.2,.8,.8)|(.4,.045,2)(1.6,0,1)(1.61,0,.5)];
+envelope indFn14  =  [(0,1)(.04,1,.7)(.5,.2,.8)(.75,.25,2)(1,.15)(1.25,.3)
+			(1.5,.2)(1.75,.35)(2,.25)(2.25,.4)(2.5,.3)(2.75,.45)
+			(3,.3)(3.25,.4)(3.5,.25)(3.75,.35)(4,.2)];
+envelope indFn16  =  [(0,.2)(.005,.4,.7)(.5,.2)];
+envelope frqFn14  = [(0,.97)(.02,1.01)(.04,.995)(.06,1)(8,1)|(8.05,.98)];
+envelope frqFn15  = [(0,.995)(.01,1.0,.8)];
+waveTable fl = [{1,1}{3,.05}];
+waveTable fl2 = [{1,1}{2,.1}];
+waveTable fl3 = [{1,1}{4,.03}];
+
+envelope cbAmpFn  =  [(0,0)(.001,1,.2)(.3,0,.8)|(.31,0,.5)];
+envelope cbIndFn  =  [(0,0)(.001,1,.2)(.3,0,.3)];
+waveTable cb1 = [{1,1}{3,.1}];
+waveTable cb2 = [{1,1}{4,1}{7,1}{11,.5}{13,.2}{17,.1}];
+
+noteTagRange = 1 to 10; // optional
+
+BEGIN;
+
+flute2  (noteUpdate) waveLen:128.000 waveform:fl2 cRatio:1.000 m1Ind1:1.100
+   m1IndEnv:indFn14 m1IndAtt:4.000 svibFreq:4.500 bearing:35.000 rvibAmp:0;
+flute3  (noteUpdate) waveLen:128.000 waveform:fl cRatio:1.000 m1Ind1:.900
+   m1IndAtt:4.500 svibFreq:4.100 bearing:.000 rvibAmp:0;
+flute1  (noteUpdate) waveLen:128.000 waveform:fl3 cRatio:1.000 m1Ind1:1.100
+   m1IndAtt:3.500 svibFreq:3.600 bearing:-35.000 rvibAmp:0;
+ebass  (noteUpdate) amp:.045 waveform:bass6 cRatio:1.000 m1Ratio:1.000
+   m2Ratio:11.000 m2IndEnv:indFn8 m2Waveform:bass5 svibAmp:0 rvibAmp:0;
+t .7+0.003;
+ebass (noteOn,1) freq1:73.416 velocity:102 ampEnv:ampFn5 m1Ind1:4.511
+   m1IndEnv:indFn7 m1Waveform:bass1 m2Ind1:2.012 bearing:30;
+cowbell  (noteUpdate) freq1:587.329 ampEnv:cbAmpFn waveLen:128.000
+   waveform:cb1 cRatio:1.000 m1Ratio:1.618 m1IndEnv:cbIndFn m1Waveform:cb2
+   bearing:-35.000 rvibAmp:0;
+bd1  (noteUpdate) freq1:30.000 amp:.150 ampEnv:ampFn1 waveLen:128.000
+   waveform:bd cRatio:1.000 m1Ratio:3.618 m1IndEnv:indFn1 m1Waveform:bd
+   m2Ratio:4.618 m2IndEnv:indFn2 noiseAmp1:.300 noiseAmpEnv:indFn2
+   velocitySensitivity:.600 bearing:-40.000 synthPatchCount:1 rvibAmp:0
+   svibAmp:0;
+t .7+0.005;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.976 m2Ind1:7.808 m1Phase:45
+   m2Phase:45;
+conga  (noteUpdate) amp:.060 ampEnv:ampFn2 waveLen:128.000 waveform:cn
+   cRatio:2.000 m1Ratio:3.414 m1IndEnv:indFn3 m2Ratio:7.515
+   m2IndEnv:indFn4 noiseAmp1:.700 noiseAmpEnv:indFn4
+   velocitySensitivity:.500 bearing:40.000 synthPatchCount:1 rvibAmp:0
+   svibAmp:0;
+t .7+0.006;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.276 m2Ind1:4.989
+   phase:0 m1Phase:45 m2Phase:45;
+tdrum  (noteUpdate) amp:.100 ampEnv:ampFn3 waveLen:128.000 waveform:tdrum1
+   cRatio:2.000 m1Ratio:3.414 m1IndEnv:indFn10 m2Ratio:7.515
+   m2IndEnv:indFn11 noiseAmpEnv:indFn11 velocitySensitivity:.600
+   synthPatchCount:1 rvibAmp:0 svibAmp:0;
+kalimba  (noteUpdate) ampEnv:ampFn4 waveLen:128.000 waveform:kal1
+   cRatio:1.000 m1Ratio:2.414 m1IndEnv:indFn5 m1Waveform:kal2
+   m2Ratio:7.618 m2Ind1:6.000 m2IndEnv:indFn6 m2Waveform:kal2
+   synthPatchCount:1 rvibAmp:0 svibAmp:0;
+t .7+0.008;
+kalimba (noteOn,5) freq1:174.614 amp:.167 m1Ind1:.617 m1Phase:90
+   m2Phase:90 bearing:-26;
+vdrum  (noteUpdate) amp:.230 ampEnv:ampFn12 m1Waveform:"SA" waveLen:64.000
+   cRatio:2.000 m1Ratio:1.400 m1IndEnv:indFn12 bearing:35.000 rvibAmp:.008;
+t .7+0.235;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.936 m2Ind1:8.064;
+t .7+0.245;
+kalimba (noteOn,5) freq1:293.665 amp:.165 m1Ind1:.615 bearing:-1;
+t .7+0.483;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.169 m2Ind1:4.501;
+t .7+0.506;
+kalimba (noteOn,5) freq1:195.998 amp:.177 m1Ind1:.627 bearing:0;
+t .7+0.601;
+conga (noteOff,3);
+t .7+0.756;
+ebass (noteOn,1) freq1:73.416 velocity:96 m1Ind1:4.505 m2Ind1:1.833;
+t .7+0.760;
+kalimba (noteOn,5) freq1:261.626 amp:.184 m1Ind1:.634 bearing:23;
+t .7+1.004;
+kalimba (noteOn,5) freq1:220.000 amp:.186 m1Ind1:.636 bearing:33;
+t .7+1.005;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.019 m2Ind1:8.137;
+t .7+1.006;
+ebass (noteOn,1) freq1:55.000 velocity:86 m1Ind1:4.278 m1Waveform:bass2
+   m2Ind1:1.815;
+t .7+1.244;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.020 m2Ind1:8.113;
+t .7+1.252;
+kalimba (noteOn,5) freq1:349.228 amp:.178 m1Ind1:.628 bearing:41;
+t .7+1.499;
+ebass (noteOn,1) freq1:65.406 velocity:92 m1Ind1:4.229 m2Ind1:2.059;
+t .7+1.507;
+kalimba (noteOn,5) freq1:146.832 amp:.174 m1Ind1:.624 bearing:18;
+t .7+1.510;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.152 m2Ind1:4.466
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+1.742;
+kalimba (noteOn,5) freq1:174.614 amp:.162 m1Ind1:.612 bearing:12;
+t .7+1.755;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.345 m2Ind1:5.296;
+t .7+1.995;
+kalimba (noteOn,5) freq1:293.665 amp:.180 m1Ind1:.630 bearing:38;
+t .7+2.002;
+ebass (noteOn,1) freq1:73.416 velocity:96 m1Ind1:4.090 m1Waveform:bass3
+   m2Ind1:2.272;
+t .7+2.009;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+2.010;
+bd1 (noteOn,2) velocity:105 m1Ind1:2.002 m2Ind1:8.199;
+t .7+2.246;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.211 m2Ind1:4.607;
+t .7+2.258;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+2.260;
+kalimba (noteOn,5) freq1:195.998 amp:.168 m1Ind1:.618 bearing:28;
+t .7+2.492;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.208 m2Ind1:4.594;
+t .7+2.493;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+2.494;
+ebass (noteOn,1) freq1:87.307 velocity:101 m1Ind1:4.353 m2Ind1:2.211;
+t .7+2.510;
+kalimba (noteOn,5) freq1:261.626 amp:.175 m1Ind1:.625 bearing:34;
+t .7+2.607;
+conga (noteOff,3);
+t .7+2.748;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+2.755;
+bd1 (noteOn,2) velocity:65 m1Ind1:2.089 m2Ind1:8.051;
+t .7+2.759;
+kalimba (noteOn,5) freq1:220.000 amp:.160 m1Ind1:.610 bearing:38;
+t .7+3.001;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+3.002;
+ebass (noteOn,1) freq1:97.999 velocity:117 m1Ind1:4.284
+   m1Waveform:bass4 m2Ind1:2.381;
+t .7+3.003;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.964 m2Ind1:8.200;
+t .7+3.004;
+kalimba (noteOn,5) freq1:349.228 amp:.159 m1Ind1:.609 bearing:22;
+t .7+3.006;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.317 m2Ind1:5.176
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+3.250;
+kalimba (noteOn,5) freq1:146.832 amp:.172 m1Ind1:.622 bearing:10;
+t .7+3.258;
+cowbell (noteOff,10);
+t .7+3.503;
+bd1 (noteOn,2) velocity:85 m1Ind1:1.963 m2Ind1:7.830;
+t .7+3.510;
+kalimba (noteOn,5) freq1:261.626 amp:.187 m1Ind1:.637 bearing:18;
+t .7+3.511;
+ebass (noteOn,1) freq1:82.407 velocity:110 m1Ind1:4.304 m2Ind1:2.542;
+t .7+3.526;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.152 m2Ind1:4.474;
+t .7+3.752;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.195 m2Ind1:4.679;
+t .7+3.753;
+kalimba (noteOn,5) freq1:174.614 amp:.181 m1Ind1:.631 bearing:8;
+t .7+3.943;
+ebass (noteOff,1);
+t .7+3.993;
+ebass (noteOn,1) freq1:73.416 velocity:100 ampEnv:ampFn5 m1Ind1:4.304
+   m1IndEnv:indFn7 m1Waveform:bass5 m2Ind1:2.604 bearing:30;
+t .7+4.002;
+bd1 (noteOn,2) velocity:100 m1Ind1:2.014 m2Ind1:7.946;
+t .7+4.007;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.109 m2Ind1:4.291;
+t .7+4.008;
+kalimba (noteOn,5) freq1:293.665 amp:.166 m1Ind1:.616 bearing:1;
+t .7+4.223;
+vdrum (noteOn,6) freq:138.591 waveform:"SU" freqEnv:frqFn13 m1Ind1:.600;
+t .7+4.234;
+bd1 (noteOn,2) velocity:80 m1Ind1:2.039 m2Ind1:7.876;
+t .7+4.253;
+kalimba (noteOn,5) freq1:195.998 amp:.151 m1Ind1:.601 bearing:-2;
+t .7+4.479;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn12;
+t .7+4.506;
+kalimba (noteOn,5) freq1:261.626 amp:.144 m1Ind1:.594 bearing:17;
+t .7+4.507;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.044 m2Ind1:4.109;
+t .7+4.602;
+conga (noteOff,3);
+t .7+4.713;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn13;
+t .7+4.745;
+ebass (noteOn,1) freq1:73.416 velocity:97 m1Ind1:4.126 m1Waveform:bass4
+   m2Ind1:2.608 bearing:-30;
+t .7+4.756;
+kalimba (noteOn,5) freq1:220.000 amp:.158 m1Ind1:.608 bearing:10;
+t .7+4.973;
+vdrum (noteOn,6) freq:311.127 waveform:"SA" freqEnv:frqFn12 m1Ind1:.400;
+t .7+5.000;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.085 m2Ind1:7.925;
+t .7+5.005;
+kalimba (noteOn,5) freq1:349.228 amp:.148 m1Ind1:.598 bearing:19;
+t .7+5.010;
+ebass (noteOn,1) freq1:43.654 velocity:101 m1Ind1:4.351 m2Ind1:2.485;
+t .7+5.230;
+vdrum (noteOn,6) freq:138.591 waveform:"SU" freqEnv:frqFn13 m1Ind1:.600;
+t .7+5.253;
+kalimba (noteOn,5) freq1:146.832 amp:.141 m1Ind1:.591 bearing:31;
+t .7+5.265;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.293 m2Ind1:5.043
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+5.498;
+kalimba (noteOn,5) freq1:174.614 amp:.157 m1Ind1:.607 bearing:26;
+t .7+5.499;
+ebass (noteOn,1) freq1:48.999 velocity:90 m1Ind1:4.053 m1Waveform:bass3
+   m2Ind1:2.377;
+t .7+5.502;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.213 m2Ind1:4.630;
+t .7+5.745;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.256 m2Ind1:4.936;
+t .7+5.756;
+kalimba (noteOn,5) freq1:293.665 amp:.166 m1Ind1:.616 bearing:15;
+t .7+5.991;
+kalimba (noteOn,5) freq1:195.998 amp:.163 m1Ind1:.613 bearing:27;
+t .7+6.002;
+bd1 (noteOn,2) velocity:90 m1Ind1:1.935 m2Ind1:7.915;
+t .7+6.008;
+ebass (noteOn,1) freq1:55.000 velocity:97 m1Ind1:4.225 m2Ind1:2.468;
+t .7+6.240;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.062 m2Ind1:8.096;
+t .7+6.255;
+kalimba (noteOn,5) freq1:261.626 amp:.155 m1Ind1:.605 bearing:36;
+t .7+6.257;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.341 m2Ind1:5.208;
+t .7+6.502;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.036 m2Ind1:4.077;
+t .7+6.506;
+ebass (noteOn,1) freq1:65.406 velocity:101 m1Ind1:4.452
+   m1Waveform:bass2 m2Ind1:2.491;
+t .7+6.510;
+kalimba (noteOn,5) freq1:220.000 amp:.159 m1Ind1:.609 bearing:33;
+t .7+6.610;
+conga (noteOff,3);
+t .7+6.714;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn12;
+t .7+6.750;
+kalimba (noteOn,5) freq1:349.228 amp:.149 m1Ind1:.599 bearing:29;
+t .7+6.971;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn13;
+t .7+7.002;
+kalimba (noteOn,5) freq1:146.832 amp:.140 m1Ind1:.590 bearing:22;
+t .7+7.005;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.210 m2Ind1:4.721
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+7.008;
+ebass (noteOn,1) freq1:82.407 velocity:112 m1Ind1:4.188 m2Ind1:2.497;
+t .7+7.011;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.927 m2Ind1:8.131;
+t .7+7.215;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn12;
+t .7+7.250;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.235 m2Ind1:4.703;
+t .7+7.252;
+kalimba (noteOn,5) freq1:261.626 amp:.157 m1Ind1:.607 bearing:10;
+t .7+7.472;
+vdrum (noteOn,6) freq:311.127 waveform:"SA" freqEnv:frqFn13 m1Ind1:.400;
+t .7+7.487;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.386 m2Ind1:5.429;
+t .7+7.494;
+ebass (noteOn,1) freq1:65.406 velocity:102 m1Ind1:4.268
+   m1Waveform:bass1 m2Ind1:2.739;
+t .7+7.499;
+kalimba (noteOn,5) freq1:174.614 amp:.169 m1Ind1:.619 bearing:11;
+t .7+7.529;
+bd1 (noteOn,2) m1Ind1:2.008 m2Ind1:8.063;
+t .7+7.758;
+kalimba (noteOn,5) freq1:293.665 amp:.187 m1Ind1:.637 bearing:-9;
+t .7+7.771;
+bd1 (noteOn,2) m1Ind1:1.901 m2Ind1:8.010;
+t .7+7.810;
+tdrum (noteOn,4) freq1:97.999 freqEnv:frqFn1 velocity:80 m1Ind1:1.750
+   m2Ind1:1.925 noiseAmp1:.536 phase:0 m1Phase:45 m2Phase:45 bearing:-45;
+t .7+7.899;
+tdrum (noteOn,4) freq1:103.826 velocity:90 noiseAmp1:.532 bearing:0;
+t .7+7.948;
+ebass (noteOff,1);
+t .7+7.980;
+vdrum (noteOff,6);
+t .7+7.999;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.952 m2Ind1:8.052;
+t .7+8.000;
+ebass (noteOn,1) freq1:73.416 velocity:102 ampEnv:ampFn5 m1Ind1:4.209
+   m1IndEnv:indFn7 m1Waveform:bass2 m2Ind1:2.382 bearing:30;
+t .7+8.003;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.131 m2Ind1:4.333;
+t .7+8.005;
+tdrum (noteOn,4) freq1:110.000 velocity:105 noiseAmp1:.506 bearing:45;
+t .7+8.006;
+kalimba (noteOn,5) freq1:195.998 amp:.174 m1Ind1:.624 bearing:-7;
+t .7+8.239;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.060 m2Ind1:8.110;
+t .7+8.258;
+kalimba (noteOn,5) freq1:261.626 amp:.178 m1Ind1:.628 bearing:4;
+t .7+8.321;
+tdrum (noteOn,4) freq1:103.826 velocity:90 noiseAmp1:.517 bearing:25;
+t .7+8.484;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.024 m2Ind1:4.071;
+t .7+8.499;
+kalimba (noteOn,5) freq1:220.000 amp:.186 m1Ind1:.636 bearing:30;
+t .7+8.585;
+conga (noteOff,3);
+t .7+8.659;
+tdrum (noteOn,4) freq1:92.499 velocity:80 noiseAmp1:.509 bearing:5;
+t .7+8.749;
+ebass (noteOn,1) freq1:73.416 velocity:97 m1Ind1:4.027 m2Ind1:2.250;
+t .7+8.758;
+kalimba (noteOn,5) freq1:349.228 amp:.188 m1Ind1:.638 bearing:8;
+t .7+8.990;
+ebass (noteOn,1) freq1:55.000 velocity:86 m1Ind1:4.243 m1Waveform:bass3
+   m2Ind1:2.057;
+t .7+8.992;
+kalimba (noteOn,5) freq1:146.832 amp:.172 m1Ind1:.622 bearing:31;
+t .7+9.000;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.970 m2Ind1:7.904;
+t .7+9.010;
+tdrum (noteOn,4) freq1:77.782 velocity:75 noiseAmp1:.536 bearing:-15;
+t .7+9.232;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.086 m2Ind1:8.112;
+t .7+9.243;
+kalimba (noteOn,5) freq1:174.614 amp:.185 m1Ind1:.635 bearing:15;
+t .7+9.492;
+ebass (noteOn,1) freq1:65.406 velocity:90 m1Ind1:4.387 m2Ind1:2.310;
+t .7+9.493;
+tdrum (noteOn,4) freq1:65.406 velocity:70 noiseAmp1:.536 bearing:-35;
+t .7+9.494;
+kalimba (noteOn,5) freq1:293.665 amp:.181 m1Ind1:.631 bearing:25;
+t .7+9.517;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.013 m2Ind1:4.011
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+9.746;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.196 m2Ind1:4.644;
+t .7+9.757;
+kalimba (noteOn,5) freq1:195.998 amp:.167 m1Ind1:.617 bearing:0;
+t .7+9.994;
+kalimba (noteOn,5) freq1:261.626 amp:.157 m1Ind1:.607 bearing:-21;
+t .7+9.996;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+9.999;
+ebass (noteOn,1) freq1:73.416 velocity:95 m1Ind1:4.532 m1Waveform:bass4
+   m2Ind1:2.541;
+t .7+10.003;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.960 m2Ind1:7.986;
+t .7+10.251;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+10.255;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.306 m2Ind1:5.139;
+t .7+10.259;
+kalimba (noteOn,5) freq1:220.000 amp:.161 m1Ind1:.611 bearing:-24;
+t .7+10.493;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.062 m2Ind1:4.050;
+t .7+10.503;
+kalimba (noteOn,5) freq1:349.228 amp:.148 m1Ind1:.598 bearing:-35;
+t .7+10.506;
+ebass (noteOn,1) freq1:87.307 velocity:102 m1Ind1:4.342 m2Ind1:2.426;
+t .7+10.508;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+10.595;
+conga (noteOff,3);
+t .7+10.668;
+tdrum (noteOn,4) freq1:46.249 freqEnv:frqFn2 velocity:100 m1Ind1:2.000
+   m2Ind1:2.200 noiseAmp1:.575 bearing:-45;
+t .7+10.740;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+10.756;
+kalimba (noteOn,5) freq1:146.832 amp:.137 m1Ind1:.587 bearing:-33;
+t .7+10.757;
+bd1 (noteOn,2) velocity:65 m1Ind1:2.097 m2Ind1:7.874;
+t .7+10.991;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+10.996;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.035 m2Ind1:7.806;
+t .7+10.998;
+kalimba (noteOn,5) freq1:261.626 amp:.144 m1Ind1:.594 bearing:-39;
+t .7+11.009;
+ebass (noteOn,1) freq1:97.999 velocity:116 m1Ind1:4.563
+   m1Waveform:bass5 m2Ind1:2.384;
+t .7+11.010;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.316 m2Ind1:5.099
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+11.241;
+cowbell (noteOff,10);
+t .7+11.246;
+kalimba (noteOn,5) freq1:174.614 amp:.162 m1Ind1:.612 bearing:-42;
+t .7+11.329;
+tdrum (noteOn,4) freq1:48.999 velocity:105 noiseAmp1:.591 bearing:45;
+t .7+11.495;
+ebass (noteOn,1) freq1:82.407 velocity:111 m1Ind1:4.326 m2Ind1:2.388;
+t .7+11.499;
+bd1 (noteOn,2) velocity:85 m1Ind1:1.974 m2Ind1:8.199;
+t .7+11.500;
+kalimba (noteOn,5) freq1:293.665 amp:.180 m1Ind1:.630 bearing:-20;
+t .7+11.513;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.030 m2Ind1:3.991;
+t .7+11.742;
+kalimba (noteOn,5) freq1:195.998 amp:.173 m1Ind1:.623;
+t .7+11.758;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.035 m2Ind1:3.951;
+t .7+11.943;
+ebass (noteOff,1);
+t .7+11.992;
+tdrum (noteOn,4) freq1:55.000 freqEnv:frqFn3 velocity:110
+   noiseAmp1:.541 bearing:0;
+t .7+11.994;
+kalimba (noteOn,5) freq1:261.626 amp:.176 m1Ind1:.626 bearing:-14;
+t .7+11.995;
+bd1 (noteOn,2) velocity:100 m1Ind1:1.961 m2Ind1:7.836;
+t .7+11.997;
+ebass (noteOn,1) freq1:73.416 velocity:101 ampEnv:ampFn5 m1Ind1:4.138
+   m1IndEnv:indFn7 m1Waveform:bass4 m2Ind1:2.357 bearing:30;
+t .7+12.002;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.193 m2Ind1:4.729;
+t .7+12.239;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.917 m2Ind1:7.814;
+t .7+12.242;
+kalimba (noteOn,5) freq1:220.000 amp:.170 m1Ind1:.620 bearing:3;
+t .7+12.504;
+kalimba (noteOn,5) freq1:349.228 amp:.181 m1Ind1:.631 bearing:18;
+t .7+12.508;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.101 m2Ind1:4.282;
+t .7+12.594;
+conga (noteOff,3);
+t .7+12.747;
+kalimba (noteOn,5) freq1:146.832 amp:.172 m1Ind1:.622 bearing:11;
+t .7+12.753;
+ebass (noteOn,1) freq1:73.416 velocity:96 m1Ind1:4.366 m1Waveform:bass3
+   m2Ind1:2.556 bearing:-30;
+t .7+12.993;
+ebass (noteOn,1) freq1:43.654 velocity:100 m1Ind1:4.452 m2Ind1:2.480;
+t .7+12.994;
+kalimba (noteOn,5) freq1:174.614 amp:.179 m1Ind1:.629 bearing:9;
+t .7+12.995;
+tdrum (noteOff,4);
+t .7+13.009;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.937 m2Ind1:7.980;
+t .7+13.251;
+kalimba (noteOn,5) freq1:293.665 amp:.185 m1Ind1:.635 bearing:30;
+t .7+13.264;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.191 m2Ind1:4.684
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+13.490;
+ebass (noteOn,1) freq1:48.999 velocity:92 m1Ind1:4.214 m1Waveform:bass2
+   m2Ind1:2.741;
+t .7+13.501;
+kalimba (noteOn,5) freq1:195.998 amp:.187 m1Ind1:.637 bearing:41;
+t .7+13.504;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.159 m2Ind1:4.486;
+t .7+13.750;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.184 m2Ind1:4.679;
+t .7+13.753;
+kalimba (noteOn,5) freq1:261.626 amp:.184 m1Ind1:.634 bearing:18;
+t .7+14.005;
+kalimba (noteOn,5) freq1:220.000 amp:.189 m1Ind1:.639 bearing:42;
+t .7+14.006;
+ebass (noteOn,1) freq1:55.000 velocity:97 m1Ind1:4.207 m2Ind1:2.509;
+t .7+14.007;
+bd1 (noteOn,2) velocity:90 m1Ind1:1.955 m2Ind1:8.060;
+t .7+14.248;
+kalimba (noteOn,5) freq1:349.228 amp:.172 m1Ind1:.622 bearing:44;
+t .7+14.250;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.926 m2Ind1:8.158;
+t .7+14.259;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.323 m2Ind1:5.068;
+t .7+14.481;
+flute2 (noteOn,8) freq1:293.665 amp:-26dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.010 m1IndEnv:indFn14 svibAmp:.011;
+t .7+14.495;
+kalimba (noteOn,5) freq1:146.832 amp:.156 m1Ind1:.606 bearing:39;
+t .7+14.503;
+flute1 (noteOn,7) freq1:220.000 amp:-26dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+14.509;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.059 m2Ind1:4.157;
+t .7+14.510;
+ebass (noteOn,1) freq1:73.416 velocity:112 m1Ind1:4.223
+   m1Waveform:bass1 m2Ind1:2.699;
+t .7+14.608;
+conga (noteOff,3);
+t .7+14.633;
+flute3 (noteOn,9) freq1:349.228 amp:-25dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+14.759;
+kalimba (noteOn,5) freq1:261.626 amp:.165 m1Ind1:.615 bearing:35;
+t .7+14.994;
+kalimba (noteOn,5) freq1:174.614 amp:.165 m1Ind1:.615 bearing:45;
+t .7+14.997;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.998 m2Ind1:8.101;
+t .7+15.010;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.317 m2Ind1:5.175
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+15.218;
+flute2 (noteOn,8) freq1:329.628 amp:-24dB m1Ratio:4.007;
+t .7+15.226;
+flute1 (noteOn,7) freq1:233.082 amp:-24dB m1Ratio:4.008;
+t .7+15.249;
+ebass (noteOn,1) freq1:65.406 velocity:116 m1Ind1:4.306 m2Ind1:2.545;
+t .7+15.251;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.204 m2Ind1:4.741;
+t .7+15.259;
+kalimba (noteOff,5);
+t .7+15.300;
+flute3 (noteOn,9) freq1:391.995 amp:-23dB m1Ratio:4.007;
+t .7+15.475;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.270 m2Ind1:4.884;
+t .7+15.500;
+kalimba (noteOn,5) freq1:195.998 amp:.137 m1Ind1:.587 m1Phase:90
+   m2Phase:90 bearing:22;
+t .7+15.525;
+bd1 (noteOn,2) m1Ind1:1.974 m2Ind1:8.023;
+t .7+15.747;
+kalimba (noteOn,5) freq1:261.626 amp:.133 m1Ind1:.583 bearing:35;
+t .7+15.770;
+bd1 (noteOn,2) m1Ind1:1.907 m2Ind1:7.926;
+t .7+15.951;
+ebass (noteOff,1);
+t .7+15.967;
+flute2 (noteOn,8) freq1:349.228 amp:-22dB m1Ratio:4.009;
+t .7+15.974;
+flute1 (noteOn,7) freq1:261.626 amp:-22dB m1Ratio:4.010;
+t .7+15.977;
+flute3 (noteOn,9) freq1:440.000 amp:-21dB m1Ratio:4.006;
+t .7+15.996;
+kalimba (noteOn,5) freq1:220.000 amp:.135 m1Ind1:.585 bearing:44;
+t .7+16.003;
+ebass (noteOn,1) freq1:87.307 velocity:117 ampEnv:ampFn5 m1Ind1:4.524
+   m1IndEnv:indFn7 m1Waveform:bass2 m2Ind1:2.795 bearing:30;
+t .7+16.007;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.093 m2Ind1:8.156;
+t .7+16.008;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.199 m2Ind1:4.671;
+t .7+16.237;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.944 m2Ind1:7.976;
+t .7+16.253;
+kalimba (noteOn,5) freq1:349.228 amp:.130 m1Ind1:.580 bearing:43;
+t .7+16.491;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.029 m2Ind1:3.935;
+t .7+16.497;
+kalimba (noteOn,5) freq1:146.832 amp:.134 m1Ind1:.584 bearing:28;
+t .7+16.594;
+conga (noteOff,3);
+t .7+16.743;
+ebass (noteOn,1) freq1:87.307 velocity:112 m1Ind1:4.481
+   m1Waveform:bass3 m2Ind1:2.528;
+t .7+16.755;
+kalimba (noteOn,5) freq1:174.614 amp:.134 m1Ind1:.584 bearing:20;
+t .7+16.996;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.007 m2Ind1:7.939;
+t .7+17.003;
+ebass (noteOn,1) freq1:65.406 velocity:101 m1Ind1:4.330 m2Ind1:2.396;
+t .7+17.004;
+kalimba (noteOn,5) freq1:293.665 amp:.140 m1Ind1:.590 bearing:3;
+t .7+17.238;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.053 m2Ind1:8.034;
+t .7+17.247;
+kalimba (noteOff,5);
+t .7+17.499;
+kalimba (noteOn,5) freq1:261.626 amp:.159 m1Ind1:.609 m1Phase:90
+   m2Phase:90 bearing:1;
+t .7+17.510;
+ebass (noteOn,1) freq1:55.000 velocity:97 m1Ind1:4.373 m1Waveform:bass4
+   m2Ind1:2.369;
+t .7+17.519;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.023 m2Ind1:3.961
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+17.742;
+kalimba (noteOn,5) freq1:220.000 amp:.156 m1Ind1:.606 bearing:-4;
+t .7+17.755;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.274 m2Ind1:4.907;
+t .7+17.996;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.907 m2Ind1:8.082;
+t .7+18.001;
+kalimba (noteOn,5) freq1:349.228 amp:.155 m1Ind1:.605 bearing:0;
+t .7+18.007;
+ebass (noteOn,1) freq1:43.654 velocity:111 m1Ind1:4.164 m2Ind1:2.275;
+t .7+18.249;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.276 m2Ind1:4.940;
+t .7+18.255;
+kalimba (noteOn,5) freq1:146.832 amp:.161 m1Ind1:.611 bearing:-7;
+t .7+18.495;
+ebass (noteOn,1) freq1:48.999 velocity:105 m1Ind1:4.274
+   m1Waveform:bass5 m2Ind1:2.099;
+t .7+18.496;
+kalimba (noteOn,5) freq1:261.626 amp:.172 m1Ind1:.622 bearing:-32;
+t .7+18.497;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.052 m2Ind1:4.066;
+t .7+18.603;
+conga (noteOff,3);
+t .7+18.743;
+kalimba (noteOn,5) freq1:174.614 amp:.171 m1Ind1:.621 bearing:-18;
+t .7+18.766;
+bd1 (noteOn,2) velocity:65 m1Ind1:2.007 m2Ind1:8.146;
+t .7+19.004;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.936 m2Ind1:7.822;
+t .7+19.005;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.247 m2Ind1:4.822
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+19.006;
+ebass (noteOn,1) freq1:55.000 velocity:101 m1Ind1:4.099 m2Ind1:2.306;
+t .7+19.007;
+kalimba (noteOn,5) freq1:293.665 amp:.163 m1Ind1:.613 bearing:-12;
+t .7+19.261;
+kalimba (noteOn,5) freq1:195.998 amp:.178 m1Ind1:.628 bearing:-36;
+t .7+19.453;
+flute2 (noteOn,8) freq1:391.995 ampEnv:ampFn16 m1Ratio:4.010
+   m1IndEnv:indFn16;
+t .7+19.464;
+flute3 (noteOn,9) freq1:466.164 ampEnv:ampFn16 m1Ratio:4.010
+   m1IndEnv:indFn16;
+t .7+19.492;
+kalimba (noteOn,5) freq1:261.626 amp:.180 m1Ind1:.630 bearing:-23;
+t .7+19.497;
+flute1 (noteOn,7) freq1:261.626 ampEnv:ampFn16 m1Ratio:4.007
+   m1IndEnv:indFn16;
+t .7+19.501;
+bd1 (noteOn,2) velocity:85 m1Ind1:1.917 m2Ind1:7.990;
+t .7+19.510;
+ebass (noteOn,1) freq1:73.416 velocity:97 m1Ind1:4.213 m1Waveform:bass4
+   m2Ind1:2.278;
+t .7+19.515;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.102 m2Ind1:4.251;
+t .7+19.721;
+flute3 (noteOn,9) freq1:440.000 m1Ratio:4.007;
+t .7+19.737;
+flute2 (noteOn,8) freq1:349.228 m1Ratio:4.009;
+t .7+19.741;
+ebass (noteOff,1);
+t .7+19.747;
+kalimba (noteOn,5) freq1:220.000 amp:.190 m1Ind1:.640 bearing:-15;
+t .7+19.753;
+flute1 (noteOn,7) freq1:261.626 m1Ratio:4.008;
+t .7+19.771;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.166 m2Ind1:4.452;
+t .7+19.965;
+flute2 (noteOn,8) freq1:329.628 amp:-21dB ampEnv:ampFn14 m1Ratio:4.007
+   m1IndEnv:indFn14;
+t .7+19.987;
+flute3 (noteOn,9) freq1:391.995 amp:-20dB ampEnv:ampFn14 m1Ratio:4.010
+   m1IndEnv:indFn14;
+t .7+19.988;
+flute1 (noteOn,7) freq1:261.626 amp:-21dB ampEnv:ampFn14 m1Ratio:4.008
+   m1IndEnv:indFn14;
+t .7+19.996;
+kalimba (noteOn,5) freq1:349.228 amp:.181 m1Ind1:.631 bearing:-5;
+t .7+20.001;
+ebass (noteOn,1) freq1:32.703 velocity:116 ampEnv:ampFn5 m1Ind1:4.261
+   m1IndEnv:indFn7 m1Waveform:bass3 m2Ind1:2.293 bearing:-30;
+t .7+20.005;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.167 m2Ind1:4.507;
+t .7+20.010;
+bd1 (noteOn,2) velocity:100 m1Ind1:2.006 m2Ind1:8.082;
+t .7+20.243;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.976 m2Ind1:7.870;
+t .7+20.251;
+kalimba (noteOn,5) freq1:146.832 amp:.168 m1Ind1:.618 bearing:16;
+t .7+20.504;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.090 m2Ind1:4.201;
+t .7+20.505;
+ebass (noteOn,1) freq1:65.406 velocity:110 m1Ind1:4.311 m2Ind1:2.160;
+t .7+20.506;
+kalimba (noteOn,5) freq1:174.614 amp:.167 m1Ind1:.617 bearing:10;
+t .7+20.603;
+conga (noteOff,3);
+t .7+20.616;
+flute3 (noteOn,9) freq1:391.995 amp:-24dB m1Ratio:4.007;
+t .7+20.643;
+flute2 (noteOn,8) freq1:329.628 amp:-25dB m1Ratio:4.010;
+t .7+20.646;
+flute1 (noteOn,7) freq1:261.626 amp:-25dB m1Ratio:4.007;
+t .7+20.745;
+kalimba (noteOn,5) freq1:293.665 amp:.160 m1Ind1:.610 bearing:9;
+t .7+20.752;
+ebass (noteOn,1) freq1:65.406 velocity:107 m1Ind1:4.343
+   m1Waveform:bass2 m2Ind1:2.164;
+t .7+20.994;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.908 m2Ind1:7.936;
+t .7+21.009;
+kalimba (noteOn,5) freq1:195.998 amp:.159 m1Ind1:.609 bearing:36;
+t .7+21.010;
+ebass (noteOn,1) freq1:73.416 velocity:102 m1Ind1:4.412 m2Ind1:2.227;
+t .7+21.250;
+kalimba (noteOn,5) freq1:261.626 amp:.159 m1Ind1:.609 bearing:45;
+t .7+21.279;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.109 m2Ind1:4.283
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+21.292;
+flute3 (noteOn,9) freq1:391.995 amp:-22dB m1Ratio:4.006;
+t .7+21.293;
+flute2 (noteOn,8) freq1:329.628 amp:-23dB m1Ratio:4.010;
+t .7+21.307;
+flute1 (noteOn,7) freq1:261.626 amp:-23dB m1Ratio:4.009;
+t .7+21.494;
+ebass (noteOn,1) freq1:65.406 velocity:95 m1Ind1:4.150 m1Waveform:bass1
+   m2Ind1:2.211;
+t .7+21.497;
+kalimba (noteOn,5) freq1:220.000 amp:.174 m1Ind1:.624 bearing:28;
+t .7+21.508;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.268 m2Ind1:4.967;
+t .7+21.743;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.328 m2Ind1:5.204;
+t .7+21.757;
+kalimba (noteOn,5) freq1:349.228 amp:.181 m1Ind1:.631 bearing:22;
+t .7+21.974;
+flute3 (noteOn,9) freq1:349.228 amp:-21dB m1Ratio:4.009;
+t .7+21.975;
+flute1 (noteOn,7) freq1:233.082 amp:-22dB m1Ratio:4.007;
+t .7+21.990;
+flute2 (noteOn,8) freq1:293.665 amp:-22dB m1Ratio:4.008;
+t .7+21.991;
+kalimba (noteOn,5) freq1:146.832 amp:.167 m1Ind1:.617 bearing:42;
+t .7+21.998;
+ebass (noteOn,1) freq1:58.270 velocity:102 m1Ind1:4.428 m2Ind1:2.418;
+t .7+22.008;
+bd1 (noteOn,2) velocity:90 m1Ind1:2.092 m2Ind1:8.143;
+t .7+22.232;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.096 m2Ind1:8.047;
+t .7+22.243;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.158 m2Ind1:4.405;
+t .7+22.250;
+kalimba (noteOn,5) freq1:261.626 amp:.173 m1Ind1:.623 bearing:36;
+t .7+22.494;
+kalimba (noteOn,5) freq1:174.614 amp:.186 m1Ind1:.636 bearing:20;
+t .7+22.499;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.155 m2Ind1:4.537;
+t .7+22.602;
+conga (noteOff,3);
+t .7+22.668;
+ebass (noteOn,1) freq1:43.654 velocity:105 m1Ind1:4.341
+   m1Waveform:bass2 m2Ind1:2.131;
+t .7+22.746;
+kalimba (noteOn,5) freq1:293.665 amp:.180 m1Ind1:.630 bearing:44;
+t .7+22.965;
+flute2 (noteOn,8) freq1:293.665 amp:-23dB m1Ratio:4.010;
+t .7+22.983;
+flute3 (noteOn,9) freq1:349.228 amp:-22dB m1Ratio:4.007;
+t .7+22.994;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.218 m2Ind1:4.782
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+22.997;
+flute1 (noteOn,7) freq1:233.082 amp:-23dB m1Ratio:4.006;
+t .7+23.004;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.929 m2Ind1:8.143;
+t .7+23.008;
+kalimba (noteOn,5) freq1:195.998 amp:.176 m1Ind1:.626 bearing:33;
+t .7+23.231;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.235 m2Ind1:4.696;
+t .7+23.246;
+kalimba (noteOn,5) freq1:261.626 amp:.180 m1Ind1:.630 bearing:17;
+t .7+23.320;
+ebass (noteOn,1) freq1:48.999 velocity:112 m1Ind1:4.332 m2Ind1:1.856;
+t .7+23.478;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.421 m2Ind1:5.478;
+t .7+23.502;
+kalimba (noteOn,5) freq1:220.000 amp:.181 m1Ind1:.631 bearing:-2;
+t .7+23.530;
+bd1 (noteOn,2) m1Ind1:2.025 m2Ind1:8.007;
+t .7+23.747;
+kalimba (noteOn,5) freq1:349.228 amp:.178 m1Ind1:.628 bearing:17;
+t .7+23.757;
+bd1 (noteOn,2) m1Ind1:2.028 m2Ind1:7.990;
+t .7+23.943;
+ebass (noteOff,1);
+t .7+23.955;
+flute3 (noteOn,9) freq1:349.228 amp:-19dB m1Ratio:4.008;
+t .7+23.966;
+flute2 (noteOn,8) freq1:293.665 amp:-20dB m1Ratio:4.008;
+t .7+23.991;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.282 m2Ind1:4.922;
+t .7+23.992;
+ebass (noteOn,1) freq1:73.416 velocity:101 ampEnv:ampFn5 m1Ind1:4.783
+   m1IndEnv:indFn7 m1Waveform:bass3 m2Ind1:2.080 bearing:-30;
+t .7+24.000;
+tdrum (noteOn,4) freq1:130.813 freqEnv:frqFn1 velocity:110 m1Ind1:1.750
+   m2Ind1:1.925 noiseAmp1:.441 phase:0 m1Phase:45 m2Phase:45 bearing:45;
+t .7+24.001;
+flute1 (noteOn,7) freq1:220.000 amp:-20dB m1Ratio:4.009;
+t .7+24.010;
+kalimba (noteOn,5) freq1:146.832 amp:.180 m1Ind1:.630 bearing:22;
+t .7+24.011;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.056 m2Ind1:8.195;
+t .7+24.160;
+flute2 (noteOff,8);
+t .7+24.182;
+flute1 (noteOff,7);
+t .7+24.233;
+flute3 (noteOff,9);
+t .7+24.235;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.938 m2Ind1:7.956;
+t .7+24.252;
+tdrum (noteOn,4) freq1:116.541 freqEnv:frqFn3 velocity:100
+   noiseAmp1:.439 bearing:30;
+t .7+24.254;
+kalimba (noteOff,5);
+t .7+24.488;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.104 m2Ind1:4.226;
+t .7+24.502;
+kalimba (noteOn,5) freq1:293.665 amp:.158 m1Ind1:.608 m1Phase:90
+   m2Phase:90 bearing:28;
+t .7+24.593;
+conga (noteOff,3);
+t .7+24.747;
+tdrum (noteOn,4) freq1:103.826 freqEnv:frqFn1 velocity:90
+   noiseAmp1:.447 bearing:15;
+t .7+24.749;
+kalimba (noteOff,5);
+t .7+24.756;
+ebass (noteOn,1) freq1:73.416 velocity:96 m1Ind1:4.549 m1Waveform:bass4
+   m2Ind1:1.888 bearing:30;
+t .7+24.990;
+ebass (noteOn,1) freq1:55.000 velocity:85 m1Ind1:4.676 m2Ind1:1.903;
+t .7+24.991;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.902 m2Ind1:8.191;
+t .7+24.993;
+kalimba (noteOn,5) freq1:261.626 amp:.144 m1Ind1:.594 m1Phase:90
+   m2Phase:90 bearing:11;
+t .7+25.004;
+tdrum (noteOn,4) freq1:97.999 velocity:100 noiseAmp1:.479 bearing:0;
+t .7+25.246;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.068 m2Ind1:8.154;
+t .7+25.252;
+tdrum (noteOn,4) freq1:87.307 velocity:90 noiseAmp1:.445 bearing:-15;
+t .7+25.253;
+kalimba (noteOn,5) freq1:220.000 amp:.137 m1Ind1:.587 bearing:30;
+t .7+25.491;
+ebass (noteOn,1) freq1:65.406 velocity:90 m1Ind1:4.925 m1Waveform:bass5
+   m2Ind1:1.810;
+t .7+25.502;
+tdrum (noteOn,4) freq1:82.407 freqEnv:frqFn2 velocity:80 noiseAmp1:.465
+   bearing:-30;
+t .7+25.511;
+kalimba (noteOn,5) freq1:349.228 amp:.139 m1Ind1:.589 bearing:6;
+t .7+25.517;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.087 m2Ind1:4.237
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+25.742;
+kalimba (noteOn,5) freq1:146.832 amp:.130 m1Ind1:.580 bearing:-8;
+t .7+25.756;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.249 m2Ind1:4.886;
+t .7+25.993;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.912 m2Ind1:7.844;
+t .7+25.994;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+26.007;
+ebass (noteOn,1) freq1:73.416 velocity:97 m1Ind1:4.652 m2Ind1:1.812;
+t .7+26.010;
+kalimba (noteOff,5);
+t .7+26.132;
+tdrum (noteOn,4) freq1:97.999 freqEnv:frqFn1 velocity:75 noiseAmp1:.535
+   bearing:40;
+t .7+26.239;
+tdrum (noteOn,4) freq1:92.499 velocity:80 noiseAmp1:.465 bearing:-40;
+t .7+26.249;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.205 m2Ind1:4.613;
+t .7+26.251;
+kalimba (noteOn,5) freq1:174.614 amp:.161 m1Ind1:.611 m1Phase:90
+   m2Phase:90 bearing:-3;
+t .7+26.259;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+26.327;
+tdrum (noteOn,4) freq1:103.826 freqEnv:frqFn2 velocity:100
+   noiseAmp1:.519 bearing:30;
+t .7+26.493;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+26.498;
+ebass (noteOn,1) freq1:87.307 velocity:102 m1Ind1:4.559
+   m1Waveform:bass4 m2Ind1:1.800;
+t .7+26.503;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.125 m2Ind1:4.417;
+t .7+26.506;
+kalimba (noteOn,5) freq1:293.665 amp:.153 m1Ind1:.603 bearing:1;
+t .7+26.595;
+conga (noteOff,3);
+t .7+26.665;
+tdrum (noteOn,4) freq1:58.270 freqEnv:frqFn1 velocity:90 m1Ind1:2.000
+   m2Ind1:2.200 noiseAmp1:.587 bearing:-30;
+t .7+26.754;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+26.758;
+kalimba (noteOn,5) freq1:195.998 amp:.147 m1Ind1:.597 bearing:-22;
+t .7+26.770;
+bd1 (noteOn,2) velocity:65 m1Ind1:2.005 m2Ind1:8.117;
+t .7+26.996;
+tdrum (noteOn,4) freq1:73.416 velocity:105 m1Ind1:1.900 m2Ind1:2.090
+   noiseAmp1:.509 bearing:20;
+t .7+26.997;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.000 m2Ind1:8.020;
+t .7+27.000;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+27.002;
+ebass (noteOn,1) freq1:97.999 velocity:115 m1Ind1:4.455 m2Ind1:1.920;
+t .7+27.006;
+kalimba (noteOn,5) freq1:261.626 amp:.146 m1Ind1:.596 bearing:-32;
+t .7+27.007;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.261 m2Ind1:4.839
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+27.246;
+cowbell (noteOff,10);
+t .7+27.258;
+kalimba (noteOn,5) freq1:220.000 amp:.134 m1Ind1:.584 bearing:-24;
+t .7+27.494;
+kalimba (noteOn,5) freq1:349.228 amp:.149 m1Ind1:.599 bearing:-22;
+t .7+27.502;
+tdrum (noteOn,4) freq1:61.735 freqEnv:frqFn3 velocity:110 m1Ind1:2.000
+   m2Ind1:2.200 noiseAmp1:.565 bearing:-20;
+t .7+27.507;
+ebass (noteOn,1) freq1:82.407 velocity:110 m1Ind1:4.516
+   m1Waveform:bass3 m2Ind1:1.867;
+t .7+27.508;
+bd1 (noteOn,2) velocity:85 m1Ind1:1.991 m2Ind1:7.850;
+t .7+27.516;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.033 m2Ind1:4.027;
+t .7+27.743;
+kalimba (noteOn,5) freq1:146.832 amp:.150 m1Ind1:.600 bearing:-29;
+t .7+27.770;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.051 m2Ind1:4.077;
+t .7+27.956;
+ebass (noteOff,1);
+t .7+27.976;
+vdrum (noteOn,6) freq:311.127 waveform:"SA" freqEnv:frqFn13 m1Ind1:.400;
+t .7+27.992;
+tdrum (noteOff,4);
+t .7+27.999;
+kalimba (noteOn,5) freq1:174.614 amp:.149 m1Ind1:.599 bearing:-25;
+t .7+28.000;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.116 m2Ind1:4.412;
+t .7+28.002;
+bd1 (noteOn,2) velocity:100 m1Ind1:1.953 m2Ind1:7.896;
+t .7+28.005;
+ebass (noteOn,1) freq1:73.416 velocity:100 ampEnv:ampFn5 m1Ind1:4.505
+   m1IndEnv:indFn7 m1Waveform:bass2 m2Ind1:2.052 bearing:-30;
+t .7+28.228;
+vdrum (noteOn,6) freq:155.563 waveform:"SU" freqEnv:frqFn12 m1Ind1:.600;
+t .7+28.249;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.933 m2Ind1:7.974;
+t .7+28.252;
+kalimba (noteOn,5) freq1:293.665 amp:.152 m1Ind1:.602 bearing:-17;
+t .7+28.477;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn13;
+t .7+28.497;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.136 m2Ind1:4.409;
+t .7+28.507;
+kalimba (noteOn,5) freq1:195.998 amp:.168 m1Ind1:.618 bearing:-20;
+t .7+28.607;
+conga (noteOff,3);
+t .7+28.721;
+vdrum (noteOn,6) freq:138.591 freqEnv:frqFn12;
+t .7+28.743;
+ebass (noteOn,1) freq1:73.416 velocity:95 m1Ind1:4.638 m2Ind1:2.265;
+t .7+28.747;
+kalimba (noteOn,5) freq1:261.626 amp:.186 m1Ind1:.636 bearing:-26;
+t .7+28.993;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.037 m2Ind1:7.849;
+t .7+28.995;
+ebass (noteOn,1) freq1:43.654 velocity:100 m1Ind1:4.520
+   m1Waveform:bass1 m2Ind1:2.034;
+t .7+29.004;
+kalimba (noteOn,5) freq1:220.000 amp:.170 m1Ind1:.620 bearing:-22;
+t .7+29.225;
+vdrum (noteOn,6) freq:293.665 waveform:"SA" freqEnv:frqFn13 m1Ind1:.400;
+t .7+29.256;
+kalimba (noteOn,5) freq1:349.228 amp:.181 m1Ind1:.631 bearing:-14;
+t .7+29.276;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.193 m2Ind1:4.614
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+29.464;
+vdrum (noteOn,6) freq:138.591 waveform:"SU" freqEnv:frqFn12 m1Ind1:.600;
+t .7+29.493;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.306 m2Ind1:5.006;
+t .7+29.494;
+kalimba (noteOn,5) freq1:146.832 amp:.177 m1Ind1:.627 bearing:-34;
+t .7+29.496;
+ebass (noteOn,1) freq1:48.999 velocity:92 m1Ind1:4.340 m2Ind1:2.333;
+t .7+29.729;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn13;
+t .7+29.749;
+kalimba (noteOn,5) freq1:261.626 amp:.170 m1Ind1:.620 bearing:-21;
+t .7+29.757;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.280 m2Ind1:4.938;
+t .7+29.975;
+vdrum (noteOn,6) freq:155.563 freqEnv:frqFn12;
+t .7+30.004;
+ebass (noteOn,1) freq1:55.000 velocity:97 m1Ind1:4.545 m1Waveform:bass2
+   m2Ind1:2.577;
+t .7+30.005;
+kalimba (noteOn,5) freq1:174.614 amp:.183 m1Ind1:.633 bearing:-18;
+t .7+30.011;
+bd1 (noteOn,2) velocity:90 m1Ind1:2.071 m2Ind1:7.989;
+t .7+30.228;
+vdrum (noteOn,6) freq:277.183 waveform:"SA" freqEnv:frqFn13 m1Ind1:.400;
+t .7+30.243;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.252 m2Ind1:4.847;
+t .7+30.244;
+kalimba (noteOn,5) freq1:293.665 amp:.179 m1Ind1:.629 bearing:-10;
+t .7+30.246;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.965 m2Ind1:7.874;
+t .7+30.460;
+flute2 (noteOn,8) freq1:349.228 amp:-26dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.006 m1IndEnv:indFn14 svibAmp:.011;
+t .7+30.481;
+vdrum (noteOff,6);
+t .7+30.504;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.156 m2Ind1:4.496;
+t .7+30.507;
+kalimba (noteOn,5) freq1:195.998 amp:.171 m1Ind1:.621 bearing:13;
+t .7+30.508;
+ebass (noteOn,1) freq1:73.416 velocity:112 m1Ind1:4.772 m2Ind1:2.759;
+t .7+30.509;
+flute1 (noteOn,7) freq1:293.665 amp:-26dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+30.609;
+conga (noteOff,3);
+t .7+30.659;
+flute3 (noteOn,9) freq1:440.000 amp:-25dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+30.759;
+kalimba (noteOn,5) freq1:261.626 amp:.168 m1Ind1:.618 bearing:30;
+t .7+31.001;
+kalimba (noteOn,5) freq1:220.000 amp:.178 m1Ind1:.628 bearing:20;
+t .7+31.003;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.919 m2Ind1:8.108;
+t .7+31.004;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.211 m2Ind1:4.789
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+31.222;
+flute1 (noteOn,7) freq1:329.628 amp:-24dB m1Ratio:4.009;
+t .7+31.229;
+flute2 (noteOn,8) freq1:391.995 amp:-24dB m1Ratio:4.008;
+t .7+31.247;
+ebass (noteOn,1) freq1:65.406 velocity:115 m1Ind1:4.997
+   m1Waveform:bass3 m2Ind1:2.476;
+t .7+31.250;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.195 m2Ind1:4.598;
+t .7+31.256;
+kalimba (noteOn,5) freq1:349.228 amp:.185 m1Ind1:.635 bearing:21;
+t .7+31.297;
+flute3 (noteOn,9) freq1:466.164 amp:-23dB m1Ratio:4.008;
+t .7+31.488;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.347 m2Ind1:5.212;
+t .7+31.510;
+kalimba (noteOn,5) freq1:146.832 amp:.175 m1Ind1:.625 bearing:37;
+t .7+31.522;
+bd1 (noteOn,2) m1Ind1:2.085 m2Ind1:7.932;
+t .7+31.747;
+kalimba (noteOn,5) freq1:174.614 amp:.180 m1Ind1:.630 bearing:39;
+t .7+31.757;
+bd1 (noteOn,2) m1Ind1:2.039 m2Ind1:8.005;
+t .7+31.959;
+ebass (noteOff,1);
+t .7+31.975;
+flute3 (noteOn,9) freq1:523.251 amp:-21dB m1Ratio:4.008;
+t .7+31.980;
+flute2 (noteOn,8) freq1:440.000 amp:-22dB m1Ratio:4.010;
+t .7+31.985;
+flute1 (noteOn,7) freq1:349.228 amp:-22dB m1Ratio:4.008;
+t .7+31.992;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.147 m2Ind1:4.449;
+t .7+31.996;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.032 m2Ind1:7.873;
+t .7+31.999;
+ebass (noteOn,1) freq1:87.307 velocity:116 ampEnv:ampFn5 m1Ind1:4.971
+   m1IndEnv:indFn7 m1Waveform:bass4 m2Ind1:2.302 bearing:-30;
+t .7+32.004;
+kalimba (noteOn,5) freq1:293.665 amp:.176 m1Ind1:.626 bearing:41;
+t .7+32.237;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.071 m2Ind1:8.190;
+t .7+32.257;
+kalimba (noteOn,5) freq1:195.998 amp:.189 m1Ind1:.639 bearing:36;
+t .7+32.497;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.153 m2Ind1:4.464;
+t .7+32.509;
+kalimba (noteOn,5) freq1:261.626 amp:.172 m1Ind1:.622 bearing:29;
+t .7+32.594;
+conga (noteOff,3);
+t .7+32.751;
+kalimba (noteOn,5) freq1:220.000 amp:.162 m1Ind1:.612 bearing:36;
+t .7+32.752;
+ebass (noteOn,1) freq1:87.307 velocity:110 m1Ind1:4.782 m2Ind1:2.333
+   bearing:30;
+t .7+32.992;
+ebass (noteOn,1) freq1:43.654 velocity:117 m1Ind1:4.744
+   m1Waveform:bass5 m2Ind1:2.207;
+t .7+32.995;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.924 m2Ind1:8.027;
+t .7+32.997;
+kalimba (noteOn,5) freq1:349.228 amp:.148 m1Ind1:.598 bearing:28;
+t .7+33.232;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.986 m2Ind1:8.184;
+t .7+33.254;
+ebass (noteOn,1) freq1:48.999 velocity:111 m1Ind1:4.786 m2Ind1:2.071;
+t .7+33.256;
+kalimba (noteOn,5) freq1:146.832 amp:.137 m1Ind1:.587 bearing:40;
+t .7+33.511;
+kalimba (noteOn,5) freq1:261.626 amp:.146 m1Ind1:.596 bearing:41;
+t .7+33.512;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.157 m2Ind1:4.414
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+33.740;
+ebass (noteOn,1) freq1:55.000 velocity:106 m1Ind1:4.567
+   m1Waveform:bass4 m2Ind1:2.059;
+t .7+33.744;
+kalimba (noteOn,5) freq1:174.614 amp:.150 m1Ind1:.600 bearing:23;
+t .7+33.756;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.182 m2Ind1:4.686;
+t .7+33.994;
+kalimba (noteOn,5) freq1:293.665 amp:.154 m1Ind1:.604 bearing:-3;
+t .7+33.995;
+bd1 (noteOn,2) velocity:105 m1Ind1:2.016 m2Ind1:7.961;
+t .7+34.245;
+kalimba (noteOn,5) freq1:195.998 amp:.137 m1Ind1:.587 bearing:17;
+t .7+34.252;
+ebass (noteOn,1) freq1:58.270 velocity:102 m1Ind1:4.819 m2Ind1:1.832;
+t .7+34.255;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.273 m2Ind1:4.877;
+t .7+34.503;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.109 m2Ind1:4.266;
+t .7+34.506;
+kalimba (noteOn,5) freq1:261.626 amp:.136 m1Ind1:.586 bearing:1;
+t .7+34.607;
+conga (noteOff,3);
+t .7+34.746;
+kalimba (noteOn,5) freq1:220.000 amp:.137 m1Ind1:.587 bearing:22;
+t .7+34.750;
+ebass (noteOn,1) freq1:65.406 velocity:96 m1Ind1:4.795 m1Waveform:bass3
+   m2Ind1:2.124;
+t .7+34.771;
+bd1 (noteOn,2) velocity:65 m1Ind1:1.947 m2Ind1:7.949;
+t .7+34.992;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.910 m2Ind1:8.186;
+t .7+35.000;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.191 m2Ind1:4.707
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+35.005;
+kalimba (noteOn,5) freq1:349.228 amp:.141 m1Ind1:.591 bearing:25;
+t .7+35.242;
+ebass (noteOn,1) freq1:73.416 velocity:100 m1Ind1:4.590 m2Ind1:2.285;
+t .7+35.250;
+kalimba (noteOn,5) freq1:146.832 amp:.136 m1Ind1:.586 bearing:6;
+t .7+35.472;
+flute2 (noteOn,8) freq1:466.164 ampEnv:ampFn16 m1Ratio:4.008
+   m1IndEnv:indFn16;
+t .7+35.479;
+flute3 (noteOn,9) freq1:587.329 ampEnv:ampFn16 m1Ratio:4.010
+   m1IndEnv:indFn16;
+t .7+35.480;
+flute1 (noteOn,7) freq1:349.228 ampEnv:ampFn16 m1Ratio:4.007
+   m1IndEnv:indFn16;
+t .7+35.496;
+kalimba (noteOn,5) freq1:174.614 amp:.132 m1Ind1:.582 bearing:-10;
+t .7+35.497;
+ebass (noteOn,1) freq1:82.407 velocity:106 m1Ind1:4.790
+   m1Waveform:bass2 m2Ind1:2.461;
+t .7+35.500;
+bd1 (noteOn,2) velocity:85 m1Ind1:2.067 m2Ind1:7.855;
+t .7+35.531;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.077 m2Ind1:4.112;
+t .7+35.707;
+flute2 (noteOn,8) freq1:440.000 m1Ratio:4.008;
+t .7+35.720;
+flute3 (noteOn,9) freq1:523.251 m1Ratio:4.008;
+t .7+35.723;
+flute1 (noteOn,7) freq1:349.228 m1Ratio:4.009;
+t .7+35.757;
+ebass (noteOn,1) freq1:87.307 velocity:110 m1Ind1:4.919 m2Ind1:2.689;
+t .7+35.759;
+kalimba (noteOff,5);
+t .7+35.767;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.111 m2Ind1:4.414;
+t .7+35.950;
+ebass (noteOff,1);
+t .7+35.988;
+flute2 (noteOn,8) freq1:391.995 amp:-21dB ampEnv:ampFn14 m1Ratio:4.007
+   m1IndEnv:indFn14;
+t .7+35.994;
+flute3 (noteOn,9) freq1:466.164 amp:-20dB ampEnv:ampFn14 m1Ratio:4.007
+   m1IndEnv:indFn14;
+t .7+35.996;
+bd1 (noteOn,2) velocity:100 m1Ind1:2.002 m2Ind1:7.814;
+t .7+35.997;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.162 m2Ind1:4.523;
+t .7+36.000;
+ebass (noteOn,1) freq1:77.782 velocity:117 ampEnv:ampFn5 m1Ind1:4.894
+   m1IndEnv:indFn7 m1Waveform:bass1 m2Ind1:2.724 bearing:-30;
+t .7+36.007;
+flute1 (noteOn,7) freq1:311.127 amp:-21dB ampEnv:ampFn14 m1Ratio:4.008
+   m1IndEnv:indFn14;
+t .7+36.009;
+kalimba (noteOn,5) freq1:195.998 amp:.162 m1Ind1:.612 m1Phase:90
+   m2Phase:90 bearing:-9;
+t .7+36.231;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.902 m2Ind1:7.893;
+t .7+36.247;
+kalimba (noteOn,5) freq1:261.626 amp:.151 m1Ind1:.601 bearing:4;
+t .7+36.338;
+ebass (noteOn,1) freq1:58.270 velocity:110 m1Ind1:4.987
+   m1Waveform:bass2 m2Ind1:2.429;
+t .7+36.494;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.035 m2Ind1:4.071;
+t .7+36.498;
+kalimba (noteOn,5) freq1:220.000 amp:.167 m1Ind1:.617 bearing:-13;
+t .7+36.597;
+conga (noteOff,3);
+t .7+36.632;
+flute2 (noteOn,8) freq1:391.995 amp:-25dB m1Ratio:4.006;
+t .7+36.635;
+flute3 (noteOn,9) freq1:466.164 amp:-24dB m1Ratio:4.007;
+t .7+36.645;
+flute1 (noteOn,7) freq1:311.127 amp:-25dB m1Ratio:4.007;
+t .7+36.651;
+ebass (noteOn,1) freq1:48.999 velocity:105 m1Ind1:4.760 m2Ind1:2.134;
+t .7+36.749;
+kalimba (noteOn,5) freq1:349.228 amp:.153 m1Ind1:.603 bearing:-18;
+t .7+37.001;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.086 m2Ind1:7.902;
+t .7+37.006;
+ebass (noteOn,1) freq1:38.891 velocity:100 m1Ind1:4.621
+   m1Waveform:bass3 m2Ind1:2.402;
+t .7+37.009;
+kalimba (noteOn,5) freq1:146.832 amp:.154 m1Ind1:.604 bearing:-33;
+t .7+37.249;
+kalimba (noteOn,5) freq1:261.626 amp:.169 m1Ind1:.619 bearing:-14;
+t .7+37.264;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.206 m2Ind1:4.753
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+37.303;
+flute3 (noteOn,9) freq1:466.164 amp:-22dB m1Ratio:4.007;
+t .7+37.305;
+flute2 (noteOn,8) freq1:391.995 amp:-23dB m1Ratio:4.009;
+t .7+37.326;
+flute1 (noteOn,7) freq1:311.127 amp:-23dB m1Ratio:4.007;
+t .7+37.491;
+ebass (noteOn,1) freq1:48.999 velocity:102 m1Ind1:4.485 m2Ind1:2.519;
+t .7+37.501;
+kalimba (noteOn,5) freq1:174.614 amp:.175 m1Ind1:.625 bearing:-2;
+t .7+37.502;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.263 m2Ind1:4.879;
+t .7+37.752;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.275 m2Ind1:4.865;
+t .7+37.759;
+kalimba (noteOn,5) freq1:293.665 amp:.185 m1Ind1:.635 bearing:10;
+t .7+37.957;
+flute2 (noteOn,8) freq1:349.228 amp:-22dB m1Ratio:4.006;
+t .7+37.973;
+flute3 (noteOn,9) freq1:466.164 amp:-21dB m1Ratio:4.009;
+t .7+37.979;
+flute1 (noteOn,7) freq1:293.665 amp:-22dB m1Ratio:4.010;
+t .7+37.994;
+bd1 (noteOn,2) velocity:90 m1Ind1:1.991 m2Ind1:7.971;
+t .7+38.003;
+kalimba (noteOn,5) freq1:195.998 amp:.183 m1Ind1:.633 bearing:-12;
+t .7+38.007;
+ebass (noteOn,1) freq1:58.270 velocity:105 m1Ind1:4.207
+   m1Waveform:bass4 m2Ind1:2.440;
+t .7+38.241;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.274 m2Ind1:4.910;
+t .7+38.242;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.067 m2Ind1:8.036;
+t .7+38.258;
+kalimba (noteOn,5) freq1:261.626 amp:.165 m1Ind1:.615 bearing:3;
+t .7+38.495;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.183 m2Ind1:4.618;
+t .7+38.503;
+kalimba (noteOn,5) freq1:220.000 amp:.165 m1Ind1:.615 bearing:18;
+t .7+38.599;
+conga (noteOff,3);
+t .7+38.661;
+ebass (noteOn,1) freq1:73.416 velocity:112 m1Ind1:4.367 m2Ind1:2.296;
+t .7+38.758;
+kalimba (noteOn,5) freq1:349.228 amp:.181 m1Ind1:.631 bearing:14;
+t .7+38.978;
+flute2 (noteOn,8) freq1:349.228 amp:-23dB m1Ratio:4.009;
+t .7+38.989;
+flute3 (noteOn,9) freq1:466.164 amp:-22dB m1Ratio:4.006;
+t .7+39.002;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.919 m2Ind1:7.875;
+t .7+39.004;
+kalimba (noteOn,5) freq1:146.832 amp:.181 m1Ind1:.631 bearing:34;
+t .7+39.009;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.298 m2Ind1:5.122
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+39.010;
+flute1 (noteOn,7) freq1:293.665 amp:-23dB m1Ratio:4.009;
+t .7+39.236;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.189 m2Ind1:4.659;
+t .7+39.259;
+kalimba (noteOn,5) freq1:174.614 amp:.187 m1Ind1:.637 bearing:17;
+t .7+39.333;
+ebass (noteOn,1) freq1:87.307 velocity:115 m1Ind1:4.408
+   m1Waveform:bass5 m2Ind1:2.086;
+t .7+39.476;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.437 m2Ind1:5.558;
+t .7+39.506;
+kalimba (noteOn,5) freq1:293.665 amp:.170 m1Ind1:.620 bearing:15;
+t .7+39.519;
+bd1 (noteOn,2) m1Ind1:2.022 m2Ind1:7.911;
+t .7+39.746;
+kalimba (noteOn,5) freq1:195.998 amp:.167 m1Ind1:.617 bearing:-4;
+t .7+39.768;
+bd1 (noteOn,2) m1Ind1:1.965 m2Ind1:7.906;
+t .7+39.945;
+ebass (noteOff,1);
+t .7+39.976;
+flute1 (noteOn,7) freq1:293.665 amp:-19dB ampEnv:ampFn15 m1Ratio:4.008;
+t .7+39.980;
+flute2 (noteOn,8) freq1:391.995 amp:-19dB ampEnv:ampFn15 m1Ratio:4.008;
+t .7+39.994;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.226 m2Ind1:4.820;
+t .7+39.996;
+flute3 (noteOn,9) freq1:493.883 amp:-19dB ampEnv:ampFn15 m1Ratio:4.008;
+t .7+40.000;
+kalimba (noteOn,5) freq1:261.626 amp:.156 m1Ind1:.606 bearing:-5;
+t .7+40.004;
+ebass (noteOn,1) freq1:48.999 velocity:102 ampEnv:ampFn5 m1Ind1:4.569
+   m1IndEnv:indFn7 m1Waveform:bass4 m2Ind1:2.235 bearing:30;
+t .7+40.007;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.037 m2Ind1:8.113;
+t .7+40.248;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.954 m2Ind1:8.013;
+t .7+40.255;
+kalimba (noteOn,5) freq1:220.000 amp:.143 m1Ind1:.593 bearing:-10;
+t .7+40.485;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.042 m2Ind1:4.100;
+t .7+40.511;
+kalimba (noteOn,5) freq1:349.228 amp:.136 m1Ind1:.586 bearing:2;
+t .7+40.583;
+conga (noteOff,3);
+t .7+40.737;
+ebass (noteOn,1) freq1:97.999 velocity:117 m1Ind1:4.450 m2Ind1:1.954;
+t .7+40.754;
+kalimba (noteOn,5) freq1:146.832 amp:.133 m1Ind1:.583 bearing:3;
+t .7+40.992;
+kalimba (noteOff,5);
+t .7+41.005;
+bd1 (noteOn,2) velocity:95 m1Ind1:1.998 m2Ind1:8.096;
+t .7+41.238;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.905 m2Ind1:7.907;
+t .7+41.244;
+kalimba (noteOn,5) freq1:174.614 amp:.148 m1Ind1:.598 m1Phase:90
+   m2Phase:90 bearing:16;
+t .7+41.483;
+ebass (noteOn,1) freq1:48.999 velocity:97 m1Ind1:4.240 m1Waveform:bass3
+   m2Ind1:1.861;
+t .7+41.496;
+kalimba (noteOn,5) freq1:293.665 amp:.163 m1Ind1:.613 bearing:40;
+t .7+41.509;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.035 m2Ind1:3.995
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+41.742;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.191 m2Ind1:4.690;
+t .7+41.759;
+kalimba (noteOn,5) freq1:195.998 amp:.161 m1Ind1:.611 bearing:22;
+t .7+41.990;
+ebass (noteOn,1) freq1:48.999 velocity:106 m1Ind1:4.388 m2Ind1:2.092;
+t .7+41.995;
+kalimba (noteOn,5) freq1:261.626 amp:.146 m1Ind1:.596 bearing:39;
+t .7+42.003;
+bd1 (noteOn,2) velocity:105 m1Ind1:1.935 m2Ind1:8.033;
+t .7+42.253;
+kalimba (noteOn,5) freq1:220.000 amp:.152 m1Ind1:.602 bearing:23;
+t .7+42.258;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.314 m2Ind1:5.057;
+t .7+42.504;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.155 m2Ind1:4.575;
+t .7+42.506;
+kalimba (noteOff,5);
+t .7+42.602;
+conga (noteOff,3);
+t .7+42.739;
+ebass (noteOn,1) freq1:97.999 velocity:110 m1Ind1:4.640
+   m1Waveform:bass2 m2Ind1:1.990;
+t .7+42.749;
+kalimba (noteOn,5) freq1:146.832 amp:.133 m1Ind1:.583 m1Phase:90
+   m2Phase:90 bearing:5;
+t .7+42.754;
+bd1 (noteOn,2) velocity:65 m1Ind1:1.911 m2Ind1:7.844;
+t .7+42.996;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.910 m2Ind1:7.898;
+t .7+42.997;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.209 m2Ind1:4.705
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+43.008;
+kalimba (noteOn,5) freq1:174.614 amp:.148 m1Ind1:.598 bearing:-18;
+t .7+43.254;
+kalimba (noteOn,5) freq1:293.665 amp:.141 m1Ind1:.591 bearing:2;
+t .7+43.489;
+ebass (noteOn,1) freq1:48.999 velocity:100 m1Ind1:4.364 m2Ind1:2.007;
+t .7+43.496;
+bd1 (noteOn,2) velocity:85 m1Ind1:2.063 m2Ind1:7.817;
+t .7+43.498;
+kalimba (noteOn,5) freq1:195.998 amp:.136 m1Ind1:.586 bearing:16;
+t .7+43.525;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.077 m2Ind1:4.266;
+t .7+43.744;
+kalimba (noteOn,5) freq1:261.626 amp:.146 m1Ind1:.596 bearing:35;
+t .7+43.758;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.204 m2Ind1:4.742;
+t .7+43.933;
+ebass (noteOff,1);
+t .7+43.993;
+ebass (noteOn,1) freq1:48.999 velocity:102 ampEnv:ampFn5 m1Ind1:4.095
+   m1IndEnv:indFn7 m1Waveform:bass1 m2Ind1:2.221 bearing:30;
+t .7+44.006;
+bd1 (noteOn,2) velocity:100 m1Ind1:2.055 m2Ind1:7.801;
+t .7+44.007;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.251 m2Ind1:4.942;
+t .7+44.008;
+kalimba (noteOn,5) freq1:220.000 amp:.137 m1Ind1:.587 bearing:33;
+t .7+44.231;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.997 m2Ind1:8.180;
+t .7+44.248;
+kalimba (noteOn,5) freq1:349.228 amp:.136 m1Ind1:.586 bearing:36;
+t .7+44.492;
+kalimba (noteOn,5) freq1:146.832 amp:.132 m1Ind1:.582 bearing:29;
+t .7+44.499;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.158 m2Ind1:4.452;
+t .7+44.605;
+conga (noteOff,3);
+t .7+44.736;
+ebass (noteOn,1) freq1:97.999 velocity:110 m1Ind1:4.348
+   m1Waveform:bass2 m2Ind1:2.512 bearing:-30;
+t .7+44.751;
+kalimba (noteOn,5) freq1:261.626 amp:.133 m1Ind1:.583 bearing:28;
+t .7+45.003;
+kalimba (noteOn,5) freq1:174.614 amp:.144 m1Ind1:.594 bearing:43;
+t .7+45.006;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.065 m2Ind1:8.121;
+t .7+45.250;
+kalimba (noteOn,5) freq1:293.665 amp:.132 m1Ind1:.582 bearing:23;
+t .7+45.270;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.263 m2Ind1:4.817
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+45.499;
+ebass (noteOn,1) freq1:48.999 velocity:97 m1Ind1:4.399 m2Ind1:2.383;
+t .7+45.500;
+kalimba (noteOn,5) freq1:195.998 amp:.130 m1Ind1:.580 bearing:40;
+t .7+45.507;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.120 m2Ind1:4.367;
+t .7+45.743;
+kalimba (noteOn,5) freq1:261.626 amp:.143 m1Ind1:.593 bearing:14;
+t .7+45.759;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.215 m2Ind1:4.678;
+t .7+45.988;
+ebass (noteOn,1) freq1:48.999 velocity:115 m1Ind1:4.273
+   m1Waveform:bass3 m2Ind1:2.573;
+t .7+45.997;
+kalimba (noteOn,5) freq1:220.000 amp:.133 m1Ind1:.583 bearing:-5;
+t .7+46.008;
+bd1 (noteOn,2) velocity:90 m1Ind1:2.070 m2Ind1:8.150;
+t .7+46.233;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.044 m2Ind1:7.834;
+t .7+46.242;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.280 m2Ind1:4.945;
+t .7+46.251;
+kalimba (noteOn,5) freq1:349.228 amp:.136 m1Ind1:.586 bearing:-18;
+t .7+46.496;
+kalimba (noteOn,5) freq1:146.832 amp:.151 m1Ind1:.601 bearing:-26;
+t .7+46.510;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.141 m2Ind1:4.387;
+t .7+46.593;
+conga (noteOff,3);
+t .7+46.756;
+kalimba (noteOn,5) freq1:174.614 amp:.154 m1Ind1:.604 bearing:-25;
+t .7+46.999;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.247 m2Ind1:4.931
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+47.002;
+bd1 (noteOn,2) velocity:105 m1Ind1:2.014 m2Ind1:8.033;
+t .7+47.009;
+kalimba (noteOn,5) freq1:293.665 amp:.157 m1Ind1:.607 bearing:-35;
+t .7+47.246;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.300 m2Ind1:5.073;
+t .7+47.256;
+kalimba (noteOn,5) freq1:195.998 amp:.158 m1Ind1:.608 bearing:-14;
+t .7+47.474;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.427 m2Ind1:5.574;
+t .7+47.494;
+kalimba (noteOn,5) freq1:261.626 amp:.176 m1Ind1:.626 bearing:-7;
+t .7+47.527;
+bd1 (noteOn,2) m1Ind1:1.976 m2Ind1:8.079;
+t .7+47.754;
+kalimba (noteOn,5) freq1:220.000 amp:.165 m1Ind1:.615 bearing:-22;
+t .7+47.755;
+bd1 (noteOn,2) m1Ind1:1.931 m2Ind1:7.831;
+t .7+47.794;
+flute3 (noteOff,9);
+t .7+47.949;
+ebass (noteOff,1);
+t .7+47.973;
+flute2 (noteOff,8);
+t .7+47.974;
+flute1 (noteOff,7);
+t .7+47.992;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+48.005;
+ebass (noteOn,1) freq1:73.416 velocity:100 ampEnv:ampFn5 m1Ind1:4.623
+   m1IndEnv:indFn7 m1Waveform:bass4 m2Ind1:2.172 bearing:30;
+t .7+48.006;
+kalimba (noteOn,5) freq1:349.228 amp:.161 m1Ind1:.611 bearing:-20;
+t .7+48.008;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.075 m2Ind1:7.992;
+t .7+48.009;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.193 m2Ind1:4.648;
+t .7+48.238;
+ebass (noteOn,1) freq1:73.416 m1Ind1:4.862 m2Ind1:2.224;
+t .7+48.247;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+48.248;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.043 m2Ind1:8.080;
+t .7+48.253;
+kalimba (noteOn,5) freq1:146.832 amp:.147 m1Ind1:.597 bearing:6;
+t .7+48.391;
+ebass (noteOff,1);
+t .7+48.449;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.006 m1IndEnv:indFn14 svibAmp:.011;
+t .7+48.466;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.010 m1IndEnv:indFn14 svibAmp:.011;
+t .7+48.492;
+kalimba (noteOn,5) freq1:261.626 amp:.148 m1Ind1:.598 bearing:13;
+t .7+48.493;
+conga (noteOn,3) freq1:73.416 velocity:95 m1Ind1:1.130 m2Ind1:4.453;
+t .7+48.506;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+48.584;
+conga (noteOff,3);
+t .7+48.644;
+flute2 (noteOff,8);
+t .7+48.686;
+flute1 (noteOff,7);
+t .7+48.750;
+ebass (noteOn,1) freq1:73.416 velocity:96 ampEnv:ampFn5 m1Ind1:4.655
+   m1IndEnv:indFn7 m1Waveform:bass5 m2Ind1:2.209 bearing:30;
+t .7+48.751;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+48.760;
+kalimba (noteOn,5) freq1:174.614 amp:.132 m1Ind1:.582 bearing:15;
+t .7+48.998;
+kalimba (noteOn,5) freq1:293.665 amp:.139 m1Ind1:.589 bearing:1;
+t .7+49.001;
+ebass (noteOn,1) freq1:55.000 velocity:85 m1Ind1:4.612 m1Waveform:bass4
+   m2Ind1:1.954;
+t .7+49.007;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+49.009;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.006 m2Ind1:8.139;
+t .7+49.244;
+cowbell (noteOff,10);
+t .7+49.247;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.031 m2Ind1:7.972;
+t .7+49.258;
+kalimba (noteOn,5) freq1:195.998 amp:.136 m1Ind1:.586;
+t .7+49.468;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+49.471;
+vdrum (noteOn,6) freq:293.665 waveform:"SA" freqEnv:frqFn13 m1Ind1:.400;
+t .7+49.481;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+49.499;
+kalimba (noteOn,5) freq1:261.626 amp:.132 m1Ind1:.582;
+t .7+49.500;
+ebass (noteOn,1) freq1:65.406 velocity:91 m1Ind1:4.755 m2Ind1:2.178;
+t .7+49.515;
+conga (noteOn,3) freq1:73.416 velocity:65 m1Ind1:1.138 m2Ind1:4.423
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+49.644;
+flute2 (noteOff,8);
+t .7+49.671;
+flute1 (noteOff,7);
+t .7+49.721;
+vdrum (noteOn,6) freq:146.832 waveform:"SU" freqEnv:frqFn12 m1Ind1:.600;
+t .7+49.746;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.191 m2Ind1:4.591;
+t .7+49.761;
+kalimba (noteOn,5) freq1:220.000 amp:.131 m1Ind1:.581 bearing:-18;
+t .7+49.961;
+vdrum (noteOn,6) freq:138.591 freqEnv:frqFn13;
+t .7+49.991;
+ebass (noteOn,1) freq1:73.416 velocity:97 m1Ind1:4.785 m1Waveform:bass3
+   m2Ind1:1.931;
+t .7+49.992;
+kalimba (noteOn,5) freq1:349.228 amp:.136 m1Ind1:.586 bearing:-1;
+t .7+50.000;
+bd1 (noteOn,2) velocity:105 m1Ind1:2.062 m2Ind1:7.967;
+t .7+50.213;
+vdrum (noteOn,6) freq:233.082 waveform:"SA" freqEnv:frqFn12 m1Ind1:.400;
+t .7+50.251;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.303 m2Ind1:5.137;
+t .7+50.260;
+kalimba (noteOn,5) freq1:146.832 amp:.141 m1Ind1:.591 bearing:13;
+t .7+50.446;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+50.480;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.008 m1IndEnv:indFn14 svibAmp:.011;
+t .7+50.506;
+conga (noteOn,3) freq1:65.406 velocity:100 m1Ind1:1.061 m2Ind1:4.160;
+t .7+50.507;
+kalimba (noteOn,5) freq1:174.614 amp:.153 m1Ind1:.603 bearing:20;
+t .7+50.509;
+ebass (noteOn,1) freq1:87.307 velocity:100 m1Ind1:4.551 m2Ind1:2.225;
+t .7+50.596;
+conga (noteOff,3);
+t .7+50.716;
+flute2 (noteOn,8) freq1:391.995 amp:-26dB ampEnv:ampFn16 m1Ratio:4.007
+   m1IndEnv:indFn16;
+t .7+50.718;
+flute1 (noteOn,7) freq1:329.628 amp:-26dB ampEnv:ampFn16 m1Ratio:4.009
+   m1IndEnv:indFn16;
+t .7+50.719;
+vdrum (noteOn,6) freq:146.832 waveform:"SU" freqEnv:frqFn13 m1Ind1:.600;
+t .7+50.742;
+kalimba (noteOn,5) freq1:293.665 amp:.154 m1Ind1:.604 bearing:33;
+t .7+50.759;
+bd1 (noteOn,2) velocity:65 m1Ind1:2.067 m2Ind1:7.817;
+t .7+50.911;
+flute2 (noteOff,8);
+t .7+50.938;
+flute1 (noteOff,7);
+t .7+50.973;
+vdrum (noteOn,6) freq:138.591 freqEnv:frqFn12;
+t .7+50.992;
+bd1 (noteOn,2) velocity:75 m1Ind1:1.982 m2Ind1:8.083;
+t .7+51.007;
+ebass (noteOn,1) freq1:97.999 velocity:115 m1Ind1:4.692
+   m1Waveform:bass2 m2Ind1:2.273;
+t .7+51.009;
+kalimba (noteOn,5) freq1:195.998 amp:.167 m1Ind1:.617 bearing:22;
+t .7+51.010;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.289 m2Ind1:5.015
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+51.227;
+vdrum (noteOn,6) freq:146.832 freqEnv:frqFn13;
+t .7+51.253;
+kalimba (noteOn,5) freq1:261.626 amp:.153 m1Ind1:.603 bearing:29;
+t .7+51.461;
+flute2 (noteOn,8) freq1:329.628 amp:-26dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.010 m1IndEnv:indFn14 svibAmp:.011;
+t .7+51.469;
+vdrum (noteOn,6) freq:293.665 waveform:"SA" freqEnv:frqFn12 m1Ind1:.400;
+t .7+51.475;
+flute1 (noteOn,7) freq1:261.626 amp:-26dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+51.493;
+ebass (noteOn,1) freq1:82.407 velocity:112 m1Ind1:4.507 m2Ind1:2.212;
+t .7+51.497;
+kalimba (noteOn,5) freq1:220.000 amp:.167 m1Ind1:.617 bearing:12;
+t .7+51.511;
+bd1 (noteOn,2) velocity:85 m1Ind1:1.966 m2Ind1:8.105;
+t .7+51.512;
+conga (noteOn,3) freq1:65.406 velocity:95 m1Ind1:1.080 m2Ind1:4.274;
+t .7+51.633;
+flute2 (noteOff,8);
+t .7+51.663;
+flute1 (noteOff,7);
+t .7+51.725;
+vdrum (noteOn,6) freq:138.591 waveform:"SU" freqEnv:frqFn13 m1Ind1:.600;
+t .7+51.743;
+kalimba (noteOn,5) freq1:349.228 amp:.180 m1Ind1:.630 bearing:3;
+t .7+51.762;
+conga (noteOn,3) freq1:65.406 m1Ind1:1.197 m2Ind1:4.690;
+t .7+51.899;
+vdrum (noteOff,6);
+t .7+51.946;
+ebass (noteOff,1);
+t .7+51.996;
+tdrum (noteOn,4) freq1:48.999 freqEnv:frqFn2 velocity:95 m1Ind1:2.100
+   m2Ind1:2.310 noiseAmp1:.550 phase:0 m1Phase:45 m2Phase:45 bearing:40;
+t .7+52.001;
+kalimba (noteOn,5) freq1:146.832 amp:.170 m1Ind1:.620 bearing:25;
+t .7+52.005;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+52.006;
+ebass (noteOn,1) freq1:36.708 velocity:112 ampEnv:ampFn5 m1Ind1:4.906
+   m1IndEnv:indFn7 m1Waveform:bass1 m2Ind1:2.307 bearing:-30;
+t .7+52.007;
+bd1 (noteOn,2) velocity:100 m1Ind1:2.062 m2Ind1:7.947;
+t .7+52.008;
+conga (noteOn,3) freq1:48.999 velocity:60 m1Ind1:1.263 m2Ind1:4.930;
+t .7+52.235;
+ebass (noteOn,1) freq1:73.416 velocity:100 m1Ind1:4.894
+   m1Waveform:bass2 m2Ind1:2.126;
+t .7+52.238;
+bd1 (noteOn,2) velocity:80 m1Ind1:1.964 m2Ind1:8.122;
+t .7+52.242;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+52.248;
+tdrum (noteOn,4) freq1:73.416 freqEnv:frqFn1 velocity:105 m1Ind1:1.900
+   m2Ind1:2.090 noiseAmp1:.512 bearing:-40;
+t .7+52.254;
+kalimba (noteOn,5) freq1:261.626 amp:.166 m1Ind1:.616 bearing:21;
+t .7+52.406;
+ebass (noteOff,1);
+t .7+52.449;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.008 m1IndEnv:indFn14 svibAmp:.011;
+t .7+52.479;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+52.491;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+52.497;
+kalimba (noteOn,5) freq1:174.614 amp:.154 m1Ind1:.604 bearing:18;
+t .7+52.510;
+conga (noteOn,3) freq1:73.416 velocity:90 m1Ind1:1.148 m2Ind1:4.552;
+t .7+52.598;
+conga (noteOff,3);
+t .7+52.652;
+flute1 (noteOff,7);
+t .7+52.663;
+flute2 (noteOff,8);
+t .7+52.747;
+cowbell (noteOn,10) amp:-21dB m1Ind1:1.500;
+t .7+52.748;
+kalimba (noteOn,5) freq1:293.665 amp:.156 m1Ind1:.606 bearing:44;
+t .7+52.752;
+tdrum (noteOn,4) freq1:58.270 freqEnv:frqFn2 velocity:95 m1Ind1:2.100
+   m2Ind1:2.310 noiseAmp1:.602 bearing:40;
+t .7+52.757;
+ebass (noteOn,1) freq1:73.416 velocity:95 ampEnv:ampFn5 m1Ind1:4.801
+   m1IndEnv:indFn7 m1Waveform:bass3 m2Ind1:2.369 bearing:-30;
+t .7+52.992;
+kalimba (noteOn,5) freq1:195.998 amp:.153 m1Ind1:.603 bearing:39;
+t .7+52.999;
+bd1 (noteOn,2) velocity:95 m1Ind1:2.011 m2Ind1:8.057;
+t .7+53.002;
+tdrum (noteOn,4) freq1:82.407 freqEnv:frqFn3 velocity:105 m1Ind1:1.900
+   m2Ind1:2.090 noiseAmp1:.544 bearing:-40;
+t .7+53.006;
+cowbell (noteOn,10) amp:-18dB m1Ind1:2.000;
+t .7+53.008;
+ebass (noteOn,1) freq1:43.654 velocity:101 m1Ind1:4.904 m2Ind1:2.449;
+t .7+53.242;
+cowbell (noteOff,10);
+t .7+53.257;
+kalimba (noteOn,5) freq1:261.626 amp:.157 m1Ind1:.607 bearing:23;
+t .7+53.265;
+conga (noteOn,3) freq1:48.999 velocity:50 m1Ind1:1.266 m2Ind1:5.008
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+53.439;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+53.473;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.008 m1IndEnv:indFn14 svibAmp:.011;
+t .7+53.491;
+ebass (noteOn,1) freq1:48.999 velocity:92 m1Ind1:4.881 m1Waveform:bass4
+   m2Ind1:2.648;
+t .7+53.498;
+kalimba (noteOn,5) freq1:220.000 amp:.147 m1Ind1:.597 bearing:24;
+t .7+53.508;
+conga (noteOn,3) freq1:48.999 velocity:65 m1Ind1:1.292 m2Ind1:4.953;
+t .7+53.638;
+flute2 (noteOff,8);
+t .7+53.675;
+flute1 (noteOff,7);
+t .7+53.743;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.296 m2Ind1:4.995;
+t .7+53.757;
+kalimba (noteOn,5) freq1:349.228 amp:.143 m1Ind1:.593 bearing:-2;
+t .7+53.761;
+tdrum (noteOn,4) freq1:123.471 freqEnv:frqFn1 velocity:100 m1Ind1:1.700
+   m2Ind1:1.870 noiseAmp1:.509 bearing:-45;
+t .7+53.880;
+tdrum (noteOn,4) freq1:116.541 velocity:103 m1Ind1:1.750 m2Ind1:1.925
+   noiseAmp1:.446 bearing:-37;
+t .7+53.992;
+ebass (noteOn,1) freq1:55.000 velocity:96 m1Ind1:4.912 m2Ind1:2.389;
+t .7+53.995;
+tdrum (noteOn,4) freq1:103.826 velocity:106 m1Ind1:1.800 m2Ind1:1.980
+   noiseAmp1:.469 bearing:-30;
+t .7+53.996;
+kalimba (noteOn,5) freq1:146.832 amp:.150 m1Ind1:.600 bearing:-14;
+t .7+54.000;
+bd1 (noteOn,2) velocity:90 m1Ind1:2.089 m2Ind1:7.843;
+t .7+54.245;
+kalimba (noteOn,5) freq1:174.614 amp:.136 m1Ind1:.586 bearing:9;
+t .7+54.246;
+bd1 (noteOn,2) velocity:75 m1Ind1:2.010 m2Ind1:7.831;
+t .7+54.254;
+conga (noteOn,3) freq1:43.654 velocity:70 m1Ind1:1.341 m2Ind1:5.190;
+t .7+54.323;
+tdrum (noteOn,4) freq1:92.499 velocity:100 m1Ind1:1.850 m2Ind1:2.035
+   noiseAmp1:.552 bearing:-12;
+t .7+54.443;
+flute2 (noteOn,8) freq1:349.228 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.011;
+t .7+54.458;
+flute1 (noteOn,7) freq1:293.665 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.008 m1IndEnv:indFn14 svibAmp:.011;
+t .7+54.509;
+kalimba (noteOn,5) freq1:293.665 amp:.134 m1Ind1:.584 bearing:19;
+t .7+54.510;
+ebass (noteOn,1) freq1:65.406 velocity:101 m1Ind1:4.709
+   m1Waveform:bass5 m2Ind1:2.092;
+t .7+54.511;
+conga (noteOn,3) freq1:65.406 velocity:85 m1Ind1:1.208 m2Ind1:4.737;
+t .7+54.611;
+conga (noteOff,3);
+t .7+54.661;
+tdrum (noteOn,4) freq1:82.407 freqEnv:frqFn2 velocity:98 m1Ind1:1.900
+   m2Ind1:2.090 noiseAmp1:.557 bearing:6;
+t .7+54.708;
+flute1 (noteOn,7) freq1:261.626 amp:-30dB ampEnv:ampFn16 m1Ratio:4.008
+   m1IndEnv:indFn16;
+t .7+54.718;
+flute2 (noteOn,8) freq1:329.628 amp:-30dB ampEnv:ampFn16 m1Ratio:4.007
+   m1IndEnv:indFn16;
+t .7+54.744;
+kalimba (noteOn,5) freq1:195.998 amp:.150 m1Ind1:.600 bearing:36;
+t .7+54.903;
+flute2 (noteOff,8);
+t .7+54.904;
+flute1 (noteOff,7);
+t .7+54.994;
+tdrum (noteOn,4) freq1:73.416 freqEnv:frqFn1 velocity:96 m1Ind1:1.950
+   m2Ind1:2.145 noiseAmp1:.521 bearing:24;
+t .7+54.996;
+kalimba (noteOn,5) freq1:261.626 amp:.146 m1Ind1:.596 bearing:29;
+t .7+55.001;
+ebass (noteOn,1) freq1:82.407 velocity:115 m1Ind1:4.421 m2Ind1:2.231;
+t .7+55.003;
+bd1 (noteOn,2) velocity:105 m1Ind1:2.095 m2Ind1:8.116;
+t .7+55.005;
+conga (noteOn,3) freq1:43.654 velocity:75 m1Ind1:1.306 m2Ind1:5.015
+   phase:0 m1Phase:45 m2Phase:45;
+t .7+55.233;
+conga (noteOn,3) freq1:43.654 velocity:85 m1Ind1:1.280 m2Ind1:4.987;
+t .7+55.252;
+kalimba (noteOn,5) freq1:220.000 amp:.159 m1Ind1:.609 bearing:4;
+t .7+55.466;
+flute2 (noteOn,8) freq1:261.626 amp:-28dB ampEnv:ampFn14 freqEnv:frqFn14
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.011;
+t .7+55.477;
+conga (noteOn,3) freq1:32.703 velocity:95 m1Ind1:1.407 m2Ind1:5.516;
+t .7+55.485;
+flute1 (noteOn,7) freq1:195.998 amp:-28dB ampEnv:ampFn14b
+   freqEnv:frqFn14 m1Ratio:4.008 m1IndEnv:indFn14 svibAmp:.011;
+t .7+55.491;
+tdrum (noteOn,4) freq1:65.406 velocity:94 m1Ind1:2.000 m2Ind1:2.200
+   noiseAmp1:.567 bearing:45;
+t .7+55.499;
+ebass (noteOn,1) freq1:65.406 velocity:112 m1Ind1:4.706
+   m1Waveform:bass4 m2Ind1:2.006;
+t .7+55.500;
+kalimba (noteOn,5) freq1:349.228 amp:.164 m1Ind1:.614 bearing:27;
+t .7+55.521;
+bd1 (noteOn,2) m1Ind1:1.915 m2Ind1:8.017;
+t .7+55.641;
+flute2 (noteOff,8);
+t .7+55.666;
+flute1 (noteOff,7);
+t .7+55.749;
+kalimba (noteOn,5) freq1:146.832 amp:.155 m1Ind1:.605 bearing:25;
+t .7+55.762;
+bd1 (noteOn,2) m1Ind1:2.040 m2Ind1:8.043;
+t .7+55.942;
+ebass (noteOff,1);
+t .7+55.944;
+flute2 (noteOn,8) freq1:349.228 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.005;
+t .7+55.971;
+flute1 (noteOn,7) freq1:293.665 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.005;
+t .7+55.983;
+flute3 (noteOn,9) freq1:440.000 amp:-20dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.005;
+t .7+55.991;
+ebass (noteOn,1) freq1:36.708 velocity:122 ampEnv:ampFn5b m1Ind1:4.779
+   m1IndEnv:indFn7b m1Waveform:bass3 m2Ind1:1.910 bearing:-30;
+t .7+55.995;
+conga (noteOn,3) freq1:73.416 velocity:120 m1Ind1:1.154 m2Ind1:4.453;
+t .7+55.996;
+tdrum (noteOn,4) freq1:48.999 velocity:113 noiseAmp1:.550 bearing:0;
+t .7+56.005;
+bd1 (noteOn,2) velocity:120 m1Ind1:1.992 m2Ind1:7.931;
+t .7+56.006;
+kalimba (noteOff,5);
+t .7+56.155;
+flute2 (noteOff,8);
+t .7+56.170;
+flute3 (noteOff,9);
+t .7+56.179;
+flute1 (noteOff,7);
+t .7+56.200;
+kalimba (noteOff,5);
+t .7+56.255;
+ebass (noteOff,1);
+t .7+56.702;
+flute2 (noteOn,8) freq1:349.228 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.006 m1IndEnv:indFn14 svibAmp:.005;
+t .7+56.703;
+flute1 (noteOn,7) freq1:293.665 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.005;
+t .7+56.743;
+conga (noteOn,3) freq1:73.416 m1Ind1:1.087 m2Ind1:4.184;
+t .7+56.746;
+ebass (noteOn,1) freq1:36.708 velocity:121 ampEnv:ampFn5b m1Ind1:4.542
+   m1IndEnv:indFn7b m1Waveform:bass2 m2Ind1:1.961 bearing:30;
+t .7+56.747;
+bd1 (noteOn,2) m1Ind1:1.938 m2Ind1:8.168;
+t .7+56.750;
+flute3 (noteOn,9) freq1:440.000 amp:-20dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.005;
+t .7+56.759;
+tdrum (noteOn,4) freq1:51.913 noiseAmp1:.510;
+t .7+56.894;
+flute2 (noteOff,8);
+t .7+56.917;
+flute1 (noteOff,7);
+t .7+56.924;
+flute3 (noteOff,9);
+t .7+57.006;
+ebass (noteOff,1);
+t .7+57.466;
+flute2 (noteOn,8) freq1:349.228 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.006 m1IndEnv:indFn14 svibAmp:.005;
+t .7+57.468;
+flute1 (noteOn,7) freq1:293.665 amp:-19dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.007 m1IndEnv:indFn14 svibAmp:.005;
+t .7+57.494;
+ebass (noteOn,1) freq1:73.416 velocity:122 ampEnv:ampFn5b m1Ind1:4.848
+   m1IndEnv:indFn7b m1Waveform:bass1 m2Ind1:2.239 bearing:30;
+t .7+57.495;
+flute3 (noteOn,9) freq1:440.000 amp:-20dB ampEnv:ampFn17 freqEnv:frqFn15
+   m1Ratio:4.009 m1IndEnv:indFn14 svibAmp:.005;
+t .7+57.499;
+conga (noteOn,3) freq1:73.416 m1Ind1:1.071 m2Ind1:4.254;
+t .7+57.507;
+tdrum (noteOn,4) freq1:73.416 freqEnv:frqFn3 velocity:118 m1Ind1:2.100
+   m2Ind1:2.310 noiseAmp1:.572;
+t .7+57.510;
+bd1 (noteOn,2) m1Ind1:1.945 m2Ind1:8.117;
+t .7+57.648;
+flute2 (noteOff,8);
+t .7+57.684;
+flute1 (noteOff,7);
+t .7+57.692;
+flute3 (noteOff,9);
+t .7+57.747;
+ebass (noteOff,1);
+t .7+58.256;
+conga (noteOff,3);
+t .7+58.261;
+bd1 (noteOff,2);
+t .7+58.500;
+tdrum (noteOff,4);
+END;
+

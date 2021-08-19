@@ -1,0 +1,33 @@
+#!/bin/csh -f
+#
+echo 'Test "make installsrc" and "make install" from the installed source.'
+
+set droot=/
+set src=$droot/dsp_source
+set ins=$droot/dsp_installation
+set logfile=$home/dsp_testinstallsrc.log
+
+if ( -e $src ) then
+	echo ${0}: Target source directory $src exists.
+	echo ${0}: "Delete it first?"
+	set ok=$<
+	if ( $ok !~ [yY]* ) then
+		echo ${0}: Aborted
+		exit(1)
+	else
+		echo ${0}: /bin/rm -rf $src
+		/bin/rm -rf $src
+	endif
+endif
+
+echo ${0}: /bin/rm -rf $ins
+	   /bin/rm -rf $ins
+
+echo ${0}: "mkdirs -m 775 $src; cp SGS_ENV $src"
+	    mkdirs -m 775 $src; cp SGS_ENV $src
+
+echo ${0}: "make $1 $2 installsrc SRCROOT=$src > & $logfile"
+           make $1 $2 installsrc SRCROOT=$src > & $logfile
+
+echo ${0}: "cd $src; make $1 $2 install DSTROOT=$ins >> & $logfile"
+            cd $src; make $1 $2 install DSTROOT=$ins >> & $logfile

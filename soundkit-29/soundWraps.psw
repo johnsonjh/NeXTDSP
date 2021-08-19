@@ -1,0 +1,13 @@
+/*
+	soundWraps.psw
+  	Copyright 1990, NeXT, Inc.
+	Responsibility: Bill Tschumy
+*/
+
+defineps _SNDMovetoRlinetoStroke (float x1; float y1; float x2; float y2)
+ x1 y1 moveto
+ x2 y2 rlineto
+ stroke
+endps
+
+

@@ -1,0 +1,45 @@
+/* 
+	This is a sample scorefile illustrating the use of the DBWave1vi
+	synthpatch.
+
+	If you make your own Music Kit program, DBWave1vi must be loaded into 
+	your program to play this. See <musickit/synthpatches/DBWave1vi.h> for 
+	details	on the meaning of the parameters in the Notes in this file. 
+
+	See Examp3.score for more comments.
+
+	Feel free to copy and modify this example.
+*/
+
+part part1,part2,part3,part4,part5,part6;
+
+part1 synthPatch:"DBWave1vi" synthPatchCount:1;
+part2 synthPatch:"DBWave1vi" synthPatchCount:1;
+part3 synthPatch:"DBWave1vi" synthPatchCount:1;
+part4 synthPatch:"DBWave1vi" synthPatchCount:1;
+part5 synthPatch:"DBWave1vi" synthPatchCount:1;
+part6 synthPatch:"DBWave1vi" synthPatchCount:1;
+
+envelope ampFun =  [(0,0)(.13,.6)(.2,.5)(2,.5)(5,1,2)|(5.2,0,.8)(5.3,0,.05)];
+
+envelope freqFun =  [(0,.97)(.13,1.01)(.2,.995)(.4,1)|(.6,1.01)];
+
+BEGIN;
+part1 (9-ran*.2) amp:0.3 ampEnv:ampFun freq:bf2 freqEnv:freqFun waveform:"BC" bearing:-45 svibAmp:.01 svibFreq:5 rvibAmp:.008;
+t .5;
+part2 (8.5-ran*.2) amp:0.3 ampEnv:ampFun freq1:f3 freqEnv:freqFun waveform:"BN" bearing:45 svibAmp:.01 svibFreq:4.6 rvibAmp:.008;
+t 1;
+part3 (8-ran*.2) amp:0.3 ampEnv:ampFun freq1:bf3 freqEnv:freqFun waveform:"CL" bearing:-30 svibAmp:.01 svibFreq:5.2 rvibAmp:.008;
+t 1.5;
+part4 (7.5-ran*.2) amp:0.3 ampEnv:ampFun freq1:d4 freqEnv:freqFun waveform:"EH" bearing:30 svibAmp:.01 svibFreq:4.8 rvibAmp:.008;
+t 2;
+part5 (7-ran*.2) amp:.3 ampEnv:ampFun freq:f4 freqEnv:freqFun waveform:"AS" bearing:-15 svibAmp:.01 svibFreq:4.7 rvibAmp:.008;
+t 2.5;
+part6 (6.5-ran*.2) amp:0.3 ampEnv:ampFun freq1:c5 freqEnv:freqFun waveform:"CL" bearing:15 svibAmp:.01 svibFreq:4.3 rvibAmp:.008;
+
+END;
+
+
+
+
+

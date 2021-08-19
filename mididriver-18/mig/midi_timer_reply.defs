@@ -1,0 +1,40 @@
+/* 
+ * Copyright (c) 1989 NeXT, Inc.
+ * 24-May-89  Gregg Kellogg (gk) at NeXT
+ *	Created.
+ *
+ */
+
+/*
+ * Asynchronous replies from the timer.
+ */
+subsystem midi_timer_reply 900;
+
+#include <std_types.defs>
+
+type u_int = int;
+type timeval_t = struct[2] of int;
+
+import <midi/midi_types.h>;
+
+waittime 100;
+
+/*
+ * Timer services can be requested either using seconds/microseconds or
+ * timer-specific quanta.  Additionally, a timer can be relative to the
+ * current time, or at an absolute time.
+ * The server will send a message when either the timer expires, or some
+ * other timer event occures (timer stopped, timeflow direction changed,
+ * timer value reset.
+ * Only one timer per reply port can be outstanding at any given time.
+ */
+simpleroutine timer_event (		// indication of a timer event
+	reply_port	: port_t;	// port to send to
+	timeval		: timeval_t;	// current time in secs/microsecs
+	quanta		: u_int;	// current time in quanta
+	usec_per_quantum : u_int;	// microseconds/quantum
+	real_usec_per_quantum : u_int;	// usec/quantum WRT system clock
+	timer_expired	: boolean_t;	// did timer actually expire?
+	timer_stopped	: boolean_t;	// timer running?
+	timer_forward	: boolean_t);	// timer running forward? (!backards)
+

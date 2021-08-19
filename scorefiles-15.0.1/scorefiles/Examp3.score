@@ -1,0 +1,66 @@
+/* 
+	This is a sample scorefile illustrating the use of the DBWave1vi
+	synthpatch.  
+
+	If you make your own Music Kit program, DBWave1vi must be loaded into 
+	your program to	play this. See <musickit/synthpatches/DBWave1vi.h> for 
+	details	on the meaning of the parameters in the Notes in this file. 
+
+	Feel free to copy and modify this example.
+*/
+
+/* Declare some parts. */
+part part1,part2,part3,part4,part5,part6;
+
+/* The following are part "info" statements, giving a suggested SynthPatch &
+   number of SynthPatch instances. If you omit the allocation statement, 
+   dynamic allocation is used (by convention). */
+part1 synthPatch:"DBWave1vi" synthPatchCount:1;
+part2 synthPatch:"DBWave1vi" synthPatchCount:1;
+part3 synthPatch:"DBWave1vi" synthPatchCount:1;
+part4 synthPatch:"DBWave1vi" synthPatchCount:1;
+part5 synthPatch:"DBWave1vi" synthPatchCount:1;
+part6 synthPatch:"DBWave1vi" synthPatchCount:1;
+
+/* We declare some envelopes. An envelope consists of a list of (x,y,s)
+   pairs. x and y are cartesian coordinate points defining envelope 
+   breakpoints. s is a "smoothing constant" such that the next point is 
+   immediately reached, when s is 0, the next point is reached (within 48dB)
+   at the time of the next point when s is 1, and the next point is never
+   reached when s is infinity. This assumes the SynthPatch is using 
+   asymptotic envelope handling as provided by the AsympUG unit generator.
+   The vertical bar '|' is the "stick point" of the envelope. The envelope
+   handler waits, when it reaches the stick point, until a noteOff (or the
+   end of the noteDur's duration) is reached.
+   */
+envelope ampFun = [(0,0)(.15,1,2)(.2,.5,2)(2,.5)(4,1,2)(7,.25,2)|(10,0.0,.5)];
+envelope ampFun2 = [(0,0)(.15,1,2)(.2,.5,2)(2,.5)(4,1,2)(7,.6,2)|(7.3,0.0,.5)];
+envelope freqFun = [(0,.98)(.15,1.01,2)(.2,1,2)(7,1)|(10,1,.1)];
+envelope freqFun2 = [(0,.98)(.15,1.01,2)(.2,1,2)(7,1)|(7.3,.98,.5)];
+
+
+BEGIN; /* Start of scorefile */
+
+part1 (10) amp:0.3 ampEnv:ampFun freq:bf2 freqEnv:freqFun
+	waveform:"BU" bearing:-45 svibAmp:.01 svibFreq:5 rvibAmp:.008;
+t .5;
+part2 (9.5) amp:0.25 ampEnv:ampFun freq1:f3 freqEnv:freqFun
+	waveform:"BO" bearing:45 svibAmp:.01 svibFreq:4.6 rvibAmp:.008;
+t 1;
+part3 (9) amp:0.25 ampEnv:ampFun freq1:bf3 freqEnv:freqFun
+	waveform:"TO" bearing:-30 svibAmp:.01 svibFreq:5.2 rvibAmp:.008;
+t 1.5;
+part4 (8.5) amp:0.25 ampEnv:ampFun freq1:d4 freqEnv:freqFun
+	waveform:"TA" bearing:30 svibAmp:.01 svibFreq:4.8 rvibAmp:.008;
+t 2;
+part5 (8) amp:.4 ampEnv:ampFun freq:f4 freqEnv:freqFun
+	waveform:"SU" bearing:-15 svibAmp:.01 svibFreq:4.7 rvibAmp:.008;
+t 2.5;
+part6 (7.5) amp:0.4 ampEnv:ampFun2 freq1:c5 freqEnv:freqFun2
+	waveform:"SA" bearing:15 svibAmp:.01 svibFreq:4.3 rvibAmp:.008;
+END;
+
+
+
+
+

@@ -1,0 +1,50 @@
+/* This example Scorefile illustrates the ScoreFile Language looping 
+	constructs. Three loops are invoked. 
+
+	1. The inner-most loop creates a set of notes that start at the same 
+		time. They differ in frequency by a small "beatingOffset". 
+		This beatingOffset causes a phasing effect. 
+	2. The second loop creates a slow harmonic series melody
+	3. The outer-most loop causes the harmonic series melodies to
+		move around the cycle of fifths.
+*/
+
+part aPart; /* Declare a part */
+aPart synthPatch:"Fm1i" synthPatchCount:11;
+
+envelope ampFn   = [(0,1)(.1,.7)|(1.0,0)];
+envelope indFn   = [(0,1)(.1,.7)];
+
+BEGIN;
+t 0.00000;
+/* First set some defaults. */
+aPart (noteUpdate) amp:.08 ampEnv:ampFn m1Ind1:5 m1Ind0:0 m1IndEnv:indFn;
+t + .1; 
+
+double curPitch,basePitch,beatingOffset;
+int i,j,k;
+
+int numVoicesPerNote = 5;
+int numNotesPerChord = 5;
+int numChords = 4;
+
+k = 0;
+while (k<numChords) {         /* Outer loop */
+   basePitch = c0 * 1.5 ^ k;  /* basePitch moves up cycle of 5ths */
+   j = 0;
+   while (j<numNotesPerChord) {  
+	i = 0;
+	curPitch = basePitch * (j + 2);  /* curPitch moves up series */
+        beatingOffset = .2 * ran + .05;  /* Beating offset randomly choosen */ 
+	while (i<numVoicesPerNote) {     /* Inner loop */
+		aPart (8) freq:curPitch + beatingOffset * i
+			   bearing:90*i/numVoicesPerNote-45;
+		i = i + 1;
+	}
+	t +3;
+	j = j + 1;
+   }
+   k = k + 1;
+}
+
+END;

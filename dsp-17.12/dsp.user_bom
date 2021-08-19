@@ -1,0 +1,3 @@
+./usr/shlib/libdsp_s.A.shlib
+./usr/lib/dsp/monitor/mkmon8k.dsp
+./usr/lib/dsp/monitor/apmon8k.dsp

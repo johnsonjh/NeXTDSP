@@ -1,0 +1,43 @@
+.TH SNDPLAY 1 "August 13, 1990" "NeXT Computer, Inc."
+.SH NAME
+sndplay \- play soundfiles
+.SH SYNOPSIS
+.B sndplay [ \fIoptions\fR ] \fIfile\fR ...
+.SH DESCRIPTION
+\fISndplay\fR
+reads each file in sequence and plays it on the standard sound-out
+hardware or sends it to the DSP port.
+The soundfiles may be of any playable type; runtime conversion is 
+performed if possible.  Emphasized formats are played with the built-in
+low-pass filter activated.
+.SH OPTIONS
+.TP
+.B \-d
+Send samples to the DSP port.
+.TP
+.B \-c
+DSP receives (rather than generates) bit clock, implies \-d.
+.TP
+.B \-s
+DSP receives (rather than generates) frame sync, implies \-d.
+.SH "SEE ALSO"
+sndinfo(1), sndrecord(1), sndconvert(1), sndcompress(1)
+.SH BUGS
+For a soundfile to be playable, it must be one of the following types:
+.DS
+16 bit linear, stereo or mono samples
+16 bit linear emphasized, stereo or mono samples
+16 bit linear compressed, stereo or mono samples
+16 bit linear compressed, emphasized, stereo or mono samples
+8 bit mulaw or 16 bit linear, 8.013kHz, mono samples
+8 bit linear, 8.013kHz, mono samples, squelched
+8 bit linear, 22.5kHz, mono samples
+16 bit linear, 22.5kHz or 44.1kHz, stereo, DSP core or DSP commands
+.DE
+
+The following types may be sent to the DSP port:
+.DS
+16 bit linear
+16 bit linear, emphasized
+16 bit DSP data
+.DE

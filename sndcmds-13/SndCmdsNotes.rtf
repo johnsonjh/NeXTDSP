@@ -1,0 +1,71 @@
+{\rtf0\ansi{\fonttbl\f1\froman Times;\f2\fmodern Courier;}
+\paperw12220
+\paperh14040
+\margl400
+\margr760
+\f1\b0\i0\ul0\ql\fs48\fi0\li1440\gray0\up0\dn0 \
+Preliminary 2.0 Release Notes: \
+Sound Commands\
+
+\pard\tx1800\tx2160\tx2520\fs28\li1440 \
+\
+\
+
+\pard\b\li720 New Features\
+
+\pard\tx1800\tx2160\tx2520\b0\li1440 \
+The following are new features that have been added to the Sound commands since Release 1.0.  For further information, see the UNIX manual page for each utility.\
+
+\pard\tx2160\tx2520\tx2880\fi-380\li1800 \
+
+\pard\tx1800\fi-360\li1800 ·	A new utility, 
+\b sndcompress
+\b0 , has been added to compress and decompress soundfiles.  See the Sound release notes for a description of the new compression feature.\
+\
+·	The 
+\b sndconvert
+\b0  utility can now convert between any two sampling rates.\
+\
+·	The 
+\b sndinfo
+\b0  utility recognizes the new format codes added to the 2.0 Sound Library.\
+\
+·	A new switch has been added to the 
+\b sndrecord
+\b0  utility which causes the soundfile's data format to be set to 
+\b SND_FORMAT_EMPHASIZED
+\b0 .\
+\
+·	The 
+\b sndplay
+\b0  utility can play back sounds by sending their samples to the DSP serial port.  Port configuration options can be set with command-line switches.  In addition, compressed soundfiles can be decompressed and played back in real-time.   Finally, linear format soundfiles with sample rates of other than 22,050 kHz or 44,100 kHz are temporarily converted to 44,100 kHz for playback. \
+\
+\
+\
+
+\pard\b\li720 Known Problems\
+
+\pard\tx1800\tx2160\tx2520\tx2880\b0\fi-380\li1800 \
+·	Real-time decompression using 
+\b sndplay
+\b0  does not work reliably in this release.   Also, 
+\b sndrecord
+\b0  does not support recording compressed files.  Use 
+\b sndcompress
+\b0  to compress and decompress soundfiles.\
+\
+·	Compressing with 
+\b sndcompress
+\b0  may sometimes take a long time to complete.  When this happens, it may also drop some samples near the end of the sound.  Pad the sound with zeros to get around this problem.\
+\
+·	Sample rate conversion with 
+\b sndconvert
+\b0  and 
+\b sndplay
+\b0  is not working in this release.\
+\
+·	Playing back samples to the DSP serial port with 
+\b sndplay
+\b0  does not work reliably in this release.\
+
+}

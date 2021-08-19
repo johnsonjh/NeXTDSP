@@ -1,0 +1,228 @@
+total 71
+drwxr-xr-x  6 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  7 root     wheel       1024 Nov 29 15:13 ..
+-rw-r--r--  1 dspdev   next_sw    20618 Nov  1 20:15 DSPNotes.rtf
+-rw-r--r--  1 dspdev   next_sw    31357 Oct 12 15:02 DSPNotes.wn
+-rw-r--r--  1 root     wheel       1219 Nov  9 19:37 Makefile
+-rw-r--r--  1 dspdev   next_sw     1554 Aug 23 15:45 Makefile.asm
+-rw-r--r--  1 dspdev   next_sw     4352 Nov  1 20:24 Makefile.config
+-rw-r--r--  1 dspdev   next_sw      746 Oct 29 22:33 README
+-rw-r--r--  1 root     wheel          0 Nov 29 15:14 SOURCE_BOM
+-rw-r--r--  1 dspdev   next_sw       97 Sep 27 18:09 dsp.user_bom
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 smsrc
+drwxr-xr-x  4 root     wheel       1024 Nov 29 15:13 src
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 test
+-rwxr-xr-x  1 dspdev   next_sw      570 Mar 31  1990 testinstall
+-rwxr-xr-x  1 dspdev   next_sw      839 May 14  1990 testinstallsrc
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:14 ugsrc
+
+smsrc:
+total 1086
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 .
+drwxr-xr-x  6 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   daemon      3814 Aug 27 17:10 Makefile
+-rw-r--r--  1 dspdev   next_sw     2330 Feb  2  1990 README
+-rw-r--r--  1 dspdev   next_sw     8134 Aug 10  1989 allocsys.asm
+-rw-r--r--  1 dspdev   next_sw    15491 Aug  3  1989 allocusr.asm
+-rw-r--r--  1 dspdev   wheel        135 Jun 19  1989 ap_macros.asm
+-rw-r--r--  1 dspdev   next_sw      417 Oct 29 21:09 apmon8k.asm
+-rw-r--r--  1 dspdev   next_sw      304 Jul 23  1989 apmon8k.mem
+-rw-r--r--  1 dspdev   next_sw    13304 Feb 27  1990 beginend.asm
+-rw-r--r--  1 dspdev   next_sw    12957 Oct 31 16:43 config.asm
+-rw-r--r--  1 dspdev   next_sw    11095 Mar 22  1990 defines.asm
+-rw-r--r--  1 dspdev   next_sw    20715 Aug 16  1989 degmon.asm
+-rw-r--r--  1 dspdev   wheel       1488 Jun 19  1989 degmon_vectors.asm
+-rw-r--r--  1 dspdev   wheel        136 Jul  2  1989 degnext.asm
+-rwxr-xr-x  1 dspdev   next_sw   530186 Oct 15 11:35 dspimg
+-rwxr-xr-x  1 dspdev   daemon    238943 Aug 27 12:41 dspmsg
+-rw-r--r--  1 dspdev   next_sw     7480 Aug 16  1989 dspmsgs.asm
+-rw-r--r--  1 dspdev   next_sw    34541 Oct 29 22:12 handlers.asm
+-rw-r--r--  1 dspdev   next_sw     9270 May  4  1990 hmdispatch.asm
+-rw-r--r--  1 dspdev   next_sw    20435 Oct 29 22:15 hmlib.asm
+-rw-r--r--  1 dspdev   next_sw    13741 Aug  7  1989 hmlib_mk.asm
+-rw-r--r--  1 dspdev   next_sw      297 Aug 10  1989 include_dirs.asm
+-rw-r--r--  1 dspdev   wheel        350 Jun 28  1989 include_dirs.asm.i
+-rw-r--r--  1 dspdev   next_sw     6351 Aug 16  1989 ioequ.asm
+-rw-r--r--  1 dspdev   wheel        823 Jun 28  1989 iv_decl.asm
+-rw-r--r--  1 dspdev   next_sw    50056 Oct 29 21:38 jsrlib.asm
+-rw-r--r--  1 dspdev   next_sw    15000 Jul 14  1989 memmap.asm
+-rw-r--r--  1 dspdev   next_sw    10020 Oct 31 20:18 misc.asm
+-rw-r--r--  1 dspdev   next_sw      408 Oct 29 22:25 mkmon8k.asm
+-rw-r--r--  1 dspdev   wheel        361 Jun 15  1989 mkmon8k.mem
+-rw-r--r--  1 dspdev   next_sw     1473 Jul  5  1989 music_macros.asm
+-rw-r--r--  1 dspdev   next_sw     1348 Aug 16  1989 reg_defines.asm
+-rw-r--r--  1 dspdev   next_sw    18443 Oct 29 21:55 reset_boot.asm
+-rw-r--r--  1 dspdev   next_sw     1223 Jul 19  1989 sys_li.asm
+-rw-r--r--  1 dspdev   next_sw     5466 Aug 16  1989 sys_xe.asm
+-rw-r--r--  1 dspdev   next_sw     4685 Jul 22  1989 sys_ye.asm
+-rw-r--r--  1 dspdev   next_sw     3081 Jun  8 18:35 vectors.asm
+-rw-r--r--  1 dspdev   next_sw      145 Apr 24  1990 verrev.asm
+
+src:
+total 5
+drwxr-xr-x  4 root     wheel       1024 Nov 29 15:13 .
+drwxr-xr-x  6 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   next_sw      614 Aug 23 15:38 Makefile
+drwxr-xr-x  5 root     wheel       1024 Nov 29 15:14 bin
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:13 lib
+
+src/bin:
+total 16
+drwxr-xr-x  5 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  4 root     wheel       1024 Nov 29 15:13 ..
+-rw-r--r--  1 dspdev   next_sw     1702 Aug 23 16:23 Makefile
+-rw-r--r--  1 dspdev   next_sw      417 Feb 17  1990 Makefile.c
+-rw-r--r--  1 dspdev   next_sw     6178 Oct 29 20:05 Makefile.cm
+-rw-r--r--  1 dspdev   next_sw      563 Aug  7  1989 Makefile.m
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 dspabort
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 dspbeep
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 dsptest
+
+src/bin/dspabort:
+total 11
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  5 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   wheel         39 Jun 25  1989 Makefile
+-rw-r--r--  1 dspdev   next_sw     2793 Mar 21  1990 dspabort.1
+-rw-r--r--  1 dspdev   daemon      4140 Aug 27 14:06 dspabort.c
+
+src/bin/dspbeep:
+total 15
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 .
+drwxr-xr-x  5 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   next_sw       38 Feb  9  1989 Makefile
+-rw-r--r--  1 dspdev   wheel        856 Jun 21  1989 dspbeep.1
+-rw-r--r--  1 dspdev   next_sw    11034 May 11  1990 dspbeep.c
+
+src/bin/dsptest:
+total 19
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:13 .
+drwxr-xr-x  5 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   next_sw       38 Jul 24  1989 Makefile
+-rw-r--r--  1 dspdev   next_sw      353 May 13  1989 dsptest.1
+-rw-r--r--  1 dspdev   daemon     15194 Aug 27 14:05 dsptest.c
+
+src/lib:
+total 545
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:13 .
+drwxr-xr-x  4 root     wheel       1024 Nov 29 15:13 ..
+-rw-r--r--  1 dspdev   next_sw    13906 Oct 31 17:26 DSPBoot.c
+-rw-r--r--  1 dspdev   next_sw     9344 Apr 30  1990 DSPControl.c
+-rw-r--r--  1 dspdev   next_sw     7619 Apr 23  1990 DSPConversion.c
+-rw-r--r--  1 dspdev   next_sw    10774 Aug 23 15:25 DSPError.c
+-rw-r--r--  1 dspdev   next_sw     2718 Oct  1 19:01 DSPGlobals.c
+-rw-r--r--  1 dspdev   next_sw     3233 Apr 30  1990 DSPLoad.c
+-rw-r--r--  1 dspdev   next_sw   165389 Nov  1 20:20 DSPObject.c
+-rw-r--r--  1 dspdev   daemon     27229 Aug 27 13:17 DSPReadFile.c
+-rw-r--r--  1 dspdev   next_sw    24258 Aug 24 14:57 DSPStructMisc.c
+-rw-r--r--  1 dspdev   next_sw    38148 May 14  1990 DSPTransfer.c
+-rw-r--r--  1 dspdev   next_sw     5729 Sep 29 17:47 Makefile
+-rw-r--r--  1 dspdev   next_sw     3438 Apr 18  1990 Makefile.common
+-rw-r--r--  1 dspdev   next_sw     8143 Oct 30 23:09 Makefile.lib
+-rw-r--r--  1 dspdev   next_sw     3019 Aug  1  1989 _DSPCV.c
+-rw-r--r--  1 dspdev   next_sw    14357 Feb 19  1990 _DSPMachSupport.c
+-rw-r--r--  1 dspdev   next_sw     9111 Apr 30  1990 _DSPRelocate.c
+-rw-r--r--  1 dspdev   next_sw     3641 Mar 31  1990 _DSPString.c
+-rw-r--r--  1 dspdev   next_sw    32536 Dec 19  1989 _DSPUtilities.c
+-rw-r--r--  1 dspdev   next_sw     1003 Aug 23 00:54 alias.s
+drwxr-xr-x  2 dspdev   next_sw     1024 Nov 29 15:13 dsp
+-rw-r--r--  1 dspdev   next_sw     3891 Apr 17  1990 foodriver.c
+-rw-r--r--  1 dspdev   next_sw     3650 Sep 27 18:07 foodriver.h
+-rw-r--r--  1 dspdev   next_sw    86463 Sep 29 17:48 foodriver_client.c
+-rw-r--r--  1 dspdev   next_sw     9038 Sep 27 16:14 foodriver_client.h
+-rw-r--r--  1 dspdev   next_sw     7122 Oct  1 13:50 pointers.c
+-rw-r--r--  1 dspdev   next_sw     5136 Oct  1 13:51 shlib.h
+-rw-r--r--  1 dspdev   next_sw       31 Apr 17  1990 snddriver.h
+-rw-r--r--  1 dspdev   next_sw    28746 Oct 21 18:08 spec_dsp
+
+src/lib/dsp:
+total 156
+drwxr-xr-x  2 dspdev   next_sw     1024 Nov 29 15:13 .
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:13 ..
+-rw-r--r--  1 dspdev   next_sw     6293 May  2  1990 DSPControl.h
+-rw-r--r--  1 dspdev   next_sw     2974 Apr 30  1990 DSPConversion.h
+-rw-r--r--  1 dspdev   next_sw     3151 Apr 30  1990 DSPError.h
+-rw-r--r--  1 dspdev   next_sw     4240 Apr 24  1990 DSPMessage.h
+-rw-r--r--  1 dspdev   next_sw    35180 May  1  1990 DSPObject.h
+-rw-r--r--  1 dspdev   next_sw     3146 Apr 30  1990 DSPStructMisc.h
+-rw-r--r--  1 dspdev   next_sw    24237 May  2  1990 DSPTransfer.h
+-rw-r--r--  1 dspdev   next_sw     7247 Jul 26  1989 _DSPMachSupport.h
+-rw-r--r--  1 dspdev   next_sw      884 Apr 23  1990 _DSPMessage.h
+-rw-r--r--  1 dspdev   next_sw     8615 Apr 23  1990 _DSPObject.h
+-rw-r--r--  1 dspdev   next_sw     2349 May  1  1990 _DSPTransfer.h
+-rw-r--r--  1 dspdev   next_sw     6368 Oct 10 16:07 _dsp.h
+-rw-r--r--  1 dspdev   next_sw     1773 Aug  2  1989 _dsputilities.h
+-rw-r--r--  1 dspdev   next_sw     5990 Apr 24  1990 _libdsp.h
+-rw-r--r--  1 dspdev   next_sw    12069 Aug 23 18:07 dsp.h
+-rw-r--r--  1 dspdev   next_sw     2172 May  1  1990 dsp_errno.h
+-rw-r--r--  1 dspdev   next_sw     7086 May  1  1990 dsp_structs.h
+-rw-r--r--  1 dspdev   next_sw     3714 Apr 24  1990 libdsp.h
+-rw-r--r--  1 dspdev   next_sw     9789 Aug  7  1989 obsolete.h
+
+test:
+total 19
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  6 root     wheel       1024 Nov 29 15:14 ..
+-r--r--r--  1 dspdev   next_sw     1100 Aug 20  1989 Makefile
+-rw-rw-r--  1 dspdev   next_sw     2461 Nov  1 20:07 README
+-r--r--r--  1 dspdev   next_sw     1137 Feb 12  1990 ap_ex1.asm
+-r--r--r--  1 dspdev   next_sw      551 Aug 14  1989 config_standalone.asm
+-r-xr-xr-x  1 dspdev   next_sw      237 Feb 25  1990 dspasm
+-r-xr-xr-x  1 dspdev   next_sw      429 Feb 25  1990 dspasml
+-r--r--r--  1 dspdev   next_sw     1202 Feb 12  1990 mk_ex1.asm
+-r--r--r--  1 dspdev   next_sw     2655 Mar 24  1990 mk_ex2.asm
+-r--r--r--  1 dspdev   next_sw     1765 Aug 14  1989 mk_ex3.asm
+
+ugsrc:
+total 216
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  6 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   next_sw     1271 Jan 15  1990 Makefile
+-rw-r--r--  1 dspdev   next_sw      276 Jun 27  1989 README
+-rw-r--r--  1 dspdev   next_sw     3875 Jun 12 15:01 add2.asm
+-rw-r--r--  1 dspdev   next_sw     4139 Jun 12 15:01 allpass1.asm
+-rw-r--r--  1 dspdev   next_sw     3422 Jun 12 15:01 asymp.asm
+-rw-r--r--  1 dspdev   next_sw     6928 Jun 12 15:01 biquad.asm
+-rw-r--r--  1 dspdev   next_sw     2105 Jun 12 15:01 constant.asm
+-rw-r--r--  1 dspdev   next_sw     6794 Jun 12 15:01 delay.asm
+-rw-r--r--  1 dspdev   next_sw     6141 Jun 12 15:01 delayticks.asm
+-rw-r--r--  1 dspdev   next_sw     4867 Jun 12 15:01 dswitch.asm
+-rw-r--r--  1 dspdev   next_sw     4652 Jun 12 15:01 dswitcht.asm
+-rw-r--r--  1 dspdev   next_sw     5046 Jun 12 15:01 impulses.asm
+-rw-r--r--  1 dspdev   next_sw     4759 Jun 12 15:01 interp.asm
+-rw-r--r--  1 dspdev   next_sw     4372 Jun 12 15:01 mul1add2.asm
+-rw-r--r--  1 dspdev   next_sw     3118 Jun 12 15:01 mul2.asm
+-rw-r--r--  1 dspdev   next_sw     4844 Jun 12 15:01 onepole.asm
+-rw-r--r--  1 dspdev   next_sw     5887 Jun 12 15:01 onezero.asm
+-rw-r--r--  1 dspdev   next_sw     1760 Jun 12 15:01 orchloopbegin.asm
+-rw-r--r--  1 dspdev   next_sw     1589 Jun 12 15:01 orchloopend.asm
+-rw-r--r--  1 dspdev   next_sw     6151 Jun 12 15:01 oscg.asm
+-rw-r--r--  1 dspdev   next_sw     7039 Jun 12 15:01 oscgaf.asm
+-rw-r--r--  1 dspdev   next_sw     7438 Jun 12 15:01 oscgafi.asm
+-rw-r--r--  1 dspdev   next_sw     6872 Jun 12 15:01 oscgf.asm
+-rw-r--r--  1 dspdev   next_sw     8885 Jun 12 15:01 osci.asm
+-rw-r--r--  1 dspdev   next_sw     7207 Jun 12 15:01 oscs.asm
+-rw-r--r--  1 dspdev   next_sw     4407 Jun 12 15:01 oscw.asm
+-rw-r--r--  1 dspdev   next_sw     3869 Jun 12 15:01 out1a.asm
+-rw-r--r--  1 dspdev   next_sw     3916 Jun 12 15:01 out1b.asm
+-rw-r--r--  1 dspdev   next_sw     6517 Jun 12 15:01 out2sum.asm
+-rw-r--r--  1 dspdev   next_sw     3278 Jun 12 15:01 patch.asm
+-rw-r--r--  1 dspdev   next_sw     2539 Jun 12 15:01 ramp.asm
+-rw-r--r--  1 dspdev   next_sw     4497 Jun 12 15:01 readticks.asm
+-rw-r--r--  1 dspdev   next_sw     3971 Jun 12 15:01 sawtooth.asm
+-rw-r--r--  1 dspdev   next_sw     3902 Jun 12 15:01 scale.asm
+-rw-r--r--  1 dspdev   next_sw     4085 Jun 12 15:01 scl1add2.asm
+-rw-r--r--  1 dspdev   next_sw     3750 Jun 12 15:01 scl2add2.asm
+-rw-r--r--  1 dspdev   next_sw     9664 Jun 12 15:01 slpdur.asm
+-rw-r--r--  1 dspdev   next_sw     3208 Jun 12 15:01 snoise.asm
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 test
+-rw-r--r--  1 dspdev   next_sw    13447 Jun 12 15:01 twopole.asm
+-rw-r--r--  1 dspdev   next_sw     3677 Jun 12 15:01 unoise.asm
+-rw-r--r--  1 dspdev   next_sw     3762 Jun 12 15:01 unoisehp.asm
+
+ugsrc/test:
+total 6
+drwxr-xr-x  2 root     wheel       1024 Nov 29 15:14 .
+drwxr-xr-x  3 root     wheel       1024 Nov 29 15:14 ..
+-rw-r--r--  1 dspdev   next_sw     1782 Jun 27  1989 toscg5.asm
+-rw-r--r--  1 dspdev   next_sw     1562 Jun 27  1989 tscale.asm

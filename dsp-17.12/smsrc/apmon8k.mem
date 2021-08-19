@@ -1,0 +1,7 @@
+; DSP56000 memory-map file for typical array processing DSP monitor.
+; Use: lnk56000 -B -Rapmon8k.mem apmon8k.lnk
+
+; *** THESE ADDRESSES MUST STAY IN SYNCH WITH memmap.asm (with AP_MON true) ***
+
+SECTION USER PI:$80,XI:2,YI:2,LI:2,XLI:0,YLI:0,LLI:0,LHE:0,PLI:0
+SECTION USER PHE:$2000,XHE:$2000,YHE:$2000

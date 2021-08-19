@@ -1,0 +1,54 @@
+/usr/lib/dsp/test/README
+
+This directory contains examples of DSP test programs in the style used
+to develop 
+
+	(1) unit generators macros for the Music Kit 
+	(2) array processing macros for non-real-time signal processing
+
+Each test file contains a DSP assembly language main program which invokes
+the macro under test, passing it pointers to test data.  The test file can
+be assembled and loaded into Bug56, the DSP56001 symbolic debugger.
+Single-stepping once through the macro will normally flush out any bugs in
+the code.
+
+IMPORTANT NOTE: In release 2.0, the default monitor load address is
+changed.  This was discovered after the code-freeze deadline for
+/usr/lib/dsp/.  Therefore, to use these examples with Bug56 requires
+configuring it WITHOUT "Revision C" support.  This means changing
+"REVCCHIP" to 0 in degnext.asm (distributed in
+/NextLibrary/Documentation/Ariel/), and having an assembled degnext.lod in
+your working directory.  That way, the default load address $80 used by the
+examples will leave room for all of degmon.  Alternatively, you can change
+the examples to start at location $96.  "Revision C" refers to the new
+revision of the DSP56001 mask where they have introduced an illegal
+instruction vector at the END of the host-command vector table, thus
+forcing programs to start at location $40.  The initial '040 machines do
+not have revision C DSP chips, but future machines probably will.
+
+See the comments in the DSP source code for instructions on how to assemble
+the code and run the DSP debugger.
+
+HINTS:
+
+	If you get assembly errors, search in the .lst file for "ERROR --".
+
+	The "finish" button in Bug56 will finish DO loops as well as the
+	current subroutine level.
+
+	The SWI instruction can be used to halt your test program when running
+	under Bug56.  It will cause an "unrecognized breakpoint" to occur, 
+	passing control back to you.  A SWI is treated as a NOP while 
+	single-stepping.
+
+	The dspasm shell-script (in this directory) provides a convenient
+	way to assemble your macros.  For example, "dspasm mk_ex1" will
+	assemble example 1.  "dspasm -I/me/my_dsp_dir mk_ex1" will assemble
+	example 1 and look in /me/my_dsp_dir for macros and include files not 
+	found in the normal directories under /usr/lib/dsp.
+
+	If you need to alter something under /usr/lib/dsp, create your
+	own copy (e.g., via "cp -r -p /usr/lib/dsp /me; ln -s /me/dsp /dsp")
+	and use the dspasml shell-script (in this directory) instead of dspasm.
+
+

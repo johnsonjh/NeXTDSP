@@ -1,0 +1,171 @@
+#!/bin/csh -f
+
+# Sound commands test suite
+
+# You need a codec microphone and dsp input (e.g. Digital Ears)
+# hooked up to run this.
+
+echo "Sound commands test suite"
+echo ""
+
+#--------------------------------------------------------------
+set foo=1
+if ( $foo ) then
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Recording and playing tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+echo "* You should try both short and long sounds *"
+echo ""
+
+echo -n "Press return to record a codec sound..."
+set ans=$<
+sndrecord -c "created by testscript" /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/foo.snd
+
+# FIXME: also test "-e", 24 bit recording (what device?)
+# FIXME: also test other sndrecord options (water marks, size, etc.)
+# FIXME: it is hard to stop dsp recording with a carriage return
+
+echo -n "Press return to record a dsp sound..."
+set ans=$<
+sndrecord -c "created by testscript" -d -s 530000 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/foo.snd
+
+echo -n "Press return to record an emphasized dsp sound..."
+set ans=$<
+sndrecord -c "created by testscript" -d -s 530000 -m /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/foo.snd
+
+echo -n "Press return to record a dsp sound with -f..."
+set ans=$<
+sndrecord -c "created by testscript" -d -s 530000 -f dsprecsim16.snd /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/foo.snd
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Playing tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+echo -n "Press return to play /NextLibrary/Sounds/*.snd..."
+set ans=$<
+sndplay /NextLibrary/Sounds/*.snd
+
+# FIXME: test -c and -s
+
+echo -n "Press return to play /NextLibrary/Sounds/*.snd to the DSP port..."
+set ans=$<
+sndplay -d -s /NextLibrary/Sounds/*.snd
+
+echo -n "Press return to create dsp commands soundfile..."
+set ans=$<
+playscore -c /tmp/foo.snd Examp3
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/foo.snd
+
+# Real-time decompression tested below...
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Other tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# FIXME: test all sndconvert options, including ascii, raw, and .lod
+
+# FIXME: -i "info" not supported for 44K->22K and 8K->22K
+
+echo -n "Press return to record a codec sound..."
+set ans=$<
+sndrecord /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to convert to 16-bit linear 22K..."
+set ans=$<
+sndconvert -o /tmp/bar.snd -i "created by testscript" -f 3 -s 22050 -c 2 /tmp/foo.snd
+sndinfo /tmp/bar.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/bar.snd
+echo -n "Press return to convert to 16-bit linear 8K..."
+set ans=$<
+sndconvert -o /tmp/bar.snd -i "created by testscript" -f 3 -s 8012 /tmp/foo.snd
+sndinfo /tmp/bar.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/bar.snd
+
+# FIXME: this uses arbitrary sample rate conversion - test other conversion factors
+
+echo -n "Press return to record a dsp sound..."
+set ans=$<
+sndrecord -d -s 530000 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to convert to 22K..."
+set ans=$<
+sndconvert -o /tmp/bar.snd -i "created by testscript" -s 22050 /tmp/foo.snd
+sndinfo /tmp/bar.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/bar.snd
+
+echo -n "Press return to record a dsp sound..."
+set ans=$<
+sndrecord -d -s 530000 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to compress bit faithful..."
+set ans=$<
+sndcompress /tmp/foo.snd /tmp/bar.snd
+sndinfo /tmp/bar.snd
+
+# This tests real-time decompression
+
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/bar.snd
+
+echo -n "Press return to decompress..."
+set ans=$<
+sndcompress /tmp/bar.snd /tmp/baz.snd
+sndinfo /tmp/baz.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/baz.snd
+
+# FIXME: test other compression factors
+
+echo -n "Press return to compress non-bit faithful..."
+set ans=$<
+sndcompress -6 /tmp/foo.snd /tmp/bar.snd
+sndinfo /tmp/bar.snd
+
+# This tests real-time decompression
+
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/bar.snd
+
+echo -n "Press return to decompress..."
+set ans=$<
+sndcompress /tmp/bar.snd /tmp/baz.snd
+sndinfo /tmp/baz.snd
+echo -n "Press return to play..."
+set ans=$<
+sndplay /tmp/baz.snd
+
+echo "End of sound commands test suite"
+
+endif
+#--------------------------------------------------------------

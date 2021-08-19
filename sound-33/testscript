@@ -1,0 +1,221 @@
+#!/bin/csh -f
+
+# Sound library debug test suite
+
+# You need a codec microphone and dsp input (e.g. Digital Ears)
+# hooked up to run this.
+
+echo "Sound library debug test suite"
+echo ""
+
+#--------------------------------------------------------------
+set foo=1
+if ( $foo ) then
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Recording and playing tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+echo -n "Press return to record short codec sound..."
+set ans=$<
+recordtest 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record long codec sound..."
+set ans=$<
+recordtest 60 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record short dsp sound..."
+set ans=$<
+recordtest -d 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: dsp recording with the sound library currently loses buffers
+
+echo -n "Press return to record long dsp sound..."
+set ans=$<
+recordtest -d 60 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record 22K mono dsp sound..."
+set ans=$<
+recordtest -2 10 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: cannot do 44k compression
+
+set compress44=0
+if ( $compress44 ) then
+
+echo -n "Press return to record 44K stereo compressed sound"
+set ans=$<
+recordtest -c 10 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record 44K stereo compressed sound, bit-faithful"
+set ans=$<
+recordtest -b 10 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: recordtest has no option for 44K mono compressed.
+
+endif
+
+echo -n "Press return to record 22K mono compressed sound..."
+set ans=$<
+recordtest -2c 10 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: recordtest has no option for 22K mono compressed, bit-faithful.
+
+echo -n "Press return to record emphasized dsp sound..."
+set ans=$<
+recordtest -d -e 10 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record codec sounds into several files..."
+set ans=$<
+recordtest 2 /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+sndinfo /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+
+echo -n "Press return to record dsp sounds into several files..."
+set ans=$<
+recordtest -d 2 /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+sndinfo /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+
+# FIXME: test chain playing other optimized and non-optimized formats.
+
+echo -n "Press return to chain record codec sounds into several files..."
+set ans=$<
+rchaintest /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+sndinfo /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+echo -n "Press return to play..."
+set ans=$<
+chaintest /tmp/foo.snd /tmp/bar.snd /tmp/baz.snd
+
+echo -n "Press return to record short codec sound to a file..."
+set ans=$<
+rfiletest 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+echo -n "Press return to record short dsp sound to a file..."
+set ans=$<
+rfiletest -d 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+
+# FIXME: have to hack header to playback dsp sound recorded to file
+# FIXME: test other rfiletest options (22K, compressed...)
+# FIXME: test recording long dsp sound to file - does not lose buffers?
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Playing tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+echo -n "Press return to play /NextLibrary/Sounds/*.snd..."
+set ans=$<
+playtest /NextLibrary/Sounds/*.snd
+
+# FIXME: can't play back on dsp yet
+
+# FIXME: can't play back with sample rate conversion yet
+
+echo -n "Press return to create dsp commands soundfile..."
+set ans=$<
+playscore -c /tmp/foo.snd Emma
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: also test playing back an emphasized sound here.
+
+echo -n "Press return to test filter..."
+set ans=$<
+filtertest /NextLibrary/Sounds/Funk.snd
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Other tests
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+echo -n "Press return to record a short codec sound..."
+set ans=$<
+recordtest 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to convert to 16-bit linear 22K..."
+set ans=$<
+converttest /tmp/foo.snd /tmp/bar.snd
+sndinfo /tmp/bar.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/bar.snd
+
+# FIXME: test bit-faithful off-line compression
+
+echo -n "Press return to record short dsp sound..."
+set ans=$<
+recordtest -d 5 /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to compress..."
+set ans=$<
+compresstest -4 /tmp/foo.snd /tmp/bar.snd
+sndinfo /tmp/bar.snd
+echo -n "Press return to decompress..."
+set ans=$<
+compresstest /tmp/bar.snd /tmp/foo.snd
+sndinfo /tmp/foo.snd
+echo -n "Press return to play..."
+set ans=$<
+playtest /tmp/foo.snd
+
+# FIXME: test a long file (currently a bug)
+# FIXME: test on Public and NOT PublicSoundServers
+
+echo -n "Enter string of host names to test: "
+set hosts=$<
+echo -n "Press return to play on hosts: $hosts..."
+set ans=$<
+hosttest /NextLibrary/Sounds/Funk.snd $hosts
+
+echo "End of sound library debug test suite"
+
+#--------------------------------------------------------------
+endif

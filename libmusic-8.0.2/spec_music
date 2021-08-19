@@ -1,0 +1,910 @@
+##
+## The shared library specification file for libmusic
+##
+## Modification history:
+##      05/05/90 - Daj added DSPMKSetTime() and 
+##                 DSPMKClearDSPSoundOutBufferTimed(). Removed DSPMKWriteLong()
+##                 and DSPMemoryClear()
+##      05/06/90 - Daj added DSPGetLowestExternalUserAddress(),
+##                 DSPGetHighestExternalUserAddress(), 
+##                 DSPMKGetClipCountAddress(),
+##      05/13/90 - DAJ added sin,cos,log,log10,fabs,sqrt,exp
+##      05/16/90 - Renamed private extern text symbol _MKNewPlaceHolderNote
+##                 to _MKMakePlaceHolder. (as in musickit-22)
+##      06/10/90 - Added private extern _MKAdjustTimeIfNotBehind (musickit-22)
+##      06/10/90 - Added reference to DSPMKPauseOrchestra
+##      07/25/90 - Added private externs _MKLock, _MKUnlock, 
+##		   _MKDisableErrorStream, _MKEnableErrorStream, _MKAddPort
+##		   _MKRemovePort, _MKSprintf, _MKVsprintf
+##		   Added libsys symbols: cthread_fork, cthread_yield,
+##		   thread_info, thread_priority, cthread_set_errno_self
+##		   Also added the following libsys symbols that are needed
+##		   by _MKSprintf:  isnan, isinf, _dbltopdfp
+##	07/26/90 - Added libsys symbols:
+##                 mutex_try_lock, mutex_wait_lock, msg_send, port_set_add,
+##		   port_set_remove, port_set_allocate, thread_self,
+##                 ur_cthread_self, NXVPrintf
+##                 Added file libmusickit/shlib_obj/_MKSprintf.o
+##	08/03/90 - Added private_extern, alias and init pointers.o lines
+##		   for compiler-generated functions bcopy and _fixdsfi
+##                 Removed _dbltopdfp
+##      08/13/90 - DAJ Added private_extern _MKParNameStr(). 
+##                 Added libsys functions: thread_policy, 
+##                 processor_set_default, host_processor_set_priv,
+##                 processor_set_policy_enable
+##                 processor_set_policy_disable
+##                 geteuid, host_self, host_priv_self
+##      08/20/90 - DAJ Added 3 functions to the Music Kit interface. 
+##    		   First empty slot is now 81
+##      08/20/90 - DAJ Added libsys function NXDefaultMallocZone 
+##      08/20/90 - DAJ Added Music Kit function MKGetNoDVal() and MKIsNoDVal()
+##      	   First empty slot is now 83
+##      09/28/90 - DAJ Added cthread_abort, condition_wait, cond_signal,
+##                 objc_getClassWithoutWarning
+##      09/29/90 - DAJ Added cthread_detach. Also added cthread_fork, which
+##                 somehow wasn't included!!!
+#target /usr/shlib/libmusic_s.A.shlib
+#address __TEXT 0x08000000
+#address __DATA 0x04200000
+##Now specified on the command line via -minor_version `vers_string -n`
+##minor_version
+
+## This is the branch table.  Symbols in it MUST remain in the same numbered
+## slot from version to version so that the versions are compatible.  Symbols
+## with ranges get assigned the HIGHEST slot.  So if new symbol is added and
+## a slot is taken from a symbol with a range of slots the orignial symbol must
+## remain using the HIGHEST slot.
+##
+## If you add a new routine, insert it at the end of the list in one of the
+## slots taken by a .empty_slot.  If you remove an old routine you WILL BREAK
+## ALL programs that use it but if you feel you can do this change its slot
+## to .empty_slot and don't reuse it (leave a comment to what it was).
+#branch
+## libmusickit
+        _MKCancelMsgRequest             0
+        _MKNewMsgRequest                1
+        _MKRepositionMsgRequest         2
+        _MKRescheduleMsgRequest         3
+        _MKScheduleMsgRequest           4
+        _MKGetEnvelopeClass             5
+        _MKSetEnvelopeClass             6
+        _MKAmpAttenuationToMidi         7
+        _MKAmpToMidi                    8
+        _MKGetNoteClass                 9
+        _MKGetNoteParAsDouble           10
+        _MKGetNoteParAsEnvelope         11
+        _MKGetNoteParAsInt              12
+        _MKGetNoteParAsObject           13
+        _MKGetNoteParAsString           14
+        _MKGetNoteParAsStringNoCopy     15
+        _MKGetNoteParAsWaveTable        16
+        _MKInitParameterIteration       17
+        _MKIsNoteParPresent             18
+        _MKMidiToAmp                    19
+        _MKMidiToAmpAttenuation         20
+        _MKMidiToAmpAttenuationWithSensitivity 21
+        _MKMidiToAmpWithSensitivity     22
+        _MKNextParameter                23
+        _MKNoteTag                      24
+        _MKNoteTags                     25
+        _MKSetNoteClass                 26
+        _MKSetNoteParToDouble           27
+        _MKSetNoteParToEnvelope         28
+        _MKSetNoteParToInt              29
+        _MKSetNoteParToObject           30
+        _MKSetNoteParToString           31
+        _MKSetNoteParToWaveTable        32
+        _MKGetPartClass                 33
+        _MKSetPartClass                 34
+        _MKGetPartialsClass             35
+        _MKSetPartialsClass             36
+        _MKGetSamplesClass              37
+        _MKSetSamplesClass              38
+        _MKAdjustFreqWithPitchBend      39
+        _MKFreqToKeyNum                 40
+        _MKKeyNumToFreq                 41
+        _MKTranspose                    42
+        _MKWritePitchNames              43
+        _MKInitUnitGeneratorClass       44
+        _MKSetUGAddressArg              45
+        _MKSetUGAddressArgToInt         46
+        _MKSetUGDatumArg                47
+        _MKSetUGDatumArgLong            48
+        _MKAddGlobalScorefileObject     49
+        _MKGetGlobalScorefileObject     50
+        _MKGetNamedObject               51
+        _MKGetObjectName                52
+        _MKNameObject                   53
+        _MKRemoveObjectName             54
+        _MKFinishPerformance            55
+        _MKSetScorefileParseErrorAbort  56
+        _MKGetDeltaT                    57
+        _MKGetDeltaTTime                58
+        _MKGetTime                      59
+        _MKSetDeltaT                    60
+        _MKSetTime                      61
+        _MKClearTrace                   62
+        _MKError                        63
+        _MKErrorStream                  64
+        _MKGetPreemptDuration           65
+        _MKIsTraced                     66
+        _MKPreemptDuration              67
+        _MKSetErrorProc                 68
+        _MKSetErrorStream               69
+        _MKSetPreemptDuration           70
+        _MKSetTrace                     71
+        _MKdB                           72
+## libunitgenerators
+        _MKUpdateAsymp                  73
+## libsynthpatches
+## undocumented libmusickit functions
+        __MKLastTime                    74
+        __MKSetTopOfMemory              75
+        __MKOrchestraSetNoops           76
+        __MKSetPollProc                 77
+## libmusickit functions added aug 20 1990
+	__MKSetConductorThreadMaxStress 78
+	_MKSetLowDeltaTThreshold        79
+	_MKSetHighDeltaTThreshold       80
+	_MKGetNoDVal                    81
+	_MKIsNoDVal                     82
+        .empty_slot                     83-1350
+## Branch table slots are a jmp 0x0:l instruction that is 6 bytes long. So to
+## just fill a 8192 byte page it takes 1350 slots plus the 90 byte shlib header
+## that goes before the branch table.  The assembler will round the text section
+## of the branch table object file to a multiple of 4 bytes so (1350 * 6) + 90
+## rounded up to a multiple of 4 is 8192.
+
+#private_externs
+## libmusickit (data symbols)
+        __MKConductorClass
+        __MKEnvelopeClass
+        __MKNoteClass
+        __MKOrchestraClass
+        __MKPartialsClass
+        __MKSamplesClass
+        __MKTraceFlag
+        __MKWaveTableClass
+## libmusickit (text symbols)
+	__MKAdjustTimeIfNotBehind
+        __MKGetEnvelopeNth
+        __MKIsPar
+        __MKIsPrivatePar
+        __MKMakePlaceHolder
+        __MKNoteAddParameter
+        __MKNoteCompare
+        __MKNoteIsPlaceHolder
+        __MKNoteShiftTimeTag
+        __MKSetNoteDur
+        __MKSetNoteTag
+        __MKSetNoteType
+        __MKWriteNote2
+        __MKWriteParameters
+        __MKCurSample
+        __MKFreeMem
+        __MKGetOrchSimulator
+        __MKGetSharedSynthGarbage
+        __MKOrchAddSynthIns
+        __MKOrchLateDeltaTMode
+        __MKOrchRemoveSynthIns
+        __MKOrchResetPreviousLosingTemplate
+        __MKOrchTrace
+        __MKSetScorePerformerOfPartPerformer
+        __MKSetScoreRecorderOfPartRecorder
+        __MKAllocSynthPatch
+        __MKDeallocatedSynthPatches
+        __MKEvalTemplateConnections
+        __MKGetTemplateEMemUsage
+        __MKIsClassInTemplate
+        __MKSetTemplateEMemUsage
+        __MKAddPatchToList
+        __MKRemoveSynthPatch
+        __MKReplaceFinishingPatch
+        __MKSynthPatchNoteDur
+        __MKSynthPatchPreempt
+        __MKSynthPatchSetInfo
+        __MKFindPitchVar
+        __MKFreqPrintfunc
+        __MKKeyNumPrintfunc
+        __MKTuningSystemInit
+        __MKAdjustTimeIfNecessary
+        __MKBeginUGBlock
+        __MKDeallocSynthElement
+        __MKDeallocSynthElementSafe
+        __MKEndUGBlock
+        __MKFixupUG
+        __MKGetSynthElementSynthPatchLoc
+        __MKProtectSynthElement
+        __MKRerelocUG
+        __MKSetSynthElementSynthPatchLoc
+        __MKCheckInit
+        __MKFreeBiHash
+        __MKGetGlobalName
+        __MKGetNamedGlobal
+        __MKNameGlobal
+        __MKNameTableAddName
+        __MKNameTableGetFirstObjectForName
+        __MKNameTableGetObjectForName
+        __MKNameTableGetObjectName
+        __MKNameTableRemoveName
+        __MKNameTableRemoveObject
+        __MKNewBiHash
+        __MKNewScorefileParseTable
+        __MKSymbolize
+        __MKUniqueName
+        __MKArchiveParOn
+        __MKCopyParameter
+        __MKFreeParameter
+        __MKGetPar
+        __MKGetParNamePar
+        __MKHighestPar
+        __MKIsParPublic
+        __MKNewDoublePar
+        __MKNewIntPar
+        __MKNewObjPar
+        __MKNewStringPar
+        __MKParAsDouble
+        __MKParAsEnv
+        __MKParAsInt
+        __MKParAsObj
+        __MKParAsString
+        __MKParAsStringNoCopy
+        __MKParAsWave
+        __MKParInit
+	__MKParNameStr
+        __MKParNameObj
+        __MKParRaw
+        __MKParWriteOn
+        __MKParWriteStdValueOn
+        __MKParWriteValueOn
+        __MKSetDoublePar
+        __MKSetIntPar
+        __MKSetObjPar
+        __MKSetStringPar
+        __MKUnarchiveParOn
+        __MKUniqueNull
+        __MKNewScorefileVar
+        __MKSFVarGetParameter
+        __MKSFVarInternalType
+        __MKSFVarRaw
+        __MKSetDoubleSFVar
+        __MKSetEnvSFVar
+        __MKSetIntSFVar
+        __MKSetObjSFVar
+        __MKSetReadOnlySFVar
+        __MKSetScorefileVarPostDaemon
+        __MKSetScorefileVarPreDaemon
+        __MKSetStringSFVar
+        __MKSetWaveSFVar
+        __MKAddSharedSynthClaim
+        __MKCollectSharedDataGarbage
+        __MKFindSharedSynthObj
+        __MKFreeSharedSet
+        __MKGetSharedSynthReferenceCount
+        __MKInstallSharedObject
+        __MKNewSharedSet
+        __MKReleaseSharedSynthClaim
+        __MKDoubleToFix24
+        __MKDoubleToString
+        __MKDoubleToStringNoCopy
+        __MKFix24ToDouble
+        __MKFix24ToInt
+        __MKIntToString
+        __MKIntToStringNoCopy
+        __MKStringToDouble
+        __MKStringToInt
+        __MKMIDIFileBeginReading
+        __MKMIDIFileBeginWriting
+        __MKMIDIFileBeginWritingTrack
+        __MKMIDIFileEndReading
+        __MKMIDIFileEndWriting
+        __MKMIDIFileEndWritingTrack
+        __MKMIDIFileReadEvent
+        __MKMIDIFileReadPreamble
+        __MKMIDIFileWriteEvent
+        __MKMIDIFileWriteSMPTEoffset
+        __MKMIDIFileWriteSequenceNumber
+        __MKMIDIFileWriteSig
+        __MKMIDIFileWriteSysExcl
+        __MKMIDIFileWriteTempo
+        __MKMIDIFileWriteText
+        __MKDurForTimeUnit
+        __MKTimeTagForTimeUnit
+        __MKFinishMidiIn
+        __MKInitMidiIn
+        __MKMidiToMusicKit
+        __MKFinishScoreIn
+        __MKNewScoreInStruct
+        __MKParseScoreHeader
+        __MKParseScoreHeaderStmt
+        __MKParseScoreNote
+        __MKTranstab
+        __MKAdjustTime
+        __MKSetConductedPerformance
+        __MKTokName
+        __MKTokNameNoCheck
+        __MKCalloc
+        __MKCheckClassConductor
+        __MKCheckClassEnvelope
+        __MKCheckClassNote
+        __MKCheckClassOrchestra
+        __MKCheckClassPartials
+        __MKCheckClassSamples
+        __MKCheckClassWaveTable
+        __MKErrBuf
+        __MKErrorf
+        __MKGetErrStr
+        __MKInheritsFrom
+        __MKLinkUnreferencedClasses
+        __MKMakeStr
+        __MKMakeStrRealloc
+        __MKMakeStrcat
+        __MKMakeSubstr
+        __MKMalloc
+        __MKOpenFileStream
+        __MKRealloc
+        __MKWriteChar
+        __MKWriteDouble
+        __MKWriteDoublePar
+        __MKWriteFloat
+        __MKWriteInt
+        __MKWriteIntPar
+        __MKWriteShort
+        __MKWriteString
+        __MKWriteStringPar
+        __MKWriteVarPar
+        __MKFinishMidiOut
+        __MKGetSysExByte
+        __MKInitMidiOut
+        __MKWriteMidiOut
+        __MKFinishScoreOut
+        __MKInitScoreOut
+        __MKWriteNote
+        __MKWritePartDecl
+	__MKLock
+	__MKUnlock
+	__MKDisableErrorStream
+	__MKEnableErrorStream
+	__MKAddPort
+	__MKRemovePort
+	__MKSprintf
+	__MKVsprintf
+## libunitgenerators (text symbols)
+        __MKUGIsPowerOf2
+        __MKUGLog2
+        __MKUGNextPowerOf2
+## libsynthpatches (data symbols)
+        __MKSPdVal
+        __MKSPiVal
+        __MKSPoVal
+        __MKSPsVal
+## libsynthpatches (text symbols)
+        __MKSPGetFmAllVibTemplate
+        __MKSPGetFmNoVibTemplate
+        __MKSPGetFmRanVibTemplate
+        __MKSPGetFmSinVibTemplate
+        __MKSPGetWaveAllVibTemplate
+        __MKSPGetWaveNoVibTemplate
+        __MKSPGetWaveRanVibTemplate
+        __MKSPGetWaveSinVibTemplate
+        __MKSPInitializeTimbreDataBase
+        __MKSPPartialForTimbre
+## These are the assembly language stubs to get around the symbols that can't
+## have a layer of indirection put in by a macro because they are generated
+## directly by the compiler.  These are in alias.o .
+        .libmusic_objc_msgSend
+        .libmusic_objc_msgSendSuper
+        .libmusic_objc_getClass
+        .libmusic_objc_getMetaClass
+        .libmusic__fixunsdfsi
+	.libmusic__fixdfsi
+	.libmusic_bcopy
+
+#alias
+        _objc_msgSend           .libmusic_objc_msgSend
+        _objc_msgSendSuper      .libmusic_objc_msgSendSuper
+        _objc_getClass          .libmusic_objc_getClass
+        _objc_getMetaClass      .libmusic_objc_getMetaClass
+        __fixunsdfsi            .libmusic__fixunsdfsi
+        __fixdfsi            	.libmusic__fixdfsi
+        _bcopy		        .libmusic_bcopy
+
+## These symbols are global const data (which appears in the text section).
+#nobranch_text
+
+## This is the order objects get loaded in the shared library.  All global data
+## CANT CHANGE IN SIZE or LOCATION.  Any new global data must added to the last
+## file in this list at the end of the file or added in a new file and put at
+## the end of this list.  There can be no common data, instead it must be
+## initialized data so that it will remain in a fixed place.  All files must
+## have all their static data declared and initialized before all global data
+## in the file.  This is because when the loader builds a shared library it
+## moves all global data to the beginning and all static data to the end.  With
+## this static data can be added changed or deleted to ANY file.
+
+#objects
+## global const data (text) and global data
+
+## only global data (no const data)
+        pointers.o                              # global data size 2048
+
+## no global data
+## libmusickit
+        libmusickit/shlib_obj/Conductor.o
+        libmusickit/shlib_obj/Envelope.o
+        libmusickit/shlib_obj/FilePerformer.o
+        libmusickit/shlib_obj/FileWriter.o
+        libmusickit/shlib_obj/Instrument.o
+        libmusickit/shlib_obj/Midi.o
+        libmusickit/shlib_obj/Note.o
+        libmusickit/shlib_obj/NoteFilter.o
+        libmusickit/shlib_obj/NoteReceiver.o
+        libmusickit/shlib_obj/NoteSender.o
+        libmusickit/shlib_obj/Orchestra.o
+        libmusickit/shlib_obj/Part.o
+        libmusickit/shlib_obj/PartPerformer.o
+        libmusickit/shlib_obj/PartRecorder.o
+        libmusickit/shlib_obj/Partials.o
+        libmusickit/shlib_obj/PatchTemplate.o
+        libmusickit/shlib_obj/Performer.o
+        libmusickit/shlib_obj/Samples.o
+        libmusickit/shlib_obj/Score.o
+        libmusickit/shlib_obj/ScorePerformer.o
+        libmusickit/shlib_obj/ScoreRecorder.o
+        libmusickit/shlib_obj/ScorefilePerformer.o
+        libmusickit/shlib_obj/ScorefileWriter.o
+        libmusickit/shlib_obj/SynthData.o
+        libmusickit/shlib_obj/SynthInstrument.o
+        libmusickit/shlib_obj/SynthPatch.o
+        libmusickit/shlib_obj/TuningSystem.o
+        libmusickit/shlib_obj/UnitGenerator.o
+        libmusickit/shlib_obj/WaveTable.o
+        libmusickit/shlib_obj/_MKNameTable.o
+        libmusickit/shlib_obj/_MKSprintf.o
+        libmusickit/shlib_obj/_OrchloopbeginUG.o
+        libmusickit/shlib_obj/_ParName.o
+        libmusickit/shlib_obj/_ScorefileVar.o
+        libmusickit/shlib_obj/_SharedSynthInfo.o
+        libmusickit/shlib_obj/conversion.o
+        libmusickit/shlib_obj/midifile.o
+        libmusickit/shlib_obj/musickit_vers.o
+        libmusickit/shlib_obj/noteRecorderCFuncs.o
+        libmusickit/shlib_obj/parseMidi.o
+        libmusickit/shlib_obj/parseScore.o
+        libmusickit/shlib_obj/time.o
+        libmusickit/shlib_obj/tokenNames.o
+        libmusickit/shlib_obj/utilities.o
+        libmusickit/shlib_obj/writeBinary.o
+        libmusickit/shlib_obj/writeMidi.o
+        libmusickit/shlib_obj/writeScore.o
+## libunitgenerators
+        libunitgenerators/shlib_obj/Add2UG.o
+        libunitgenerators/shlib_obj/Add2UGxxx.o
+        libunitgenerators/shlib_obj/Add2UGxxy.o
+        libunitgenerators/shlib_obj/Add2UGxyx.o
+        libunitgenerators/shlib_obj/Add2UGxyy.o
+        libunitgenerators/shlib_obj/Add2UGyxx.o
+        libunitgenerators/shlib_obj/Add2UGyxy.o
+        libunitgenerators/shlib_obj/Add2UGyyx.o
+        libunitgenerators/shlib_obj/Add2UGyyy.o
+        libunitgenerators/shlib_obj/Allpass1UG.o
+        libunitgenerators/shlib_obj/Allpass1UGxx.o
+        libunitgenerators/shlib_obj/Allpass1UGxy.o
+        libunitgenerators/shlib_obj/Allpass1UGyx.o
+        libunitgenerators/shlib_obj/Allpass1UGyy.o
+        libunitgenerators/shlib_obj/AsympUG.o
+        libunitgenerators/shlib_obj/AsympUGx.o
+        libunitgenerators/shlib_obj/AsympUGy.o
+        libunitgenerators/shlib_obj/ConstantUG.o
+        libunitgenerators/shlib_obj/ConstantUGx.o
+        libunitgenerators/shlib_obj/ConstantUGy.o
+        libunitgenerators/shlib_obj/DelayUG.o
+        libunitgenerators/shlib_obj/DelayUGxxx.o
+        libunitgenerators/shlib_obj/DelayUGxxy.o
+        libunitgenerators/shlib_obj/DelayUGxyx.o
+        libunitgenerators/shlib_obj/DelayUGxyy.o
+        libunitgenerators/shlib_obj/DelayUGyxx.o
+        libunitgenerators/shlib_obj/DelayUGyxy.o
+        libunitgenerators/shlib_obj/DelayUGyyx.o
+        libunitgenerators/shlib_obj/DelayUGyyy.o
+        libunitgenerators/shlib_obj/DswitchUG.o
+        libunitgenerators/shlib_obj/DswitchUGxx.o
+        libunitgenerators/shlib_obj/DswitchUGxy.o
+        libunitgenerators/shlib_obj/DswitchUGyx.o
+        libunitgenerators/shlib_obj/DswitchUGyy.o
+        libunitgenerators/shlib_obj/DswitchtUG.o
+        libunitgenerators/shlib_obj/DswitchtUGxx.o
+        libunitgenerators/shlib_obj/DswitchtUGxy.o
+        libunitgenerators/shlib_obj/DswitchtUGyx.o
+        libunitgenerators/shlib_obj/DswitchtUGyy.o
+        libunitgenerators/shlib_obj/InterpUG.o
+        libunitgenerators/shlib_obj/InterpUGxxxx.o
+        libunitgenerators/shlib_obj/InterpUGxxxy.o
+        libunitgenerators/shlib_obj/InterpUGxxyx.o
+        libunitgenerators/shlib_obj/InterpUGxxyy.o
+        libunitgenerators/shlib_obj/InterpUGxyxx.o
+        libunitgenerators/shlib_obj/InterpUGxyxy.o
+        libunitgenerators/shlib_obj/InterpUGxyyx.o
+        libunitgenerators/shlib_obj/InterpUGxyyy.o
+        libunitgenerators/shlib_obj/InterpUGyxxx.o
+        libunitgenerators/shlib_obj/InterpUGyxxy.o
+        libunitgenerators/shlib_obj/InterpUGyxyx.o
+        libunitgenerators/shlib_obj/InterpUGyxyy.o
+        libunitgenerators/shlib_obj/InterpUGyyxx.o
+        libunitgenerators/shlib_obj/InterpUGyyxy.o
+        libunitgenerators/shlib_obj/InterpUGyyyx.o
+        libunitgenerators/shlib_obj/InterpUGyyyy.o
+        libunitgenerators/shlib_obj/Mul1add2UG.o
+        libunitgenerators/shlib_obj/Mul1add2UGxxxx.o
+        libunitgenerators/shlib_obj/Mul1add2UGxxxy.o
+        libunitgenerators/shlib_obj/Mul1add2UGxxyx.o
+        libunitgenerators/shlib_obj/Mul1add2UGxxyy.o
+        libunitgenerators/shlib_obj/Mul1add2UGxyxx.o
+        libunitgenerators/shlib_obj/Mul1add2UGxyxy.o
+        libunitgenerators/shlib_obj/Mul1add2UGxyyx.o
+        libunitgenerators/shlib_obj/Mul1add2UGxyyy.o
+        libunitgenerators/shlib_obj/Mul1add2UGyxxx.o
+        libunitgenerators/shlib_obj/Mul1add2UGyxxy.o
+        libunitgenerators/shlib_obj/Mul1add2UGyxyx.o
+        libunitgenerators/shlib_obj/Mul1add2UGyxyy.o
+        libunitgenerators/shlib_obj/Mul1add2UGyyxx.o
+        libunitgenerators/shlib_obj/Mul1add2UGyyxy.o
+        libunitgenerators/shlib_obj/Mul1add2UGyyyx.o
+        libunitgenerators/shlib_obj/Mul1add2UGyyyy.o
+        libunitgenerators/shlib_obj/Mul2UG.o
+        libunitgenerators/shlib_obj/Mul2UGxxx.o
+        libunitgenerators/shlib_obj/Mul2UGxxy.o
+        libunitgenerators/shlib_obj/Mul2UGxyx.o
+        libunitgenerators/shlib_obj/Mul2UGxyy.o
+        libunitgenerators/shlib_obj/Mul2UGyxx.o
+        libunitgenerators/shlib_obj/Mul2UGyxy.o
+        libunitgenerators/shlib_obj/Mul2UGyyx.o
+        libunitgenerators/shlib_obj/Mul2UGyyy.o
+        libunitgenerators/shlib_obj/OnepoleUG.o
+        libunitgenerators/shlib_obj/OnepoleUGxx.o
+        libunitgenerators/shlib_obj/OnepoleUGxy.o
+        libunitgenerators/shlib_obj/OnepoleUGyx.o
+        libunitgenerators/shlib_obj/OnepoleUGyy.o
+        libunitgenerators/shlib_obj/OnezeroUG.o
+        libunitgenerators/shlib_obj/OnezeroUGxx.o
+        libunitgenerators/shlib_obj/OnezeroUGxy.o
+        libunitgenerators/shlib_obj/OnezeroUGyx.o
+        libunitgenerators/shlib_obj/OnezeroUGyy.o
+        libunitgenerators/shlib_obj/OscgUG.o
+        libunitgenerators/shlib_obj/OscgUGxx.o
+        libunitgenerators/shlib_obj/OscgUGxy.o
+        libunitgenerators/shlib_obj/OscgUGyx.o
+        libunitgenerators/shlib_obj/OscgUGyy.o
+        libunitgenerators/shlib_obj/OscgafUG.o
+        libunitgenerators/shlib_obj/OscgafUGs.o
+        libunitgenerators/shlib_obj/OscgafUGxxxx.o
+        libunitgenerators/shlib_obj/OscgafUGxxxy.o
+        libunitgenerators/shlib_obj/OscgafUGxxyx.o
+        libunitgenerators/shlib_obj/OscgafUGxxyy.o
+        libunitgenerators/shlib_obj/OscgafUGxyxx.o
+        libunitgenerators/shlib_obj/OscgafUGxyxy.o
+        libunitgenerators/shlib_obj/OscgafUGxyyx.o
+        libunitgenerators/shlib_obj/OscgafUGxyyy.o
+        libunitgenerators/shlib_obj/OscgafUGyxxx.o
+        libunitgenerators/shlib_obj/OscgafUGyxxy.o
+        libunitgenerators/shlib_obj/OscgafUGyxyx.o
+        libunitgenerators/shlib_obj/OscgafUGyxyy.o
+        libunitgenerators/shlib_obj/OscgafUGyyxx.o
+        libunitgenerators/shlib_obj/OscgafUGyyxy.o
+        libunitgenerators/shlib_obj/OscgafUGyyyx.o
+        libunitgenerators/shlib_obj/OscgafUGyyyy.o
+        libunitgenerators/shlib_obj/OscgafiUG.o
+        libunitgenerators/shlib_obj/OscgafiUGxxxx.o
+        libunitgenerators/shlib_obj/OscgafiUGxxxy.o
+        libunitgenerators/shlib_obj/OscgafiUGxxyx.o
+        libunitgenerators/shlib_obj/OscgafiUGxxyy.o
+        libunitgenerators/shlib_obj/OscgafiUGxyxx.o
+        libunitgenerators/shlib_obj/OscgafiUGxyxy.o
+        libunitgenerators/shlib_obj/OscgafiUGxyyx.o
+        libunitgenerators/shlib_obj/OscgafiUGxyyy.o
+        libunitgenerators/shlib_obj/OscgafiUGyxxx.o
+        libunitgenerators/shlib_obj/OscgafiUGyxxy.o
+        libunitgenerators/shlib_obj/OscgafiUGyxyx.o
+        libunitgenerators/shlib_obj/OscgafiUGyxyy.o
+        libunitgenerators/shlib_obj/OscgafiUGyyxx.o
+        libunitgenerators/shlib_obj/OscgafiUGyyxy.o
+        libunitgenerators/shlib_obj/OscgafiUGyyyx.o
+        libunitgenerators/shlib_obj/OscgafiUGyyyy.o
+        libunitgenerators/shlib_obj/Out1aUG.o
+        libunitgenerators/shlib_obj/Out1aUGx.o
+        libunitgenerators/shlib_obj/Out1aUGy.o
+        libunitgenerators/shlib_obj/Out1bUG.o
+        libunitgenerators/shlib_obj/Out1bUGx.o
+        libunitgenerators/shlib_obj/Out1bUGy.o
+        libunitgenerators/shlib_obj/Out2sumUG.o
+        libunitgenerators/shlib_obj/Out2sumUGx.o
+        libunitgenerators/shlib_obj/Out2sumUGy.o
+        libunitgenerators/shlib_obj/ScaleUG.o
+        libunitgenerators/shlib_obj/ScaleUGxx.o
+        libunitgenerators/shlib_obj/ScaleUGxy.o
+        libunitgenerators/shlib_obj/ScaleUGyx.o
+        libunitgenerators/shlib_obj/ScaleUGyy.o
+        libunitgenerators/shlib_obj/Scl1add2UG.o
+        libunitgenerators/shlib_obj/Scl1add2UGxxx.o
+        libunitgenerators/shlib_obj/Scl1add2UGxxy.o
+        libunitgenerators/shlib_obj/Scl1add2UGxyx.o
+        libunitgenerators/shlib_obj/Scl1add2UGxyy.o
+        libunitgenerators/shlib_obj/Scl1add2UGyxx.o
+        libunitgenerators/shlib_obj/Scl1add2UGyxy.o
+        libunitgenerators/shlib_obj/Scl1add2UGyyx.o
+        libunitgenerators/shlib_obj/Scl1add2UGyyy.o
+        libunitgenerators/shlib_obj/Scl2add2UG.o
+        libunitgenerators/shlib_obj/Scl2add2UGxxx.o
+        libunitgenerators/shlib_obj/Scl2add2UGxxy.o
+        libunitgenerators/shlib_obj/Scl2add2UGxyx.o
+        libunitgenerators/shlib_obj/Scl2add2UGxyy.o
+        libunitgenerators/shlib_obj/Scl2add2UGyxx.o
+        libunitgenerators/shlib_obj/Scl2add2UGyxy.o
+        libunitgenerators/shlib_obj/Scl2add2UGyyx.o
+        libunitgenerators/shlib_obj/Scl2add2UGyyy.o
+        libunitgenerators/shlib_obj/SnoiseUG.o
+        libunitgenerators/shlib_obj/SnoiseUGx.o
+        libunitgenerators/shlib_obj/SnoiseUGy.o
+        libunitgenerators/shlib_obj/UnoiseUG.o
+        libunitgenerators/shlib_obj/UnoiseUGx.o
+        libunitgenerators/shlib_obj/UnoiseUGy.o
+        libunitgenerators/shlib_obj/ugUtilities.o
+        libunitgenerators/shlib_obj/unitgenerators_vers.o
+## libsynthpatches
+        libsynthpatches/shlib_obj/DBFm1vi.o
+        libsynthpatches/shlib_obj/DBWave1v.o
+        libsynthpatches/shlib_obj/DBWave1vi.o
+        libsynthpatches/shlib_obj/DBWave2vi.o
+        libsynthpatches/shlib_obj/Fm1.o
+        libsynthpatches/shlib_obj/Fm1i.o
+        libsynthpatches/shlib_obj/Fm1v.o
+        libsynthpatches/shlib_obj/Fm1vi.o
+        libsynthpatches/shlib_obj/Fm2cnvi.o
+        libsynthpatches/shlib_obj/Fm2cvi.o
+        libsynthpatches/shlib_obj/Fm2pnvi.o
+        libsynthpatches/shlib_obj/Fm2pvi.o
+        libsynthpatches/shlib_obj/Pluck.o
+        libsynthpatches/shlib_obj/Simp.o
+        libsynthpatches/shlib_obj/Wave1.o
+        libsynthpatches/shlib_obj/Wave1i.o
+        libsynthpatches/shlib_obj/Wave1v.o
+        libsynthpatches/shlib_obj/Wave1vi.o
+        libsynthpatches/shlib_obj/globals.o
+        libsynthpatches/shlib_obj/partialsDB.o
+        libsynthpatches/shlib_obj/synthpatches_vers.o
+
+        alias.o
+        vers.o
+
+## These undefined symbols are expected since they are super classes of objects
+## in here and are defined in other shared libraries.
+#undefined
+        .objc_class_name_HashTable
+        .objc_class_name_List
+        .objc_class_name_Object
+        .objc_class_name_Sound
+        .objc_class_name_Storage
+
+#init libmusickit/shlib_obj/Midi.o
+        __libmusic_midi_clear_queue             _midi_clear_queue
+        __libmusic_midi_error_string            _midi_error_string
+        __libmusic_midi_get_data                _midi_get_data
+        __libmusic_midi_get_in_timer_port       _midi_get_in_timer_port
+        __libmusic_midi_get_recv                _midi_get_recv
+        __libmusic_midi_get_xmit                _midi_get_xmit
+        __libmusic_midi_output_queue_notify     _midi_output_queue_notify
+        __libmusic_midi_reply_handler           _midi_reply_handler
+        __libmusic_midi_send_raw_data           _midi_send_raw_data
+        __libmusic_midi_set_owner               _midi_set_owner
+        __libmusic_midi_set_proto               _midi_set_proto
+        __libmusic_midi_set_sys_ignores         _midi_set_sys_ignores
+        __libmusic_midi_timer_error_string      _midi_timer_error_string
+        __libmusic_timer_set                    _timer_set
+        __libmusic_timer_start                  _timer_start
+        __libmusic_timer_stop                   _timer_stop
+
+#init pointers.o
+        __libmusic_DSPClose                     _DSPClose
+        __libmusic_DSPCloseCommandsFile         _DSPCloseCommandsFile
+        __libmusic_DSPCloseSimulatorFile        _DSPCloseSimulatorFile
+        __libmusic_DSPDoubleToFix24             _DSPDoubleToFix24
+        __libmusic_DSPDoubleToFix48UseArg       _DSPDoubleToFix48UseArg
+        __libmusic_DSPEnableErrorFile           _DSPEnableErrorFile
+        __libmusic_DSPErrorNo                   _DSPErrorNo
+        __libmusic_DSPFix24ToDouble             _DSPFix24ToDouble
+        __libmusic_DSPFix48ToDouble             _DSPFix48ToDouble
+        __libmusic_DSPGetDSPCount               _DSPGetDSPCount
+        __libmusic_DSPGetLowestExternalUserAddress _DSPGetLowestExternalUserAddress
+        __libmusic_DSPGetHighestExternalUserAddress _DSPGetHighestExternalUserAddress
+        __libmusic_DSPGetSimulatorFP            _DSPGetSimulatorFP
+        __libmusic_DSPHostMessage               _DSPHostMessage
+        __libmusic_DSPIntToFix24                _DSPIntToFix24
+        __libmusic_DSPIsSavingCommands          _DSPIsSavingCommands
+        __libmusic_DSPLCtoMS                    _DSPLCtoMS
+        __libmusic_DSPMKBLTTimed                _DSPMKBLTTimed
+        __libmusic_DSPMKCallTimedV              _DSPMKCallTimedV
+        __libmusic_DSPMKClearDSPSoundOutBufferTimed _DSPMKClearDSPSoundOutBufferTimed
+        __libmusic_DSPMKDisableAtomicTimed      _DSPMKDisableAtomicTimed
+        __libmusic_DSPMKDisableBlockingOnTMQEmptyTimed _DSPMKDisableBlockingOnTMQEmptyTimed
+        __libmusic_DSPMKEnableAtomicTimed       _DSPMKEnableAtomicTimed
+        __libmusic_DSPMKEnableBlockingOnTMQEmptyTimed _DSPMKEnableBlockingOnTMQEmptyTimed
+        __libmusic_DSPMKEnableReadData          _DSPMKEnableReadData
+        __libmusic_DSPMKEnableSSISoundOut       _DSPMKEnableSSISoundOut
+        __libmusic_DSPMKEnableSmallBuffers      _DSPMKEnableSmallBuffers
+        __libmusic_DSPMKEnableSoundOut          _DSPMKEnableSoundOut
+        __libmusic_DSPMKEnableWriteData         _DSPMKEnableWriteData
+        __libmusic_DSPMKFlushTimedMessages      _DSPMKFlushTimedMessages
+        __libmusic_DSPMKFreezeOrchestra         _DSPMKFreezeOrchestra
+        __libmusic_DSPMKGetClipCountAddress     _DSPMKGetClipCountAddress
+        __libmusic_DSPMKInit                    _DSPMKInit
+        __libmusic_DSPMKMemoryFillSkipTimed     _DSPMKMemoryFillSkipTimed
+        __libmusic_DSPMKPauseReadDataTimed      _DSPMKPauseReadDataTimed
+        __libmusic_DSPMKPauseOrchestra	        _DSPMKPauseOrchestra
+        __libmusic_DSPMKReadTime                _DSPMKReadTime
+        __libmusic_DSPMKResumeOrchestra         _DSPMKResumeOrchestra
+        __libmusic_DSPMKResumeReadDataTimed     _DSPMKResumeReadDataTimed
+        __libmusic_DSPMKRetValueTimed           _DSPMKRetValueTimed
+        __libmusic_DSPMKRewindReadData          _DSPMKRewindReadData
+        __libmusic_DSPMKRewindWriteData         _DSPMKRewindWriteData
+        __libmusic_DSPMKSendArraySkipTimed      _DSPMKSendArraySkipTimed
+        __libmusic_DSPMKSendLongTimed           _DSPMKSendLongTimed
+        __libmusic_DSPMKSendShortArraySkipTimed _DSPMKSendShortArraySkipTimed
+        __libmusic_DSPMKSendValueTimed          _DSPMKSendValueTimed
+        __libmusic_DSPMKSetReadDataFile         _DSPMKSetReadDataFile
+        __libmusic_DSPMKSetSamplingRate         _DSPMKSetSamplingRate
+        __libmusic_DSPMKSetTime                 _DSPMKSetTime
+        __libmusic_DSPMKSetWriteDataFile        _DSPMKSetWriteDataFile
+        __libmusic_DSPMKStartReadDataTimed      _DSPMKStartReadDataTimed
+        __libmusic_DSPMKStartSSISoundOut        _DSPMKStartSSISoundOut
+        __libmusic_DSPMKStartSoundOut           _DSPMKStartSoundOut
+        __libmusic_DSPMKStartWriteDataTimed     _DSPMKStartWriteDataTimed
+        __libmusic_DSPMKStopReadData            _DSPMKStopReadData
+        __libmusic_DSPMKStopSSISoundOut         _DSPMKStopSSISoundOut
+        __libmusic_DSPMKStopSoundOut            _DSPMKStopSoundOut
+        __libmusic_DSPMKStopWriteData           _DSPMKStopWriteData
+        __libmusic_DSPMKThawOrchestra           _DSPMKThawOrchestra
+        __libmusic_DSPMemoryNames               _DSPMemoryNames
+        __libmusic_DSPOpenCommandsFile          _DSPOpenCommandsFile
+        __libmusic_DSPOpenSimulatorFile         _DSPOpenSimulatorFile
+        __libmusic_DSPSetCurrentDSP             _DSPSetCurrentDSP
+        __libmusic_DSPStartAtAddress            _DSPStartAtAddress
+        __libmusic_DSPWriteValue                _DSPWriteValue
+        __libmusic__DSPError                    __DSPError
+        __libmusic__DSPMKSendUnitGeneratorWithLooperTimed __DSPMKSendUnitGeneratorWithLooperTimed
+        __libmusic__DSPReloc                    __DSPReloc
+
+        __libmusic_DPSAddPort                   _DPSAddPort
+        __libmusic_DPSAddTimedEntry             _DPSAddTimedEntry
+        __libmusic_DPSRemovePort                _DPSRemovePort
+        __libmusic_DPSRemoveTimedEntry          _DPSRemoveTimedEntry
+        __libmusic_NXApp                        _NXApp
+        __libmusic_NXLogError                   _NXLogError
+
+        __libmusic_NXClose                      _NXClose
+        __libmusic_NXCountHashTable             _NXCountHashTable
+        __libmusic_NXCreateHashTable            _NXCreateHashTable
+        __libmusic_NXDefaultMallocZone 		_NXDefaultMallocZone
+        __libmusic_NXEmptyHashTable             _NXEmptyHashTable
+        __libmusic_NXFlush                      _NXFlush
+        __libmusic_NXFreeHashTable              _NXFreeHashTable
+        __libmusic_NXHashGet                    _NXHashGet
+        __libmusic_NXHashInsert                 _NXHashInsert
+        __libmusic_NXHashInsertIfAbsent         _NXHashInsertIfAbsent
+        __libmusic_NXHashRemove                 _NXHashRemove
+        __libmusic_NXInitHashState              _NXInitHashState
+        __libmusic_NXNextHashState              _NXNextHashState
+        __libmusic_NXNoEffectFree               _NXNoEffectFree
+        __libmusic_NXOpenFile                   _NXOpenFile
+        __libmusic_NXPrintf                     _NXPrintf
+        __libmusic_NXReadArray                  _NXReadArray
+        __libmusic_NXReadObject                 _NXReadObject
+        __libmusic_NXReadType                   _NXReadType
+        __libmusic_NXReadTypes                  _NXReadTypes
+        __libmusic_NXSeek                       _NXSeek
+        __libmusic_NXTell                       _NXTell
+        __libmusic_NXTypedStreamClassVersion    _NXTypedStreamClassVersion
+        __libmusic_NXUngetc                     _NXUngetc
+        __libmusic_NXUniqueString               _NXUniqueString
+        __libmusic_NXVPrintf                    _NXVPrintf
+        __libmusic_NXWriteArray                 _NXWriteArray
+        __libmusic_NXWriteObject                _NXWriteObject
+        __libmusic_NXWriteObjectReference       _NXWriteObjectReference
+        __libmusic_NXWriteType                  _NXWriteType
+        __libmusic_NXWriteTypes                 _NXWriteTypes
+        __libmusic__NXStreamChangeBuffer        __NXStreamChangeBuffer
+        __libmusic__NXStreamFillBuffer          __NXStreamFillBuffer
+        __libmusic__ctype_                      __ctype_
+        __libmusic__cvtToId                     __cvtToId
+        __libmusic__fixunsdfsi                  __fixunsdfsi
+        __libmusic__fixdfsi                     __fixdfsi
+        __libmusic__iob                         __iob
+        __libmusic__strhash                     __strhash
+        __libmusic_alloca                       _alloca
+        __libmusic_atan2                        _atan2
+        __libmusic_atoi                         _atoi
+        __libmusic_bsearch                      _bsearch
+        __libmusic_bcopy	                _bcopy
+        __libmusic_calloc                       _calloc
+        __libmusic_close                        _close
+	__libmusic_cond_signal                  _cond_signal
+	__libmusic_condition_wait               _condition_wait
+	__libmusic_cos				_cos
+        __libmusic_creat                        _creat
+	__libmusic_cthread_abort                _cthread_abort
+	__libmusic_cthread_fork                 _cthread_fork
+	__libmusic_cthread_detach               _cthread_detach
+	__libmusic_cthread_set_errno_self	_cthread_set_errno_self
+	__libmusic_cthread_yield		_cthread_yield
+        __libmusic_errno                        _errno
+        __libmusic_exit                         _exit
+	__libmusic_exp				_exp
+	__libmusic_fabs				_fabs
+        __libmusic_floor                        _floor
+        __libmusic_fprintf                      _fprintf
+        __libmusic_free                         _free
+        __libmusic_gettimeofday                 _gettimeofday
+        __libmusic_geteuid                      _geteuid
+	__libmusic_host_processor_set_priv      _host_processor_set_priv
+	__libmusic_host_self                    _host_self
+        __libmusic_host_priv_self               _host_priv_self
+        __libmusic_initstate                    _initstate
+        __libmusic_isnan			_isnan
+        __libmusic_isinf			_isinf
+        __libmusic_kern_timestamp               _kern_timestamp
+	__libmusic_log				_log
+	__libmusic_log10 			_log10
+        __libmusic_longjmp                      _longjmp
+        __libmusic_mach_error_string            _mach_error_string
+        __libmusic_malloc                       _malloc
+        __libmusic_memcpy                       _memcpy
+        __libmusic_memmove                      _memmove
+        __libmusic_memset                       _memset
+        __libmusic_modf                         _modf
+        __libmusic_msg_receive                  _msg_receive
+        __libmusic_msg_send	                _msg_send
+        __libmusic_mutex_try_lock		_mutex_try_lock
+        __libmusic_mutex_wait_lock		_mutex_wait_lock
+        __libmusic_name_server_port             _name_server_port
+        __libmusic_netname_look_up              _netname_look_up
+        __libmusic_objc_getClass                _objc_getClass
+        __libmusic_objc_getClassWithoutWarning  _objc_getClassWithoutWarning
+        __libmusic_objc_getMetaClass            _objc_getMetaClass
+        __libmusic_objc_msgSend                 _objc_msgSend
+        __libmusic_objc_msgSendSuper            _objc_msgSendSuper
+        __libmusic_open                         _open
+        __libmusic_port_allocate                _port_allocate
+        __libmusic_port_deallocate              _port_deallocate
+        __libmusic_port_set_add			_port_set_add
+        __libmusic_port_set_remove		_port_set_remove
+        __libmusic_port_set_allocate		_port_set_allocate
+        __libmusic_pow                          _pow
+	__libmusic_processor_set_default        _processor_set_default
+	__libmusic_processor_set_policy_enable  _processor_set_policy_enable
+	__libmusic_processor_set_policy_disable _processor_set_policy_disable
+        __libmusic_qsort                        _qsort
+        __libmusic_random                       _random
+        __libmusic_realloc                      _realloc
+        __libmusic_setjmp                       _setjmp
+        __libmusic_setstate                     _setstate
+	__libmusic_sin				_sin
+        __libmusic_sprintf                      _sprintf
+	__libmusic_sqrt				_sqrt
+        __libmusic_sscanf                       _sscanf
+        __libmusic_strcat                       _strcat
+        __libmusic_strchr                       _strchr
+        __libmusic_strcmp                       _strcmp
+        __libmusic_strcpy                       _strcpy
+        __libmusic_strcspn                      _strcspn
+        __libmusic_strlen                       _strlen
+        __libmusic_strncpy                      _strncpy
+        __libmusic_strrchr                      _strrchr
+        __libmusic_strtod                       _strtod
+        __libmusic_strtol                       _strtol
+        __libmusic_task_self_                   _task_self_
+	__libmusic_thread_info			_thread_info
+	__libmusic_thread_self			_thread_self
+	__libmusic_thread_policy		_thread_policy
+	__libmusic_thread_priority		_thread_priority
+	__libmusic_ur_cthread_self		_ur_cthread_self
+        __libmusic_vfprintf                     _vfprintf
+        __libmusic_vsprintf                     _vsprintf

@@ -1,0 +1,23 @@
+# Initialization
+
+CALL		midi_announce		0
+
+# Associate ports with proc/arg
+
+SMAP	midi0	midi_server_server	0
+SMAP	midi1	midi_server_server	1
+ADVERTISE	midi0
+ADVERTISE	midi1
+
+# Set proc to be called when a port dies
+
+PORT_DEATH	midi_port_gone
+
+# This driver must be wired down.
+
+WIRE
+
+
+
+
+

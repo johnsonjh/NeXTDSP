@@ -1,0 +1,11 @@
+#!/bin/csh -f
+#
+# DSP assembler invocation for LOCAL assembly, i.e., including macros 
+# from a private copy of /usr/lib/dsp.  In this example, the replacement
+# for /usr/lib/dsp is accessed via the symbolic link /dsp.
+# The file /dsp/smsrc/include_dirs.asm has been edited to point into /dsp also.
+
+set my_dsp_dir=/me/P/dsp
+echo asm56000 -A -B -L -OS,SO -I$my_dsp_dir/smsrc/ $*
+asm56000 -A -B -L -OS,SO -I$my_dsp_dir/smsrc/ $*
+

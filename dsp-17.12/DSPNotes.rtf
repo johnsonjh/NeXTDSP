@@ -1,0 +1,483 @@
+{\rtf0\nextcset {\fonttbl{\f22\fmodern Courier;}{\f20\froman 
+Times-Roman;}{\f0\fswiss Helvetica;}{\f3\fswiss Helvetica;}}
+\paperw13440\paperh12240\landscape \margl420\margr1980\margt0\margb0 
+\pgnstart1\ftnstart1 \deftab31680 \sectd\sbknone \linemod0\linex0 
+\ftnbj \headery0\footery0 \cols1 {\header \pard \li1380\ri0\fi0\qc\sl320 
+\plain \f3 \par 
+\par 
+\par 
+\par 
+}{\footer \pard \li1380\ri0\fi0\qc\sl320 \plain \f3 \par 
+\par 
+\par 
+\par 
+}\pard \li0\ri0\fi0\sl320 \tx780 \tx1580 \tx2360 \tx3160 
+\tx3960 \tx4740 \tx5540 \tx6320 \tx7120 \tx7900 \tx8700 
+\tx9480 \tx10280 \plain \f0\fs30 \par 
+\pard \li300\ri0\fi0\sl320 \tx2360 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\f20\fs48 Release 2.0 \par 
+DSP Software Notes\par 
+\fs28 \pard \li1580\ri0\fi0\sl320 \tx2360 \tx3160 \tx3960 
+\tx4740 \tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 
+\tx10280 \par 
+\pard \li300\ri0\fi0\sl320 \tx1020 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\par 
+These notes address the following topics:\par 
+\par 
+\tab DSP Driver Interface\par 
+\tab The \b dspwrap\b0  program\par 
+\tab Array Processing Software\par 
+\tab DSP Software Overview\par 
+\par 
+\par 
+\pard \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 \tx1380 
+\tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 \tx5540 
+\tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 \fs36\b 
+DSP Driver Interface\par 
+\par 
+\fs28\b0 We list below Sound/DSP driver news pertaining 
+to the DSP, and not sound.  For more information, see 
+\b Sound.rtf\b0  and \b OperatingSystem.rtf\b0 .   Also, 
+see the two new programming examples regarding bidirectional 
+DSP DMA in\b  /NextDeveloper/Examples/DSP/SoundDSP/\b0 .\par 
+\par 
+\b New Features\par 
+\b0 \par 
+\'b7\tab A mach message to reset the DSP:  See \b 
+snddriver_dsp_reset()\b0 .\par 
+\par 
+\'b7\tab Support for streaming DMA into the DSP:  See 
+\b snddriver_stream_start_writing()\b0 .\par 
+\par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\'b7\tab One-shot DSP DMA support (in addition to streaming 
+DMAs):  See \b snddriver_dsp_dma_read() \b0 and\b  snddriver_dsp_dma_read()\b0 
+.\par 
+\par 
+\'b7\tab An efficient, no-interrupt, programmed DSP read 
+feature.  See the documentation for the SNDDRIVER_DSP_PROTO_RAW 
+protocol bit.\par 
+\par 
+\'b7\tab New protocol mode bits for enabling and disabling 
+driver services.\par 
+\par 
+\'b7\tab Support for changing the protocol mode dynamically.\par 
+\par 
+\'b7\tab New documentation and bugs fixed.\par 
+\par 
+\b Incompatible Changes\par 
+\b0 \par 
+\'b7 \tab The driver should be compatible with usage 
+of any documented behavior in release 1.0.  As a result 
+of backward compatibility, the driver DSP protocol bits 
+are slightly more complicated to use: the protocol bit 
+SNDDRIVER_DSP_PROTO_RAW effectively enables the new features. 
+ \par 
+\par 
+\'b7\tab The snddriver and sound library functions documented 
+in header files or documentation in Release 1.0 should 
+be fully compatible with Release 1.0 behavior \i with 
+one apparent exception\i0 .  The function \b netname_look_up()\b0 
+ recommended in the Release 1.0 \b SoundDSPDriver\b0 
+ programming examples no longer suffices to obtain the 
+sound device port unless the machine is a \'aapublic 
+sound server\'ba as determined by the \b Preferences 
+\b0 application.  This change occurred because, for reasons 
+of security, the sound device port is no longer registered 
+with Netname Lookup Server.  It is now recommended that 
+\b SNDAcquire()\b0  be used to obtain the sound device 
+and ownership ports.  The \b SoundDSPDriver\b0  programming 
+examples (and the Sound release notes) illustrate use 
+of \b SNDAcquire() \b0 for obtaining these system resources.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Known Problems\par 
+\b0 \par 
+\'b7\tab \'aaUnpacked\'ba DMA transfers do not work in 
+hardware.  In this mode, a full 32-bit \'aaint\'ba on 
+the host transfers to or from a 24-bit word on the 
+DSP.  (The least significant byte of each 32-bit host 
+word is thrown away or ignored in the transfer, depending 
+on direction.)  Consequently, the only DMA modes into 
+and out of the DSP are 16-bit mode, 8-bit mode, and 
+24-bit mode.  In all of these cases, the data is packed 
+on the host without \'aaholes,\'ba or \'aapacked,\'ba 
+and in DSP memory, the data are right-justified in 24-bit 
+words.  \par 
+\par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\'b7\tab The 24-bit DMA mode cannot be used in streaming 
+mode because the transfer size is specified in words, 
+each word is three bytes, and the driver requires the 
+transfer size to divide a page size.  More specifically, 
+the driver requires each DMA buffer to be address-aligned 
+to the size of the transfer and the buffer cannot cross 
+a page boundary.  (The page size is currently 8192 
+bytes.)  It is possible, however, to use 24-bit mode 
+in single bursts, by padding the transfer with extra 
+data.\par 
+\par 
+\'b7\tab The \'aaone-shot\'ba or \'aaarray-processing style\'ba 
+DMA transfers are not as efficient as the \'aastreaming\'ba 
+DMA transfers.  The best performance is obtained by 
+using the largest possible buffers on the DSP, 16-bit 
+data mode, and large regions (at least several DSP buffers 
+worth) enqueued with the driver for recording and/or 
+playback.\par 
+\par 
+\page \fs36\b The dspwrap and dsploadwrap Programs\par 
+\fs28\b0 \par 
+The \b dspwrap/loadwrap\b0  programs emit C code from 
+DSP assembly language source.  Consult the \'aaman pages\'ba 
+for more complete descriptions of them.  The \b dsploadwrap\b0 
+ program is run by \b dspwrap\b0 , and below, we will 
+only refer to \b dspwrap\b0  unless the change affects 
+\b dsploadwrap\b0  only.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+New Features\par 
+\b0 \par 
+\'b7\tab Support for input/output type specification in 
+the DSPWRAP ARGUMENT INFO field of the unit generator 
+or array processing macro source file.\par 
+\par 
+\'b7\tab Improved estimates of unit-generator run-time.\par 
+\par 
+\'b7\tab A \i working\i0  Objective C module is now 
+emitted for unit generators.  Formerly, only a \'aastub 
+file\'ba was emitted.  Now a working prototype class 
+file  is produced.  This makes it a lot easier to 
+see how to write unit generators.   An example of 
+its use can be seen in /NextDeveloper/Examples/MusicKit/exampunitgenerator/.\par 
+\par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\'b7\tab Option for \b dspwrap\b0  allowing function 
+library prefix specification. The new option \b \'aa-prefix 
+<\i str\i0 >\'ba\b0  exists to allow specification of 
+a custom function name prefix \i str\i0 .  For example, 
+\'aa-prefix MYAP\'ba means generate functions of the form 
+MYAPfn() rather than the default DSPAPfn().\par 
+\par 
+\'b7\tab Option  \b \'aa-stackable\'ba \b0 for\b  dspwrap 
+\b0 which changes the function called by an array processing 
+module interface function from <prefix>LoadGo() to <prefix>Load(). 
+ In release 1.0, each AP module loaded and executed 
+itself on the DSP when called.  Now, as shown in the 
+new array processing programming example, /NextDeveloper/Examples/DSP/ArrayProcessing/myAP/, 
+modules can be \'aastacked\'ba to build a larger program 
+inside the DSP before initiating execution.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Incompatible Changes\par 
+\b0 \par 
+\'b7\tab The C structs in header files emitted by \b 
+dspwrap\b0  have changed slightly: the DSP dataRecord 
+fields \'aarData,\'ba \'aarWordCount,\'ba and \'aarRepeatCount,\'ba 
+have been renamed to \'aadata,\'ba \'aawordCount,\'ba and 
+\'aarepeatCount,\'ba respectively.\par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\par 
+\'b7\tab The names in the DSPWRAP ARGUMENT INFO comment 
+field no longer have their last characters removed.  
+They are now used exactly as specified, and must match 
+the second argument to \b new_xarg\b0  or \b new_yarg\b0 
+ given in the macro body.  (In release 1.0, the source-code 
+convention was to append a zero `0' to the parameter 
+name, indicating an initial value, thus matching the 
+typical third argument to \b new_xarg\b0  or \b new_yar.) 
+\b0  Attempting to process release 1.0 unit-generator 
+source code, for example, will result in the names not 
+being found.\par 
+\par 
+\b Known Problems\par 
+\b0 \par 
+\'b7\tab  \'aaLocal labels\'ba supported by the DSP assembler, 
+(labels beginning with the underscore character `_'), 
+cannot be used in modules to be processed by dspwrap. 
+ References to local labels will be improperly relocated 
+at run time. \par 
+\par 
+\'b7\tab The comment fields cannot be arbitrarily ordered 
+in the source file, and leading whitespace is significant 
+in the coment fields.\par 
+\par 
+\'b7\tab The man page and brief mention in the Music 
+Kit and Array Processing chapters of the Concepts manual 
+are the only existing documentation.\par 
+\par 
+\fs36\b \par 
+\page Array Processing Software\par 
+\fs28\b0 \par 
+\b New Features\par 
+\b0 \par 
+\'b7\tab The \b libarrayproc.a\b0  functions now have 
+procedure prototypes.  You may get some new type coersion 
+ warnings as a result.  The new prototype header file, 
+\b <dsp/DSPAPUtilities.h>\b0  is included by \b <dsp/arrayproc.h>\b0 
+.\par 
+\par 
+\'b7\tab There is now a \i very simple\i0  programming 
+example covering use of the Fast Fourier Transform (FFT) 
+on the DSP.  Formerly, the only example was in  \b 
+fdfilter\b0 , which is pretty elaborate.  (The \b fdfilter\b0 
+ example, which itself was updated and improved for 
+this release, performs frequency-domain convolution on 
+the DSP via the FFT).  The new FFT example is in\b 
+ /NextDeveloper/Examples/DSP/ArrayProcessing/fft/\b0 .\par 
+\par 
+\'b7\tab There is a new, fairly long programming example 
+illustrating \i dynamic loading\i0  of DSP modules.  
+All relevant details of the internal operation of libarrayproc.a 
+are divulged in this programming example.  Since every 
+line of DSP code has always been on-line in \b /usr/lib/dsp\b0 
+ (even since release 1.0), this programming example effectively 
+gives you the rest of the array processing source code, 
+in addition to showing how to extend it to dynamic 
+module stacking.\par 
+\par 
+\b Incompatible Changes\par 
+\b0 \par 
+\'b7\tab The array processing macro \b \'aavtvms\'ba\b0 
+ was incorrectly named in 1.0.  It's new name is \b 
+\'aavtvmv\'ba\b0 .  The function \b DSPAPvtvms()\b0  
+was similarly renamed to \b DSPAPvtvmv().\b0 \par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\par 
+\'b7\tab The protocol used for detecting end-of-module-execution 
+has changed slightly.  When an AP module terminates, 
+it sends the \'aamain_done\'ba DSP message (as before) 
+and clears the \'aaDSP busy\'ba host flag HF3 (as before). 
+ The function \b DSPAPAwaitNotBusy()\b0  waits for and 
+consumes the \'aamain_done\'ba message, and the function 
+\b DSPAwaitHF3Clear()\b0  will block until HF3 clears 
+or the time-limit is reached.  Unlike before, \b DSPAPAwaitNotBusy()\b0 
+ will hang forever if it is called more than once, 
+because it waits for the one \'aamain_done\'ba message. 
+ Formerly it returned early on HF3 clear, allowing redundant 
+calls, but this gave a race.\par 
+\par 
+\b Other Changes\par 
+\b0 \par 
+\'b7\tab The macros \'aabeg_def\'ba \'aaend_def\'ba \'aabeg_mac\'ba 
+and \'aaend_mac\'ba have been removed from the array 
+processing DSP macro sources.  Simplest is best.\par 
+\par 
+\pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\'b7\tab All inputs and outputs have been declared as 
+such in the DSPWRAP ARGUMENT INFO comment field of the 
+array processing DSP macro sources.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Known Problems\par 
+\b0 \par 
+\'b7\tab Many system-level \'aaDSPAP\'ba functions are 
+still not documented.  Because procedure prototypes now 
+exist, it is helpful to drag the folder \b /usr/include/dsp\b0 
+ into the Digital Librarian book shelf so that the 
+header files can serve as interim documentation. \par 
+\par 
+\'b7\tab AP performance is not what it could be.  DMA 
+is not used and there is time between Mach message 
+components that could be squeezed out with optimization. 
+ DSP code is not cached, and the AP module is not 
+executed in parallel with data transfers.  To achieve 
+best performance, use \b snddriver_stream_start_writing()\b0 
+ (preferably in 16-bit mode) to send data to the DSP, 
+use \b snddriver_stream_start_reading() \b0 to retrieve 
+DSP data, and combine several AP modules into a longer 
+program as illustrated in /NextDeveloper/Examples/DSP/ArrayProcessing/myAP/.\par 
+\pard \li1580\ri0\fi0\sl320 \tx2360 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\fs40 \par 
+\page \pard \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+\fs36\b DSP Software Overview\fs40\b0 \par 
+\fs48\b \fs24\b0 \par 
+\fs28 Listed and described below is the DSP software 
+provided in this Release, primarily third-party, Music 
+Kit, and array processing software.  Notes covering the 
+sound library and Sound Kit, which also access the DSP, 
+are given in the Sound release notes.\par 
+\f22\fs24 \par 
+\f20\fs28\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 
+\tx1020 \tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 
+\tx4740 \tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 
+\tx10280 Applications\b0 \par 
+\fs22 \par 
+\fs28 \'b7\tab \b Bug56\b0 .  Ariel DSP56000/1 symbolic 
+debugger.  Located in\b  /NextDeveloper/Apps/\b0 .\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Demos\fs26 \par 
+\fs22\b0 \par 
+\fs28 The demonstration applications are in /NextDeveloper/Demos/:\par 
+\par 
+\'b7\tab Ensemble.  Real time DSP music performance control 
+from an interactive interface.\par 
+\par 
+\'b7\tab ScorePlayer.  Real time DSP music synthesis 
+from a scorefile.\par 
+\par 
+\'b7\tab Mandelbrot.  Use the DSP or the 68882 to compute 
+the Mandelbrot set.\par 
+\par 
+Two demos use the DSP to generate real-time sound effects:\par 
+\par 
+\'b7\tab BreakApp\par 
+\'b7\tab Stealth\par 
+\par 
+\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Programs\b0 \par 
+\par 
+\'b7\tab asm56000.  Motorola DSP56000/1 assembler.\par 
+\'b7\tab lnk56000.  Motorola DSP56000/1 linker.\par 
+\'b7\tab lib56000.  Motorola DSP56000/1 librarian.\par 
+\'b7\tab dspimg.  Creates binary format DSP files.\par 
+\'b7\tab dspabort.  Halts the DSP so Bug56 can grab 
+it.\par 
+\'b7\tab dspwrap.  Generates a C function from DSP assembly 
+language macros.\par 
+\'b7\tab dsploadwrap.  Used in conjunction with dspwrap.\par 
+\'b7\tab dspbeep.  Synthesizes a DSP sine sweep\par 
+\'b7\tab dsptest.  DSP array-transfer test program.\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Libraries and Header Files\b0 \par 
+\par 
+\'b7\tab /usr/lib/libdsp_s.a.  DSP support C library.\par 
+\'b7\tab /usr/lib/libarrayproc.a.  DSP array processing 
+C library.\par 
+\'b7\tab /usr/include/dsp.  All DSP include files (only 
+on-line libdsp documentation).\par 
+\'b7\tab /usr/lib/libsys_s.a.  Contains DSP utilities supplied 
+by the sound library.\par 
+\'b7\tab /usr/include/sound/sound.h.  For sound library 
+DSP utilities.\par 
+\'b7\tab /usr/include/nextdev/snd_msgs.h.  For use with 
+Sound/DSP Mach driver.\par 
+\par 
+\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Motorola DSP Development Tools\b0 \par 
+\par 
+DSP developers may want to order the following documents 
+from Motorola:\par 
+\par 
+\'b7\tab DSP56001 Data Sheet\par 
+\'b7\tab DSP56000 User's Manual\par 
+\par 
+The DSP simulator, sim56000, is useful for serious DSP 
+software development.  You can find these materials by 
+calling Motorola:  (512)891-2030.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+On-line Documentation\par 
+\b0 \par 
+On-line DSP documentation is in various files under the 
+directory /NextLibrary/Documentation/NextDev/SndMusicDSP/. 
+ In addition, the following documents under /NextLibrary/Documentation/ 
+are relevant:\par 
+\par 
+\'b7\tab Ariel/Bug56Reference.wn.  DSP symbolic debugger.\par 
+\'b7\tab Motorola/dsp_assembler_manual.txt.  DSP56001 assembler 
+and linker manuals.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Programming Examples\b0 \par 
+\par 
+\'b7\tab /NextDeveloper/Examples/DSP/ArrayProcessing/ contains 
+several examples illustrating the use and extension of 
+the array processing library.\par 
+\par 
+\'b7\tab /usr/lib/dsp/test/ contains examples that show 
+how to develop unit-generator and array-processing macros 
+using Bug56.\par 
+\par 
+\'b7\tab /NextDeveloper/Examples/DSP/SoundDSPDriver/.  Examples 
+illustrating low level DSP programming in terms of the 
+Mach port-based kernel interface.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Music Kit DSP Files\par 
+\b0 \par 
+\'b7\tab DSP system files are installed in /usr/lib/dsp/monitor/.\par 
+\'b7\tab The Music Kit DSP monitor source is /usr/lib/dsp/smsrc/mkmon8k.asm.\par 
+\'b7\tab DSP unit generator macros for the Music Kit 
+are in /usr/lib/dsp/ugsrc/.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+Array Processing DSP Files\par 
+\b0 \par 
+\'b7\tab The array processing monitor source is /usr/lib/dsp/smsrc/apmon8k.asm.\par 
+\'b7\tab DSP array processing macros are in /usr/lib/dsp/apsrc/.\par 
+\'b7\tab DSP array processing macro binaries are in /usr/lib/dsp/apbin/\par 
+\'b7\tab DSP utility-macro assembly sources are installed 
+in /usr/lib/dsp/umsrc/.\par 
+\par 
+\b \pard \keep \li300\ri0\fi0\sl320 \tx480 \tx660 \tx1020 
+\tx1380 \tx1740 \tx2120 \tx2460 \tx3160 \tx3960 \tx4740 
+\tx5540 \tx6320 \tx7120 \tx7900 \tx8700 \tx9480 \tx10280 
+The DSP Environment Variable\par 
+\b0 \par 
+If the DSP environment variable is set (through the 
+setenv command), the Music Kit looks for the Music Kit 
+DSP monitor as $DSP/monitor/mkmon8k.dsp, overriding its 
+normal location listed above.  Similarly, the array processing 
+monitor is searched for as $DSP/monitor/apmon8k.dsp.  
+In addition, array processing binaries will be picked 
+up in $DSP/apbin, if they exist there. The complete 
+search sequence is \par 
+\par 
+\'b7\tab The current working directory\par 
+\'b7\tab $DSP/apbin/\par 
+\'b7\tab /usr/lib/dsp/apbin/\par 
+\par 
+\fs22 \tab \tab \tab \tab \tab \tab \tab \tab \tab 
+\tab \tab \tab \tab \tab \i J.O. Smith, 11/01/90\par 
+}

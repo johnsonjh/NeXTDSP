@@ -1,0 +1,168 @@
+{\rtf0\ansi{\fonttbl\f0\froman Times;\f1\fmodern Ohlfs;}
+\paperw12180
+\paperh13540
+\margl380
+\margr620
+\pard\tx0\tx2520\tx2880\tx3240\f0\b0\i0\ul0\fs48\li1440 \
+Preliminary 2.0 Release Notes:\
+Sound Library\
+
+\pard\tx1800\tx2160\tx2520\fs28\li1440 \
+\
+\
+
+\pard\b\li720 New Features\
+
+\pard\tx1800\tx2160\tx2520\li1440 \
+
+\b0 The following are new features that have been added to the Sound Library since Release 1.0.
+\b \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-380\li1800 \
+·	
+\b0 Samples from the DSP serial port can be compressed in real-time during recording.  They are automatically decompressed on playback.  Samples can be compressed in such a way that the decompression processes reproduces the original samples exactly ("bit-faithful").  Most sounds can be compressed by a factor of about 2 to 1.  This compression factor can be increased up to about 6 to 1 by allowing some loss of fidelity on playback.  Sounds with the new format code 
+\b SND_FORMAT_COMPRESSED
+\b0  cause
+\b  SNDStartRecording()
+\b0  to read samples from the DSP and compress them into the sound.  This format code causes 
+\b SNDStartPlaying()
+\b0  to decompress the samples as they are being played back.  The functions 
+\b SNDSetCompressionOptions()
+\b0  and 
+\b SNDGetCompressionOptions()
+\b0  can be used to set and get compression options the 
+\b SNDStartRecording()
+\b0  function will use.  These functions are described in 
+\b /usr/include/sound/performsound.h
+\b0 .  An additional function, 
+\b SNDCompressSound()
+\b0 , allows compression and decompression of existing sounds.  See 
+\b /usr/include/sound/convertsound.h
+\b0 .\
+\
+·	
+\b SNDStartPlaying()
+\b0  recognizes a new format code, 
+\b SND_FORMAT_EMPHASIZED
+\b0 .  Sounds in this format cause the monitor's built-in low pass filter to be used when the sound is played back.  
+\b SND_FORMAT_COMPRESS_EMPHASIZED
+\b0  is also recognized, and causes compressed sounds to play back with the filter on.  The functions 
+\b SNDSetFilter()
+\b0  and 
+\b SNDGetFilter()
+\b0  are available for setting and getting the filter state directly.\
+\
+·	
+\b SNDStartPlaying()
+\b0  also recognizes the new format code 
+\b SND_FORMAT_DSP_COMMANDS
+\b0 .  Playing back sounds in this format reproduces a Music Kit performance by sending the appropriate messages to the sound/DSP driver.  See the Music Kit documentation for how to create a soundfile in this format.\
+\
+·	A new function, 
+\b SNDStartRecordingFile()
+\b0 , initiates recording from the microphone or the DSP directly to a file (samples are not returned in memory). See the description in 
+\b /usr/include/sound/performsound.h
+\b0 .\
+\
+·	Several new interface functions have been added to the Sound/DSP driver:\
+\
+·	
+\b snddriver_dsp_reset()
+\b0  resets the DSP\
+\
+·	
+\b snddriver_set_ramp()
+\b0  supports turning off ªramping to zeroº for sound-out buffers which do not begin/end with a 0 sample.\
+\
+·	
+\b snddriver_dsp_dma_write()
+\b0  supports DMA writes to the DSP\
+\
+·	
+\b snddriver_dsp_dma_read()
+\b0  supports DMA reads from the DSP\
+\
+·	
+\b snddriver_dsp_read_data()
+\b0  supports programmed reads from the DSP\
+\
+·	
+\b snddriver_dsp_read_messages()
+\b0  reads "messages" from the DSP.   If the "SNDDRIVER_DSP_PROTO_DSPMSG" protocol bit is set, or if in ª1.0 modeº, words from the DSP cause an interrupt and they are collected by the driver into a "message buffer".  
+\b snddriver_dsp_read_data()
+\b0  in 1.0 was equivalent to this.\
+\
+·	
+\b snddriver_new_device_port()
+\b0  allow a privileged process to reallocate a new device port\
+\
+·	
+\b snddriver_set_sndout_bufcount() 
+\b0 and 
+\b snddriver_set_sndout_bufsize() 
+\b0 set the number and size of the buffers used by the sound-out stream that is configured by 
+\b snddriver_stream_setup()
+\b0 .  These functions must be called before calling 
+\b snddriver_stream_setup()
+\b0 .\
+\
+·	
+\b snddriver_stream_ndma() 
+\b0 sets the number of dma descriptors used by a stream.\
+\
+·	
+\b snddriver_reset_sndin_owner(),  snddriver_reset_sndout_owner(),  
+\b0 and 
+\b snddriver_reset_dsp_owner()
+\b0  exchange the current owner port with a new one.\
+\
+·	Some Sound/DSP driver interface functions have changed :\
+\
+·	
+\b snddriver_dsp_protocol()
+\b0  now has more protocol options.  These options enable DSP "raw mode", "DSP messages", "DSP error messages", aborting on HF2&HF3, "simple DMA mode", and "complex DMA mode".  Setting the protocol argument as in 1.0 will give the same behavior provided you did not make use of any undocumented features of the protocol.\
+\
+·	
+\b snddriver_stream_setup()
+\b0  has a new stream types
+\b  SNDDRIVER_DMA_STREAM_TO_DSP, SNDDRIVER_DMA_STREAM_THROUGH_DSP_TO_SNDOUT_22, and SNDDRIVER_DMA_STREAM_THROUGH_DSP_TO_SNDOUT_44.  
+\b0 These enable use of streaming DMA into the DSP.  The corresponding versions without the word "DMA" in them do programmed writes as they did in 1.0.  There are also corresponding "from" versions, for reading, but these are identical to the versions without "DMA" in their names, because streaming DMA reads existed in 1.0.  In other words, to preserve 1.0 API compatibility, (so that 1.0 DSP software receiving streaming writes does not break), a new stream type had to be introduced for the write direction,  and for symmetry's sake, corresponding types were introduced for the read direction, but they are not actually new .  The remaining asymmetry is that it is possible to do streaming writes with either programmed writes or DMA, while streaming reads can only be done using DMA. If DMA writes had been possible in 1.0, there would only be DMA streaming.
+\b \
+\
+ 
+\b0 ·	
+\b snddriver_dsp_read()
+\b0  now calls 
+\b snddriver_dsp_read_data()
+\b0  
+\b  
+\b0 or
+\b  snddriver_dsp_read_messages()
+\b0 , depending on the current protocol.\
+\
+	For more information, see 
+\b /usr/include/sound/snddriver_client.h
+\b0 .\
+\
+\
+\
+
+\pard\b\li720 Known Problems\
+
+\pard\tx1800\tx2160\tx2520\tx2880\b0\fi-380\li1800 \
+·	Real-time compression using 
+\b SNDStartRecording()
+\b0  does not support the bit-faithful mode and has a maximum compression factor of about 2 to 1.  Use 
+\b SNDCompressSound()
+\b0  to get full bit-faithful compression.\
+\
+·	Real-time decompression using 
+\b SNDStartPlaying()
+\b0  is sensitive to the overall system load when decompressing the most demanding format:  44 KHz stereo, bit-faithful.  Use another format (e.g. 22K Hz stereo, bit-faithful) in contexts where other applications my be consuming significant amounts of disk I/O bandwidth.\
+
+\pard\tx1152\tx2304\tx3456\tx4608\tx5760\tx6912\tx8064\tx9216\tx10368\tx11520 \
+
+\pard\tx1800\tx2160\tx2520\tx2880\fi-380\li1800 ·	The function 
+\b SNDStartRecordingFile()
+\b0  does not support recording sounds in the compressed format.
+}

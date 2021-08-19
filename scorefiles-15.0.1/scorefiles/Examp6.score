@@ -1,0 +1,83 @@
+/* 
+	This is a sample scorefile illustrating the use of the Wave1vi
+	synthpatch.  
+
+	If you make your own Music Kit program, Wave1vi must be loaded into 
+	your program to play this. See <musickit/synthpatches/Wave1vi.h> for 
+	details on the meaning of the Note parameters.
+
+	Feel free to copy and modify this example.
+*/
+part part1,part2,part3,part4,part5,part6,part7,part8;
+
+part1 synthPatch:"Wave1vi" synthPatchCount:1;
+part2 synthPatch:"Wave1vi" synthPatchCount:1;
+part3 synthPatch:"Wave1vi" synthPatchCount:1;
+part4 synthPatch:"Wave1vi" synthPatchCount:1;
+part5 synthPatch:"Wave1vi" synthPatchCount:1;
+part6 synthPatch:"Wave1vi" synthPatchCount:1;
+part7 synthPatch:"Wave1vi" synthPatchCount:1;
+part8 synthPatch:"Wave1vi" synthPatchCount:1;
+
+envelope freqFun =  [(0,.9)(.3,1)|(.5,.995)];
+envelope ampFun =  [(0,0)(.4,1)|(10,0.0,.4)]; 
+/* Long decay time gives impression of reverberation. */
+
+waveTable sneezy = [{1,1},{2,.05},{3,.3},{4,.01},{5,.1}];
+waveTable goofy = [{1,.5},{2,1},{3,.3},{4,.1},{5,.02}];
+waveTable doc = [{1,.4},{2,1},{3,.4},{4,.2},{5,.1},{6,.05},{7,.02},{8,.01}];
+waveTable sleepy = [{1,1},{2,.1},{3,.05},{4,.01}];
+
+BEGIN;
+part1 (11/3) amp:.2 ampEnv:ampFun freq:bf4 freqEnv:freqFun
+	waveform:doc bearing:-45 svibAmp:.01 svibFreq:5 rvibAmp:.008;
+t + .33;
+part5 (10.5/3) amp:.2 ampEnv:ampFun freq:bf4 freqEnv:freqFun
+	waveform:doc bearing:45 svibAmp:.01 svibFreq:4.7 rvibAmp:.008;
+t +.33;
+part2 (10.2/3) amp:0.2 ampEnv:ampFun freq1:d5 freqEnv:freqFun
+	waveform:sneezy bearing:-20 svibAmp:.01 svibFreq:4.6 rvibAmp:.008;
+t +.33;
+part6 (9.7/3) amp:0.2 ampEnv:ampFun freq1:d5 freqEnv:freqFun
+	waveform:sneezy bearing:20 svibAmp:.01 svibFreq:4.3 rvibAmp:.008;
+t +.33;
+part3 (9.4/3) amp:0.2 ampEnv:ampFun freq1:f5 freqEnv:freqFun 
+	waveform:goofy bearing:5 svibAmp:.01 svibFreq:5.2 rvibAmp:.008;
+t +.33;
+part7 (8.9/3) amp:0.2 ampEnv:ampFun freq1:f5 freqEnv:freqFun 
+	waveform:goofy bearing:-5 svibAmp:.01 svibFreq:4.9 rvibAmp:.008;
+t +.33;
+part4 (8.6/3) amp:0.2 ampEnv:ampFun freq1:af5 freqEnv:freqFun 
+	waveform:sleepy bearing:30 svibAmp:.01 svibFreq:4.8 rvibAmp:.008;
+t +.33;
+part8 (8.1/3) amp:0.2 ampEnv:ampFun freq1:af5 freqEnv:freqFun 
+	waveform:sleepy bearing:-30 svibAmp:.01 svibFreq:4.5 rvibAmp:.008;
+t +4;
+part1 (11/3) amp:.2 ampEnv:ampFun freq:bf4/2.0 freqEnv:freqFun
+	waveform:doc bearing:-45 svibAmp:.01 svibFreq:5 rvibAmp:.008;
+t + .33;
+part5 (10.5/3) amp:.2 ampEnv:ampFun freq:bf4/2.0 freqEnv:freqFun
+	waveform:doc bearing:45 svibAmp:.01 svibFreq:4.7 rvibAmp:.008;
+t +.33;
+part2 (10.2/3) amp:0.2 ampEnv:ampFun freq1:d5/2.0 freqEnv:freqFun
+	waveform:sneezy bearing:-20 svibAmp:.01 svibFreq:4.6 rvibAmp:.008;
+t +.33;
+part6 (9.7/3) amp:0.2 ampEnv:ampFun freq1:d5/2.0 freqEnv:freqFun
+	waveform:sneezy bearing:20 svibAmp:.01 svibFreq:4.3 rvibAmp:.008;
+t +.33;
+part3 (9.4/3) amp:0.2 ampEnv:ampFun freq1:f5/2.0 freqEnv:freqFun 
+	waveform:goofy bearing:5 svibAmp:.01 svibFreq:5.2 rvibAmp:.008;
+t +.33;
+part7 (8.9/3) amp:0.2 ampEnv:ampFun freq1:f5/2.0 freqEnv:freqFun 
+	waveform:goofy bearing:-5 svibAmp:.01 svibFreq:4.9 rvibAmp:.008;
+t +.33;
+part4 (8.6/3) amp:0.2 ampEnv:ampFun freq1:af5/2.0 freqEnv:freqFun 
+	waveform:sleepy bearing:30 svibAmp:.01 svibFreq:4.8 rvibAmp:.008;
+t +.33;
+part8 (8.1/3) amp:0.2 ampEnv:ampFun freq1:af5/2.0 freqEnv:freqFun 
+	waveform:sleepy bearing:-30 svibAmp:.01 svibFreq:4.5 rvibAmp:.008;
+END;
+
+
+
+
